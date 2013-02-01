@@ -1,0 +1,58 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fswiss\fcharset77 Helvetica;\f1\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red3\green3\blue3;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf2 (\
+var w,soundFileButton;\
+\
+SynthDef("Player",\{arg stpos=0,edpos=0,trig=1,rate=1;\
+	Out.ar(0,\
+		//PlayBuf.ar(1,0,1,trig,pos,1);\
+		
+\f1\fs18 BufRd.ar(1, 0, Phasor.ar(trig, BufRateScale.kr(0) * rate, 
+\f0\fs24 stpos
+\f1\fs18 ,
+\f0\fs24 edpos
+\f1\fs18 ), 1);
+\f0\fs24 \
+		)\
+	\}).store;\
+\
+w= SCWindow("Sound File Reader", Rect(10 , 450, 350, 130));\
+w.view.decorator = FlowLayout(w.view.bounds);\
+1.do(\{arg i;\
+	t = SCSoundFileView.new(w, Rect(20,20, 300, 60));\
+	\
+	t.waveColors_([Color.new(0.1,0.3,0.4,0.7),Color.new(0.1,0.3,0.4,0.7)]);\
+	t.background_(Color.new(0.7,0.8,0.6,0.8));\
+	t.setSelectionColor(0,Color.new(0.9,0.9,0.4,0.4));\
+	t.gridOn_(false);\
+\
+	soundFileButton = SCButton(w, 120 @ 20);\
+	soundFileButton.states = [["load file", Color.white, Color.new255(160, 210, 139)]];\
+	soundFileButton.action = \{\
+		CocoaDialog.getPaths(\{\
+			arg paths;\
+			paths.do(\{\
+				arg file;\
+				file.postln;\
+				//f.close;\
+				f = SoundFile.new;\
+				f.openRead(file);\
+				t.soundfile = f;\
+				b = Buffer.read(s,file,0,f.numFrames,bufnum:0);\
+				t.readWithTask(0, f.numFrames,showProgress:true);\
+				y = Synth.new("Player",[\\edpos,
+\f1\fs18 BufRateScale.kr(0)
+\f0\fs24 ]);\
+				\});\
+			\},\
+		\{"cancelled".postln;\})\
+		\};\
+	\});\
+\
+w.front;\
+\
+w.onClose_(\{ s.sendMsg(24,1); \});\
+)}

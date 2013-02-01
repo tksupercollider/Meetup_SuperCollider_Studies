@@ -1,0 +1,390 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red3\green3\blue3;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 //////////////////Set up///////////////\
+\
+s.boot;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 s.latency=0.05;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 s.sendMsg(\\b_allocRead, 16, "sounds/snr7.wav");\
+s.sendMsg(\\b_allocRead, 15, "sounds/kick5.wav");\
+s.sendMsg(\\b_allocRead, 17, "sounds/kick3.wav");\
+t=TempoClock.new;\
+\
+\
+////////////////SynthDefs//////////////\
+(\
+SynthDef("clicker1",\{arg amp,gt;\
+var out;\
+out=Resonz.ar(ClipNoise.ar(0.9),LFNoise2.ar(0.14,1787)+6000,0.2)*EnvGen.ar(Env.perc(0.03,0.05,1,-6),doneAction:2)*gt*amp;\
+Out.ar(0,out.dup);\
+\}).store;\
+\
+SynthDef("clicker2",\{arg amp,gt;\
+var out;\
+out=RLPF.ar(Klank.ar(`[[9800, 12071, 6893],[1, 1, 0.8], [1, 1, 1]], Dust2.ar(30,0.75)),LFNoise2.ar(0.14,1787)+12000,0.2)*EnvGen.ar(Env.perc(0.06,0.12,1,-11),doneAction:2)*gt*amp;\
+Out.ar(0,out);\
+\}).store;\
+\
+SynthDef("clicker3",\{arg amp=1,gt;\
+var out;\
+out=Pan2.ar(PlayBuf.ar(1, 17,1, 1,0,0),-0.4)*EnvGen.ar(Env.perc(0.01,2.7,1,4),doneAction:2,levelScale:amp*gt);\
+Out.ar(0,out);\
+\}).store;\
+\
+\
+SynthDef("ir5",\{arg amp=1,gt,rate;\
+var out;\
+out=Pan2.ar((RLPF.ar(PlayBuf.ar(1, 16,rate, Dust.ar(4),0.0,0),LFNoise2.ar(0.14,1787)+3000,0.3)*289).softclip,0.25)*EnvGen.ar(Env.perc(0.01,LFNoise2.ar(0.1,0.7)+0.02,1,-12),doneAction:2,levelScale:amp*gt);\
+Out.ar(10,out);\
+\}).store;\
+\
+\
+SynthDef("ir3",\{arg amp=1,gt,rate;\
+	var b = 16, dur,out,trate;\
+	trate=20;\
+	dur = SinOsc.ar(0.4,0,3) +4 / trate;\
+out=RLPF.ar(TGrains.ar(2, Impulse.ar(trate), b,rate, MouseX.kr(0,BufDur.kr(b)), dur,LFNoise2.kr(3), 1.5, 2),LFNoise2.ar(0.14,1787)+12000,0.3)*EnvGen.ar(Env.perc(0.1,0.12,1.9,2),doneAction:2,levelScale:amp*gt);\
+Out.ar(0,out);\
+\}).store;\
+\
+\
+SynthDef("ir4",\{arg amp=1,gt;\
+var out;\
+out=Pan2.ar(PlayBuf.ar(1, 15,1, 1,0,0),0)*EnvGen.ar(Env.perc(0.01,0.7,1,4),doneAction:2,levelScale:amp*gt);\
+Out.ar(0,out);\
+\}).store;\
+\
+\
+SynthDef("siner",\{arg freq,amp;\
+var fc,osc,out;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf2 fc = LinExp.kr(LFNoise1.kr(Rand(0.25,0.2)), -1,0.5,500,2000);
+\fs18 \
+osc = Mix.fill(4, \{ SinOsc.ar(freq * [Rand(0.99,1.01),Rand(0.99,1.01)], 0, amp) \}).distort;\
+
+\fs20 out =Pan2.ar(RLPF.ar(osc, fc, 0.1),0.25)*EnvGen.ar(Env.perc(0.05,3.8,0.9,1),doneAction:2);
+\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf2 Out.ar(0,out);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \}).load(s);\
+\
+SynthDef("siner0",\{arg freq,amp;\
+var fc,osc,out;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf2 fc = LinExp.kr(LFNoise1.kr(Rand(0.25,0.2)), -1,0.5,500,2000);
+\fs18 \
+osc = Mix.fill(3, \{ SinOsc.ar(freq * [Rand(0.99,1.01),Rand(0.99,1.01)], 0, amp) \}).distort;\
+
+\fs20 out =Pan2.ar(RLPF.ar(osc, fc, 0.3),-0.5)*EnvGen.ar(Env.perc(0.1,1.8,0.6,-7),doneAction:2);
+\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf2 Out.ar(0,out);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \}).load(s);\
+\
+SynthDef("siner5",\{arg freq,amp;\
+var fc,osc,out;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf2 fc = LinExp.kr(LFNoise1.kr(Rand(0.25,0.2)), -1,0.5,500,2000);
+\fs18 \
+osc = Mix.fill(3, \{ SinOsc.ar(freq * [Rand(0.99,1.01),Rand(0.99,1.01)], 0, amp) \}).distort;\
+
+\fs20 out =Pan2.ar(RLPF.ar(osc, fc, 0.3),-0.5)*EnvGen.ar(Env.perc(0.01,0.3,0.6,-7),doneAction:2);
+\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf2 Out.ar(0,out);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \}).load(s);\
+\
+SynthDef("siner2",\{arg amp,freq;\
+var out,fc;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf2 fc = LinExp.kr(LFNoise1.kr(Rand(0.35,0.08)), -1,0.5,500,3600);
+\fs18 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 out=Pan2.ar(PMOsc.ar(freq,XLine.ar(freq/2,freq*4,0.02),XLine.ar(1,34,0.01),0.5,amp)*EnvGen.ar(Env.perc(0.01,0.23,2,2),doneAction:2),LFNoise2.ar(2));\
+out=
+\fs20 RHPF.ar(out, fc, 0.3);
+\fs18 \
+Out.ar(0,out);\
+\}).store;\
+\
+SynthDef("siner3",\{arg amp,freq;\
+var out;\
+out=Pan2.ar(Mix.fill(4, \{LFPulse.ar(freq +\{[2.0.rand,2.0.rand]\},pi.rand,0.6,amp)\})*EnvGen.ar(Env.perc(0.01,0.13,0.2,10),doneAction:2),LFNoise2.ar(2));\
+Out.ar(0,out);\
+\}).store\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 )\
+\
+\
+////////////////Strems/////////////////////\
+\
+#x, y ,z,v,w,u= \{EventPatternProxy.basicNew\} ! 6;\
+\
+(\
+x.play;\
+y.play; \
+z.play;\
+w.play; \
+v.play; \
+u.play; \
+u.fadeTime = 3.0;\
+)\
+\
+\
+v.source = Pbind(\\dur, 1, \\instrument, \\clicker3,\\amp,Pseq([0,1,0,1,0,1,0,1],inf));\
+\
+x.source = Pbind(\\dur, 0.25, \\instrument, \\clicker1,\\gt,Pseq([0,1,0,1,1,1,0,1],inf),\\amp,Pseq([4,1,3,1,4,1,4,1]/4,inf));\
+\
+\
+x.source = Pbind(\\dur, 0.25, \\instrument, \\clicker1,\\gt,Pseq([0,1,0,1,0,0,1,1],inf),\\amp,Pseq([4,1,3,1,1,1,2,4]/4,inf));\
+\
+x.source = Pbind(\\dur, 0.25, \\instrument, \\clicker1,\\gt,Pseq([1,0,1,1,0,1,0,0],inf),\\amp,Pseq([4,1,3,4,4,1,4,1]/4,inf));\
+\
+(\
+x.source = Pbind(\\dur, 0.25, \\instrument, \\clicker1,\\gt,Pseq([1,0,0,1,0,0,0,0],inf),\\amp,Pseq([4,1,3,1,1,1,4,1]/4,inf));\
+\
+y.source = Pbind(\\dur, 0.5, \\instrument, \\ir5,\\gt,Pseq([0,1,1,1,0,1,0,0, 1,0,1,0,1,0,0,0],inf),\\amp,Pseq([4,1,4,1,1,4,4,3]/4,inf),\\rate,Prand([1,1,1,1,1,1,-2,0.75],inf));\
+\
+w.source = Pbind(\\dur, 0.5, \\instrument, \\clicker2,\\gt,Pseq([1,0,0,1,0,1,0,1],inf),\\amp,Pseq([4,1,4,1,1,4,4,3]/4,inf),\\rate,Prand([1,1,1,1,1,1,-2,0.75],inf));\
+\
+z.source = Pbind(\\dur, 0.5, \\instrument, \\ir4,\\gt,Pseq([1,0,0,0,0,0,1,0, 1,1,0,0,0,1,0,0],inf),\\amp,Pseq([4,1,3,4,2,4,4,4]/3,inf));\
+)\
+\
+(\
+x.source = Pbind(\\dur, 0.25, \\instrument, \\clicker1,\\gt,Pseq([1,0,1,0,1,1,0,1,0,1,1,1,0,1,0,1],inf),\\amp,Pseq([4,1,3,4,4,1,4,1,4,1,4,1,1,4,4,3]/4,inf));\
+\
+y.source = Pbind(\\dur, 0.5, \\instrument, \\ir5,\\gt,Pseq([0,1,1,1,0,1,0,1],inf),\\amp,Pseq([4,1,4,1,1,4,4,3]/4,inf),\\rate,Prand([1,1,1,1,1,1,-2,0.75],inf));\
+\
+w.source = Pbind(\\dur, 0.5, \\instrument, \\clicker2,\\gt,Pseq([1,0,0,1,0,1,0,1,0,1,1,1,0,1,0,1],inf),\\amp,Pseq([4,1,4,1,2,3,4,4,4,1,4,1,2,3,4,4]/4,inf),\\rate,Prand([1,1,1,1,1,1,-2,0.75],inf));\
+\
+z.source = Pbind(\\dur, 0.5, \\instrument, \\ir4,\\gt,Pseq([1,0,0,1,0,0,1,0, 0,1,0,0,1,0,1,1, 1,0,0,1,0,0,0,0, 1,0,0,0,0,1,1,0,1,0,0,1,0,0,1,0, 1,1,0,0,0,0,0,0, 1,0,0,0,0,1,1,0, 1,1,0,0,0,0,0,0],inf),\\amp,Pseq([4,1,3,4,2,4,4,4]/3,inf));\
+)\
+\
+(\
+x.source = Pbind(\\dur, 0.25, \\instrument, \\clicker1,\\gt,Pseq([1,1,1,1,1,1,0,1,0,1,0,1,0,0,1,1],inf),\\amp,Pseq([4,1,3,1,4,1,4,1]/4,inf));\
+\
+y.source = Pbind(\\dur, Prand([0.75,0.75,0.75,1,0.25,1.25],inf), \\instrument, \\ir5,\\gt,Pseq([0,1,1,1,0,1,0,1],inf),\\amp,Pseq([4,1,4,1,1,4,4,3]/4,inf),\\rate,Prand([1,1,1,1,1,1,-2,0.75],inf));\
+\
+w.source = Pbind(\\dur, 0.5, \\instrument, \\clicker2,\\gt,Pseq([1,0,0,1,0,1,0,1],inf),\\amp,Pseq([4,1,4,1,1,4,4,3]/4,inf),\\rate,Prand([1,1,1,1,1,1,-2,0.75],inf));\
+\
+z.source = Pbind(\\dur, 0.25, \\instrument, \\ir4,\\gt,Pseq([1,0,0,1,0,0,1,0, 1,0,0,0,1,0,1,0, 1,0,0,1,0,0,0,0, 1,1,0,1,0,1,1,0],inf),\\amp,Pseq([4,1,3,4,2,4,4,4]/3,inf));\
+)\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 (\
+u.source=Pdef(\\pug,\
+	Ppar([\
+Pbind(\\
+\fs24 instrument
+\fs18 ,\\siner3,\\midinote,\
+Pseq([\
+0,12,11,7,4,9,2,2,4,7,4,-1,2,0,\
+0,0,9,7,4,0,2,2,4,7,9,12,9,7,\
+0,12,11,7,4,9,2,2,4,7,4,-1,2,0,\
+0,0,9,7,4,0,2,2,4,7,9,12,9,7\
+]+53,4),\
+\\dur,\
+Pseq([\
+3,1,2,1,1,4,4,3,1,1,1,1,1,8,\
+3,1,1,1,1,1,6.25,0.5,1.5,4.75,1,1,1,8,\
+3,1,2,1,1,4,4,3,1,1,1,1,1,8,\
+3,1,1,1,1,1,6.25,0.5,1.5,4.75,1,1,1,8\
+\
+]/2,2)\
+),\
+Pbind(\\
+\fs24 instrument
+\fs18 ,\\siner,\\midinote,\
+Pseq([\
+41,43,40,45,41,\
+41,36,41,41,41,41,\
+41,43,40,45,41,\
+41,36,41,41,41,41,\
+\
+],1),\
+\\dur,Pseq([1,1,0.5,0.5,1,\
+1,1,0.5,0.5,1, 1,1,0.5,0.5,1,\
+1,1,0.5,0.5,1,2,\
+1,1,0.5,1,1,0.5,1,1,0.5,1,1,0.5,\
+\
+]*4,24)),\
+Pbind(\\
+\fs24 instrument
+\fs18 ,\\siner5,\\midinote,\
+Pseq([Pshuf([\
+[53,41],43,65]+24,8),\
+Pshuf([41,[43,38],58]+24,4),\
+Pshuf([41,[40],48]+24,4),\
+Pshuf([38,[41,36],50]+24,8),\
+Pshuf([[53,41],43,60]+24,8)\
+],inf),\\dur,
+\fs24  
+\fs18 Pseq([ Pgeom(0.2, 1.2, 6)], inf))\
+]))\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 )\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 u.source=Pdef(\\pug,\
+	Ppar([\
+Pbind(\\
+\fs24 instrument
+\fs18 ,\\siner0,\\midinote,\
+Pseq([Pseq([\
+[53,48],46,58],4),\
+Pseq([50,[57,38],62],5)\
+],inf),\
+\\dur,Pseq([0.5,0.5,1,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,0.5,1\
+]*2,inf)),\
+Pbind(\\
+\fs24 instrument
+\fs18 ,\\siner5,\\midinote,\
+Pseq([Pseq([\
+[53,48],46,58]+24,16),\
+Pseq([50,[57,38],62]+24,16)\
+],inf),\
+\\dur,
+\fs24  
+\fs18 Pseq([ Pgeom(0.2, 1.2, 6)], inf)),\
+Pbind(\\
+\fs24 instrument
+\fs18 ,\\siner3,\\midinote,\
+Pseq([41,43,40,41]+24,inf),\
+\\dur,Pseq([0.5\
+],inf))\
+],inf));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SynthDef("clicker1",\{arg amp,gt;\
+var out;\
+out=(Resonz.ar(GrayNoise.ar(0.9),LFNoise2.ar(1,287)+4900,0.2)*820).softclip*EnvGen.ar(Env.perc(0.01,0.04,0.25,3),doneAction:2)*gt*amp;\
+Out.ar([0,10],out.dup);\
+\}).store;\
+SynthDef("clicker2",\{arg amp,gt;\
+var out;\
+out=(Klank.ar(`[[900, 221, 63],[1, 1, 0.8], [1, 1, 1]], Dust2.ar(30,0.75))*420).softclip*EnvGen.ar(Env.perc(0.06,0.12,0.25,1),doneAction:2)*gt*amp;\
+Out.ar(10,out);\
+\}).store;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 x.source = Pbind(\\dur, 0.25, \\instrument, \\clicker1,\\gt,Pseq([1,1,1,1,1,0,1,0,1,1,1,0,1,1,1,1],inf),\\amp,Pseq([4,2,4,2,4,2,4,4]/4,inf));\
+\
+y.source = Pbind(\\dur, 0.25, \\instrument, \\ir5,\\gt,Pseq([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],inf),\\amp,Pseq([4,4,4,4,4,4,4,1]/4,inf),\\rate,Pseq([1,1,1,1,0.5,0.5,0.5,0.5,0.46,0.46,0.46,0.46,0.35,0.35,0.35,0.2,0.2,0.2,0.2,0.2,0.1,0.1,0.1,0.1,Pseq([0,0,0,0,0,0,0,0,Prand([1,0,0,1],inf)],inf)],inf));\
+\
+w.source = Pbind(\\dur, 0.25, \\instrument, \\clicker2,\\gt,Pseq([0,0,0,0,1,1,1,1, 0,0,0,0,1,1,1,1],inf),\\amp,Pseq([4,4,4,4,4,4,4,3]/4,inf),\\rate,Prand([1,1,1,1,1,1,-2,0.75],inf));\
+\
+z.source = Pbind(\\dur, 0.25, \\instrument, \\ir4,\\gt,Pshuf([0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1, 0,0,1,0,0,0,1,0, 1,1,1,1,1,1,1,1,Pseq([1,0,0,1,0,0,1,0, 0,1,0,0,1,0,0,1, 0,0,1,1,0,0,0,0],inf)],inf),\\amp,1);\
+) \
+\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SynthDef("clicker1",\{arg amp,gt;\
+var out;\
+out=Resonz.ar(ClipNoise.ar(0.9),LFNoise2.ar(0.14,1787)+6000,0.2)*EnvGen.ar(Env.perc(0.03,0.05,1,-6),doneAction:2)*gt*amp;\
+Out.ar([0,10],out.dup);\
+\}).store;\
+SynthDef("clicker2",\{arg amp,gt;\
+var out;\
+out=RLPF.ar(Klank.ar(`[[9800, 12071, 5393],[1, 1, 0.8], [1, 1, 1]], Dust2.ar(10,0.75)),LFNoise2.ar(0.14,1787)+12000,0.2)*EnvGen.ar(Env.perc(0.06,0.12,1,-11),doneAction:2)*gt*amp;\
+Out.ar(10,out);\
+\}).store;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 x.source = Pbind(\\dur, 0.5, \\instrument, \\clicker1,\\gt,Pseq([1],inf),\\amp,Pseq([3]/4,inf));\
+\
+y.source = Pbind(\\dur, 1, \\instrument, \\ir5,\\gt,Pseq([0],inf),\\amp,Pseq([4,1,4,1,1,4,4,3]/4,inf),\\rate,Prand([1,1,1,1,1,1,-2,0.75],inf));\
+\
+w.source = Pbind(\\dur, 0.25, \\instrument, \\clicker2,\\gt,Pseq([1,1,1,1,1,1,1,1],inf),\\amp,Pseq([3,1,1,3,1,1,4,1]/4,inf),\\rate,Prand([1,1,1,1,1,1,-2,0.75],inf));\
+\
+z.source = Pbind(\\dur,1, \\instrument, \\ir4,\\gt,Pseq([0],inf),\\amp,Pseq([4,1,3,4,2,4,4,4]/3,inf));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 Pdef(\\pug,\
+	Ppar([\
+\
+u.source=Pbind(\\
+\fs24 instrument
+\fs18 ,\\siner0,\\midinote,\
+Pseq([Pseq([46,\
+[53,48],58]+24,4),\
+Pseq([[57,38],50,62]+24,4)\
+],inf),\
+\\dur,
+\fs24  
+\fs18 Pseq([0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,1]*2, inf)),\
+\
+],inf));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 )\
+\
+\
+\
+(\
+y.stop;\
+x.stop;\
+z.stop;\
+w.stop\
+)\
+\
+///////////////////////BBCut part////////////////////////\
+Tempo.bpm=120;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 c=ExternalClock(2.5).play;\
+(	\
+a=BBCut2(CutGroup([CutStream1.new(10),CutMixer(60,1,RollAmplitude.new(0.69),CutPan1.new(\{(0.25.rand2)\}))]),WarpCutProc1.new).play(c);\
+)\
+a.play(c);\
+\
+a.pause; \
+.\
+a.resume;\
+\
+a.end;\
+\
+\
+Instr("verb",\{arg amp;\
+z=In.ar(60,2)*amp;\
+w=z;\
+4.do(\{w=AllpassC.ar(w,0.04,\{[0.04.rand,0.05.rand]\},0.5,0.5)\});\
+Out.ar(0,Mix.ar([z+w]))\
+\}).test\
+\
+\
+\
+/////////////\
+\
+u.source=Pbind(\\instrument,\\siner,\\root,Pseq([4],inf),\\octave,5,\\degree,Pshuf([2,4,5,7,9,11],inf),\\dur,Pshuf([0.25,0.125,0.333,0.5,0.25,0.25]*4,inf)\
+);\
+\
+SynthDef("siner",\{arg freq,amp;\
+var fc,osc,out;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf2 fc =LinExp.kr(LFNoise1.kr(Rand(0.25,0.2)), -1,0.5,500,2000);
+\fs18 \
+osc = Mix.fill(3, \{ SinOsc.ar(freq * [Rand(0.99,1.01),Rand(0.99,1.01)]*[1,0.5,0.66,0.25,1].choose, 0, amp) \}).distort;\
+
+\fs20 out =Pan2.ar(RLPF.ar(osc, fc, 0.4),0.25)*EnvGen.ar(Env.perc(0.01,0.9,0.8,6),doneAction:2);
+\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf2 Out.ar(0,out);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \}).load(s);\
+}

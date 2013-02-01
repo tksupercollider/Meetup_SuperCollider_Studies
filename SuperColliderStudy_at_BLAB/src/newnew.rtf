@@ -1,0 +1,358 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fnil\fcharset78 Osaka-Mono;\f2\fswiss\fcharset77 Helvetica;
+\f3\fswiss\fcharset77 Helvetica-Bold;}
+{\colortbl;\red255\green255\blue255;\red3\green3\blue3;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs18 \cf2 (\
+\
+SynthDef("berif",\{arg amp,freq;\
+var src;\
+src=Pan2.ar(SinOsc.ar(freq,0,0.3)+WhiteNoise.ar(0.4)*Decay2.ar(Dust.ar(0.05*freq),0.1,0.1),0.3)*EnvGen.ar(Env.perc(0.00,5,1,-6),doneAction:2);\
+Out.ar(0,src);\
+\}).store;\
+\
+\
+SynthDef("berif2",\{arg amp,freq,dur;\
+var src;\
+src=Pan2.ar(SinOsc.ar(Duty.kr(\
+				Drand([0.025, 0.125,0.13333,0.477,0.0125]*6, inf),\
+				0, \
+				Drand([2,0.5, 0.666, 0.75, 0.3333]*freq, inf)\
+			),0.75,0.3),-0.36)*EnvGen.ar(Env.perc(0.4,3,1,-4),doneAction:2);\
+Out.ar(0,src);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs22 \cf2 		
+\fs18 SendTrig.kr(Impulse.kr(1),2,1);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \}).store;\
+\
+\
+\
+SynthDef("berif3",\{arg amp,freq,dur;\
+var src;\
+src=Pan2.ar(SinOsc.ar(Duty.kr(\
+				Drand([0.025, 0.125,0.13333,0.477,0.0125]*4, inf),\
+				3, \
+				Drand([0.5, 0.666, 0.75, 0.3333]*freq, inf)\
+			),0,0.2)+Resonz.ar( HenonC.ar(\
+	SampleRate.ir/4, \
+	LFNoise2.kr(1.3, 0.2, 1.2), \
+	LFNoise2.kr(0.6, 0.015, 0.15),mul:0.4\
+) clip2:SinOsc.ar([freq,freq*0.99]*0.01,0,0.45),LFNoise1.ar(0.24,17,106).midicps,0.2),0)*EnvGen.ar(Env.perc(0.6,dur*2,1,4),doneAction:2);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs22 \cf2 		
+\fs18 SendTrig.kr(Impulse.kr(1),1,1);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 Out.ar(0,src);\
+\}).store;\
+\
+\
+)\
+\
+\
+(\
+Pdef(\\moe0,\
+Ppar([\
+Pbind(\\instrument,"berif2",\\dur,Pseq([7],inf),\
+\\freq,Pwhite(100.0,12667.0)),\
+Pbind(\\instrument,"berif2",\\dur,Pseq([3,2,2,3,1,2],inf),\
+\\freq,Pwhite(60.0,13596.0)),\
+Pbind(\\instrument,"berif",\\dur,Pseq([4,1,3,3,1,2],inf),\
+\\freq,Pwhite(80,156)),\
+Pbind(\\instrument,"berif3",\\dur,Prand([1.75,0.75,0.5,0.75,4,0.75,2],inf),\
+\\note,Pwhite(30,56)-12)\
+])\
+)\
+)\
+Pdef(\\moe0).play;\
+Pdef(\\moe0).stop;\
+\
+\
+Tempo.bpm=2
+\f1 0
+\f0 ;\
+s.boot;\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs24 \cf2 \
+\
+(\
+SynthDef("reverb", \{ arg out=0, decay=1, wet=0.7, gate=1;\
+var zout, env;\
+zout = In.ar(out);\
+6.do(\{ zout = AllpassC.ar(zout, 0.8, \{Rand(0.05,0.1)\}.dup, decay)\});\
+Out.ar(0, zout);\
+\}).store;\
+)\
+)
+\f0\fs18 \cf2 \
+
+\f2\fs24 \cf2 \
+\
+d=Synth.
+\f3\b tail
+\f2\b0 (1, "reverb");\
+d.free
+\f0\fs18 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+\
+\
+///////////////////////SynthDef vealration/////////\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 s.sendMsg(\\b_allocRead, 10, "sounds/sona2.wav");\
+s.sendMsg(\\b_allocRead, 11, "sounds/soz2.wav");\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+(\
+SynthDef("berif",\{arg amp,freq,dur;\
+var src;\
+src=Pan2.ar(PlayBuf.ar(1,10,Duty.kr(\
+				Drand([0.025, 0.125,0.13333,0.477,0.0125]*10, inf),\
+				0, \
+				Drand([-1,0.5, -0.666, 0.75, -0.3333,-1.6666]*0.58, inf)\
+			),0,1455,1),-0.4)*EnvGen.ar(Env.perc(0.02,1,1,5),doneAction:2);\
+Out.ar(0,src);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs22 \cf2 		
+\fs18 SendTrig.kr(Impulse.kr(1),2,1);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \}).store;\
+\
+\
+\
+SynthDef("berif4",\{arg amp,freq,dur;\
+var src;\
+src=Pan2.ar(PlayBuf.ar(1,11,Duty.kr(\
+				Drand([0.055, 1.125,0.13333,2.477,0.25], inf),\
+				0, \
+				Drand([0.75,-0.25, -0.125, -0.75,0.666,1,1.2,0.3333]*0.886, inf)\
+			),0,425,1),LFNoise2.ar(0.4))*EnvGen.ar(Env.perc(0.02,1.1*dur,2.7,12),doneAction:2);\
+Out.ar(0,src);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs22 \cf2 		
+\fs18 SendTrig.kr(Impulse.kr(1),0,1);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \}).store;\
+\
+\
+\
+SynthDef("berif3",\{arg amp,freq,dur;\
+var src;\
+src=Pan2.ar(SinOsc.ar(Duty.kr(\
+				Drand([0.025, 0.125,0.13333,0.477,0.0125]*0.8, inf),\
+				3, \
+				Drand([0.5, 0.666, 0.75, 1.3333]*freq, inf)\
+			),0,0.6)+Resonz.ar( HenonL.ar(\
+	SampleRate.ir/12, \
+	Duty.kr(\
+				Drand([0.025, 0.125,0.13333,0.477,0.0125], inf),\
+				0, \
+				Drand([0.054, 1.666, 2.075, 1.3345,0.45], inf)\
+			), \
+	LFNoise2.kr(4.6, 0.015, 0.15),mul:0.6\
+),LFNoise1.ar(0.4,27,106).midicps,0.2),0)*EnvGen.ar(Env.perc(0.01,dur*1.63,1,6),doneAction:2);\
+Out.ar(0,src);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs22 \cf2 		
+\fs18 SendTrig.kr(Impulse.kr(1),4,1);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \}).store;\
+)\
+\
+(\
+Pdef(\\moe0,\
+Ppar([\
+Pbind(\\instrument,"berif2",\\dur,Prand([0.535,0.2565,0.25,2.565,2,0.75,2.25],inf),\
+\\note,Prand([0,\\n,7,10,\\n]+20+12,inf)),\
+Pbind(\\instrument,"berif2",\\dur,Prand([0.534,0.2555,0.5,0.5,4,0.755,2.25]*2,inf),\
+\\note,Prand([\\n,5,\\n,10,12]+32,inf)),\
+Pbind(\\instrument,"berif",\\dur,Prand([0.436,1.75,0.465,0.7565,2,0.75,2]*3,inf),\
+\\note,Prand([0,5,7,10,12]+1,inf)),\
+\
+Pbind(\\instrument,"berif4",\\dur,Prand([0.5,0.2565,2.5,0.556,2,0.75,2.245]*2,inf),\
+\\note,Prand([0,5,\\n,7,\\,\\,\\]+32,inf)),\
+Pbind(\\instrument,"berif3",\\dur,Prand([0.7565,0.75,2.5,1.7365,2,0.7655,2],inf),\
+\\note,Prand([0,5,7,10,\\n,12]-28,inf))\
+])\
+)\
+)\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \
+s.sendMsg(\\b_allocRead, 30, "sounds/hh10.wav");\
+\
+s.sendMsg(\\b_allocRead, 20, "sounds/snr3.wav");\
+\
+//s.sendMsg(\\b_allocRead, 10, "sounds/bent19.wav");\
+\
+\
+\
+(\
+SynthDef("kicks",\{arg amp=0;\
+var out;\
+out=SinOsc.ar(XLine.kr(420,60,0.04),pi/4,amp).dup*EnvGen.ar(Env.perc(0.03, 0.5, 1.25, -3),doneAction: 2);\
+Out.ar(0,out);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs22 \cf2 		
+\fs18 SendTrig.kr(Impulse.kr(1),3,1);\
+\}).store;\
+\
+SynthDef("moes",\{arg rate=1,amp=0;\
+	var b = 10, trate, dur,out;\
+	trate = MouseY.kr(2,50,1);\
+	dur = SinOsc.ar(0.4,0,3) +4 / trate;\
+	out=TGrains.ar(2, Impulse.ar(XLine.ar(trate,10,0.04)), b,rate, MouseX.kr(0,BufDur.kr(b)), dur, LFNoise1.kr(2), 4, 2)*amp*\
+EnvGen.kr(Env.perc(0.01,0.197,1.2,-4), 1, doneAction:2);\
+Out.ar(0,out);\
+
+\fs22 		
+\fs18 SendTrig.kr(Impulse.kr(1),0,1);\
+\}).store;\
+\
+\
+SynthDef("moes2",\{arg rate=1,amp=0;\
+	var b = 20, trate, dur,out;\
+	trate = MouseY.kr(2,50,1);\
+	dur = SinOsc.ar(0.4,0,34) / trate;\
+	out=TGrains.ar(2, Dust.ar(XLine.ar(trate*100,1,0.03)), b,rate, MouseX.kr(0,BufDur.kr(b)), dur, LFNoise1.kr(4), 4, 2)*amp*\
+EnvGen.kr(Env.perc(0.01,0.097,2,-4), 1, doneAction:2);\
+Out.ar(0,out);\
+
+\fs22 		
+\fs18 SendTrig.kr(Impulse.kr(1),0,1);\
+\}).store;\
+\
+\
+SynthDef("moe2",\{arg rate=1,amp=0,trate = 860;\
+	var b = 30, dur,out;\
+	dur = SinOsc.ar(0.4,0,43) +4 / trate;\
+	out=TGrains.ar(2, Impulse.ar(XLine.ar(trate,10,0.04)), b,rate, MouseX.kr(0,BufDur.kr(b)), dur,LFNoise2.kr(3), 4, 2)*amp*\
+EnvGen.kr(Env.perc(0.21,0.297,1.2,-4), 1, doneAction:2);\
+Out.ar(0,out);\
+
+\fs22 		
+\fs18 SendTrig.kr(Impulse.kr(1),0,1);\
+\}).store;\
+\
+\
+\
+SynthDef("moe3",\{arg amp=0,dur;\
+     var out;\
+	out= Pan2.ar(Klank.ar(`[[725, 12445, 8562], nil, [1, 1, 0.5]], ClipNoise.ar(0.04)) *amp*\
+EnvGen.kr(Env.perc(0.01,dur*0.45,1,-3), 1, doneAction:2),LFNoise1.ar(0.6));\
+Out.ar(0,out);\
+\}).store;\
+\
+\
+SynthDef("moe4",\{arg amp=0;\
+     var out;\
+	out= Pan2.ar(RHPF.ar(Klank.ar(`[[6710, 893,12892], nil, [0.6, 0.4, 0.6]], ClipNoise.ar(0.4)),LFNoise1.ar(2,32,68).midicps,0.3) *amp*\
+EnvGen.kr(Env.perc(0.01,0.02,1,5), 1, doneAction:2),0.36);\
+Out.ar(0,(out*120).softclip*0.3);\
+
+\fs22 		
+\fs18 SendTrig.kr(Impulse.kr(1),4,1);\
+\}).store;\
+)\
+\
+s.boot;\
+\
+Tempo.bpm=
+\f1 6
+\f0 0;\
+\
+(\
+Pdef(\\moe0,\
+	Ppar([\
+	\
+Pbind(\\instrument,"moe2",\
+	\\dur,Prand([3,2,1,0.5],inf),\\amp,0.2,\\trate,Prand([100,80,40],inf)),\
+\
+\
+Pbind(\\instrument,"kicks",\
+	\\dur,Pshuf([4],inf),\\amp,1),\
+	\
+Pbind(\\instrument,Prand(["moe4","moe3"],inf),\
+	\\dur,Pshuf([0.25,0.75,4,0.25,0.25]/2,inf),\\amp,Pseq([2,\\n,1,\\n,2,1,1,1]/4,inf)),\
+	\
+Pbind(\\instrument,Prand(["moe4","moe3"],inf),\
+	\\dur,Pseq([0.25]*2,inf),\\amp,Pseq([2,1,1,1,4,1,\\n,1]/4,inf)),\
+\
+Pbind(\\instrument,Prand(["moes","moes2"],inf),\
+	\\dur,Pshuf([0.25,0.75],inf),\\amp,1,\\rate,Prand([4/5,1/2,3/4,2,-2,0.05,\\n],inf)),\
+	\
+	\
+/////\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+Pbind(\\instrument,"berif2",\\dur,Prand([0.535,0.2565,0.25,2.565,2,0.75,2.25],inf),\
+\
+\\note,Prand([0,\\n,7,10,\\n]+20+12,inf)),\
+\
+\
+Pbind(\\instrument,"berif",\\dur,Prand([0.75,1.75,0.45,0.75,2,0.75,2]*3,inf),\
+\\note,Prand([0,5,7,10,12]+1,inf)),\
+//\
+//Pbind(\\instrument,"berif4",\\dur,Prand([0.5,1.25,2.5,0.5,2,0.75,1.5],inf),\
+//\\note,Prand([0,5,\\,7,12,10,17,\\,\\,\\,-5]+32,inf)),\
+\
+Pbind(\\instrument,"berif3",\\dur,Prand([0.7565,0.75,2.5,1.7365,2,0.7655,2],inf),\
+\\note,Prand([0,5,7,10,\\,12,\\,\\]-28,inf))\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 	\
+	\
+	])\
+	)\
+)\
+Pdef(\\moe0).play;\
+\
+Pdef(\\moe0).fadeTime = 10;\
+\
+Pdef(\\moe0).stop;\
+\
+\{HenonN.ar(MouseX.kr(10,12134))\}.scope;\
+Conter\
+Demand\
+Trig\
+\
+ProxySpace.push(s);\
+\
+~a.play;\
+~a.source=\{\
+AllpassC.ar(Mix.fill(5,\{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf2 Trig.ar(
+\fs18 \cf2 HenonN.ar(7.5*2,HenonN.ar(30,mul:2.8)),
+\fs24 \cf2  0.5)*PMOsc.ar(920.xrand,14240.rand,
+\fs18 \cf2 LFNoise1.kr([0.3,0.7],8,2)
+\fs24 \cf2 ,0.0,0.1)
+\fs18 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \
+\}),[0.25,0.6])\};\
+\
+~a.source=\{\
+AllpassC.ar(Mix.fill(7,\{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf2 Trig.ar(
+\fs18 \cf2 HenonN.ar(7.5*2,HenonN.ar(31210,mul:2.8)),
+\fs24 \cf2  0.25)*SinOsc.ar(\{1832.xrand\},0,0.05)
+\fs18 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \}),[0.25,0.6])\};\
+\
+\
+}

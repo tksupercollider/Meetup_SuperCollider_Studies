@@ -1,0 +1,209 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fnil\fcharset78 Osaka-Mono;\f2\fswiss\fcharset77 Helvetica-Bold;
+\f3\fnil\fcharset77 LucidaGrande;\f4\fswiss\fcharset77 Helvetica;\f5\fnil\fcharset78 HiraKakuPro-W3;
+}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue191;\red191\green0\blue0;\red96\green96\blue96;
+\red0\green115\blue0;\red3\green3\blue3;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs60 \cf2 B\cf0 -\cf2 Lab\cf0  \cf2 SuperCollider
+\f1 \cf0 \'95\'d7\'8b\'ad\'89\'ef\cf2 _
+\f0 6\cf0 .19
+\fs24 \
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs18 \cf3 ////////////////////////////////////////////////////////////
+\fs24 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs26 \cf0 \
+s=\cf2 Server\cf0 .local;\cf3 //\'8e\'a9\'95\'aa\'82\'cc\'83\'7d\'83\'56\'83\'93\'82\'cc\'83\'54\'81\'5b\'83\'6f\cf0 \
+s.boot;\cf3 //\'83\'75\'81\'5b\'83\'67
+\f0\fs18 \cf0 \
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs28 \cf0 \'83\'56\'83\'93\'83\'5a\'82\'f0\'90\'b6\'90\'ac\'81\'41\'91\'97\'90\'4d\'81\'42
+\f0\fs24 \
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SynthDef\cf0 (\cf4 "help-sine"\cf0 ,\{\cf2 arg\cf0  freq=440,amp=0.3;\
+	\cf2 var\cf0  out;\
+	out=\cf2 Pan2\cf0 .ar(\
+			\cf2 SinOsc\cf0 .ar(freq,0,amp),\
+			\cf2 SinOsc\cf0 .kr(1)\
+			);\
+	\cf2 Out\cf0 .ar(0,out);\
+\}).store;\
+)\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs28 \cf0 \'83\'6d\'81\'5b\'83\'68\'90\'b6\'90\'ac
+\f0\fs24 \
+s.sendMsg(\cf4 "/s_new"\cf0 ,\cf4 "help-sine"\cf0 ,1004,1,0);\cf3 //
+\f1 \'83\'4f\'83\'8b\'81\'5b\'83\'76
+\f0 1
+\f1 \'82\'cc
+\f0 ID 1004
+\f1 \'82\'c9
+\f0 help-sine
+\f1 \'82\'f0\'90\'b6\'90\'ac
+\f0 \cf0 \
+\
+
+\f1\fs28 \'83\'70\'83\'89\'83\'81\'81\'5b\'83\'5e\'82\'f0\'95\'cf\'82\'a6\'82\'e9
+\f0\fs24 \
+s.
+\f2\b\fs30 sendMsg
+\f0\b0\fs24 (\cf4 "/n_set"\cf0 ,1004,\cf4 "freq"\cf0 ,1200,\cf4 "amp"\cf0 ,
+\f1 0.3
+\f0 );\
+\
+
+\f1\fs28 \'83\'6d\'81\'5b\'83\'68\'82\'cc\'89\'f0\'95\'fa
+\f0\fs24 \
+s.sendMsg(\cf4 "/n_free"\cf0 ,1004);
+\fs18 \
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 ////////////////////////////////////////////////////////////\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs38 \cf2 Instr
+\fs34 \cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs22 \cf0 \'8a\'c8\'92\'50\'82\'c9\'83\'70\'83\'62\'83\'60\'83\'93\'83\'4f\'82\'f0\'8e\'8e\'82\'b7\'8e\'96\'82\'aa\'82\'c5\'82\'ab\'82\'e9\'81\'41\'90\'ea\'97\'70\'82\'cc\cf2 GUI\cf0 \'82\'f0\'90\'b6\'90\'ac\'82\'b5\'82\'c4\'82\'ad\'82\'ea\'82\'e9\'81\'42\'83\'56\'83\'93\'83\'5e\'83\'62\'83\'4e\'83\'58\'82\'cd\cf2 SynthDef\cf0 \'82\'c9\'8e\'97\'82\'c4\'82\'a2\'82\'e9\'81\'42
+\fs20 \
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 (\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 Instr\cf0 (\cf4 "help-sine"\cf0 ,\{\cf2 arg\cf0  freq=440,amp=0.3;\
+	\cf2 var\cf0  out;\
+	out=\cf2 SinOsc\cf0 .ar(freq,0,amp).dup;\
+\}).test;\
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs18 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 ////////////////////////////////////////////////////////////\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs34 \cf0 \'83\'8a\'83\'59\'83\'80\'82\'f0\'8d\'ec\'82\'c1\'82\'c4\'82\'dd\'82\'e9
+\f0\fs18 \
+
+\fs30 \cf2 Pbind\cf0 \
+\
+
+\fs22 \cf2 Pbind\cf0 (\cf5 \\dur\cf0 ,0.5).play\
+\
+\cf2 Pbind\cf0 (\cf5 \\dur\cf0 ,0.5,\cf5 \\note\cf0 ,\cf2 Pseq\cf0 ([0,1,2,3],10)).play
+\fs18 \
+\
+
+\fs22 \cf2 Pbind\cf0 (\cf5 \\dur\cf0 ,0.25,\cf5 \\note\cf0 ,\cf2 Pseq\cf0 ([0,1,2,3,4,5,6,7,8,9],10),\cf5 \\amp\cf0 ,\cf2 Prand\cf0 ([0,0.3],\cf2 inf\cf0 )).play\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs30 \cf0 \
+\
+\'8e\'a9\'95\'aa\'82\'c5\'8d\'ec\'82\'c1\'82\'bd\'83\'56\'83\'93\'83\'5a\'82\'c5\'82\'c8\'82\'e7\'82\'b7\'81\'42
+\f0\fs22 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SynthDef\cf0 (\cf4 "mySynth"\cf0 ,\{\cf2 arg\cf0  freq,amp;\
+	\cf2 var\cf0  out;\
+ 	out=\cf2 Pulse\cf0 .ar(freq,0.1,amp).dup*\cf2 EnvGen\cf0 .ar(\cf2 Env\cf0 .perc,doneAction:2);\cf3 //
+\f1 \'83\'47\'83\'93\'82\'d7\'83\'8d\'81\'5b\'83\'76\'82\'f0\'82\'c2\'82\'af\'82\'c4\'89\'b9\'82\'f0\'8c\'b8\'90\'8a\'82\'b3\'82\'b9\'82\'e9\'81\'42
+\f0 \cf0 \
+ 	\cf2 Out\cf0 .ar(0,out);\
+\}).store;\
+\
+\cf2 Pbind\cf0 (\cf5 \\instrument\cf0 ,\cf4 "mySynth"\cf0 ,\cf5 \\dur\cf0 ,0.25,\cf5 \\note\cf0 ,\cf2 Pseq\cf0 ([0,1,2,3,4,5,6,7,8,9],\cf2 inf\cf0 ),\cf5 \\amp\cf0 ,\cf2 Prand\cf0 ([0,0.3],\cf2 inf\cf0 )).play\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs18 \cf0 ------------------------------------------------------------------\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs46 \cf2 Tips\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs26 \cf0 \'83\'77\'83\'8b\'83\'76\'81\'46 
+\f3 \uc0\u8984 
+\f1 +shift+?
+\f0\fs22 \
+
+\f1\fs26 \
+\'83\'54\'81\'5b\'83\'6f\'82\'cc\'83\'75\'81\'5b\'83\'67\'81\'46\'83\'54\'81\'5b\'83\'6f\'83\'45\'83\'42\'83\'93\'83\'68\'82\'c9\'83\'74\'83\'48\'81\'5b\'83\'4a\'83\'58\'8f\'f3\'91\'d4\'82\'c5space\'83\'4c\'81\'5b
+\f0\fs22 \
+\
+
+\f1\fs26 \'8f\'88\'97\'9d\'82\'cc\'92\'e2\'8e\'7e: 
+\f3 \uc0\u8984 
+\f0 +.\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs42 \cf0 \'82\'a8\'82\'b7\'82\'b7\'82\'df\'83\'77\'83\'8b\'83\'76\'82\'c6\'82\'a9\
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "file:///Applications/SC3/Help/UGens/Tour_of_UGens.html"}}{\fldrslt 
+\f4\fs24 \cf2 \ul \ulc6 Tour_of_UGens}}
+\f4\fs24 \ul \ulc6  : 
+\f5 \'81\'40
+\f4 \cf2 UGen
+\f5 \cf0 \'8f\'57
+\f1\fs42 \ulnone \
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "file:///Applications/SC3/Help/Streams-Patterns-Events/Streams.html"}}{\fldrslt 
+\f4\fs24 \cf2 \ul Streams}}
+\f5\fs24 \ul \'81\'40
+\f4 \ulnone :
+\f5 \'81\'40\'83\'58\'83\'67\'83\'8a\'81\'5b\'83\'80\'83\'77\'83\'8b\'83\'76\
+\pard\pardeftab560\ql\qnatural
+{\field{\*\fldinst{HYPERLINK "file:///Applications/SC3/Help/ServerArchitecture/Server-Command-Reference.html"}}{\fldrslt 
+\f4 \cf2 \ul Server\cf0 -\cf2 Command\cf0 -\cf2 Reference}}
+\f4 \ul  :
+\f5 \'81\'40\'83\'54\'81\'5b\'83\'6f\'83\'52\'83\'7d\'83\'93\'83\'68\'82\'aa\'82\'ed\'82\'a9\'82\'e7\'82\'c8\'82\'ad\'82\'c8\'82\'c1\'82\'bd\'82\'e7
+\f1\fs26 \ulnone \
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+\cf2 SuperCollider\cf0  in \cf2 SAITAMA\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 [http:\cf3 //mouxse.org/scs/]\cf0 \
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\f1\fs26 \cf2 SuperCollider\cf0  \cf2 JAPAN\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 [http:\cf3 //SuperCollider.jp]}

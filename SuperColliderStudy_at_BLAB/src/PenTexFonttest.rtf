@@ -1,0 +1,104 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fnil\fcharset78 Osaka-Mono;\f2\fswiss\fcharset77 Helvetica;
+}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue191;\red96\green96\blue96;\red191\green0\blue0;
+}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs18 \cf0 (\
+\cf2 var\cf0  w, h = 800, v = 600, seed , phase = 0, zoom = 0.02, zoomf = 0.9, run = \cf2 true\cf0 ;\
+w = \cf2 SCWindow\cf0 (\cf3 "affines"\cf0 , \cf2 Rect\cf0 (10, 10, h, v));\
+w.view.background = \cf2 Color\cf0 .white;\
+w.onClose = \{ run = \cf2 false\cf0  \};\
+w.front;\
+w.drawHook = \{\
+	\cf2 thisThread\cf0 .randSeed = \cf2 Date\cf0 .seed;\
+	if (0.25.coin) \{ seed = \cf2 Date\cf0 .seed; phase = 0; zoom = 0.1; zoomf = exprand(0.002, 0.0001); \}\
+	\{ phase = phase ; zoom = zoom +
+\f1  
+\f0 zoomf; \};\
+	\cf2 thisThread\cf0 .randSeed = seed;\
+	\cf2 Pen\cf0 .use \{\
+		\cf2 var\cf0  p1 = \cf2 Point\cf0 (2.rand2 + (h/2), 2.rand2 + (v/2));\
+		\cf2 var\cf0  p2 = \cf2 Point\cf0 (2.rand2 + (h/2), 3.rand2 + (v/2));\
+		\cf2 var\cf0  xscales = \{ exprand(2** -0.1, 2**0.5) \} ! 2;\
+		\cf2 var\cf0  yscales = \{ exprand(2** -0.1, 2**0.5) \} ! 2;\
+		\cf2 var\cf0  xlates = \{ 2.rand2 \} ! 2;\
+		\cf2 var\cf0  ylates = \{ 23.rand2 \} ! 2;\
+		\cf2 var\cf0  rots = \{2pi.rand + phase \} ! 2;\
+		\cf2 var\cf0  xform;\
+		xscales = (xscales ++ (9/xscales)) * 1;\
+		yscales = (yscales ++ (2/yscales)) * 1;\
+		xlates = xlates ++ xlates.neg;\
+		ylates = ylates ++ xlates.neg;\
+		rots = rots ++ rots.neg;\
+		xform = \{\cf2 |i|\cf0  [xlates[i], ylates[i], rots[i], xscales[i], yscales[i]] \} ! 4;\
+		\cf2 Pen\cf0 .width = 2.linrand + 1;\
+		\cf2 Pen\cf0 .translate(120, 140);\
+		\cf2 Pen\cf0 .scale(zoom, zoom);\
+		\cf2 Pen\cf0 .translate(-400, -400);\
+		\
+		4.do \{\
+			\cf2 var\cf0  p, rot, xlate, ylate, xscale, yscale,i=0;\
+			#rot, xlate, ylate, xscale, yscale = xform.choose;\
+			\
+			\cf2 Pen\cf0 .translate(xlate*zoom, ylate);\
+			\cf2 Pen\cf0 .rotate(rot, h/2, v/2);\
+			\
+			\cf4 //Pen.skew(zoom,zoom);\cf0 \
+			\cf2 Pen\cf0 .scale(xscale, yscale);\
+\
+			\cf2 Pen\cf0 .moveTo(p1*0.02);\
+			\cf2 Pen\cf0 .width = 2.linrand + 1;\
+			\cf3 "	fDocument \{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+		// search the document for a string, in either direction\
+		// returns starting position of string or nil if not found before BOF or stopString\
+	scanFor \{ arg start, string, stopString, increment = 1;\
+		var whileFlag = true, foundFlag = false, strtemp;\
+		\
+		\{ whileFlag \}.while(\{\
+			strtemp = this.string(start, string.size);\
+			(strtemp == string).if(\{\
+				whileFlag = false; foundFlag = true;	// got it\
+			\}, \{\
+					// check bof/eof condition\
+				increment.isNegative.if(\{\
+					whileFlag = (start > 0);\
+				\}, \{\
+					whileFlag = (strtemp.size == string.size);\
+				\});  // eof, stop now\
+					// check the stop condition\
+				(this.string(start, stopString.size) == stopString).if(\{\
+					whileFlag = false;\
+				\});\
+			\});\
+			start = start + increment;\
+		\});\
+		\
+		foundFlag.if(\{ ^(start - increment) \}, \{ ^nil \});\
+	\}\
+	\
+	scanBackFor \{ arg start, string, stopString;\
+		^this.scanFor(start, string, stopString, -1)\
+	\}"\cf0 .scramble.drawAtPoint(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf0 		0@0, \
+		\cf2 Font\cf0 (\cf3 "
+\f2 Tahoma
+\f0 "\cf0 , 28), \
+		\cf2 Color\cf0 .new255(44, 44, 54,220));\
+		\
+			\
+			\cf4 //Pen.stroke;\cf0 \
+		\};\
+\
+	\};\
+		\
+	\};\
+	\
+\
+\{ while \{ run \} \{ w.refresh; 0.05.wait; \} \}.fork(\cf2 AppClock\cf0 )\
+\
+)}

@@ -1,0 +1,110 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;}
+{\colortbl;\red255\green255\blue255;\red3\green3\blue3;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 ~a.source
+\fs20  = \{ 
+\fs18 HenonC
+\fs20 .ar(SampleRate.ir + HenonN.ar(SampleRate.ir,
+\fs18 LFNoise2.kr(2, 1.9, 1)
+\fs20 ), TExpRand.ar([0.01,0.03],1.5,
+\fs18 LinCongN
+\fs20 .ar(32,LFNoise2.ar(0.1,0.5,1.4))), mul:0.3) \};\
+\
+ProxySpace.push(s);\
+~a.play\
+~b.play\
+~a.stop\
+~b.stop\
+\
+\
+
+\fs18 ~a.source
+\fs20  = \{SinOsc.ar(7294,0, HenonL.ar(SampleRate.ir,
+\fs18 LFNoise2.kr(2, 0.3, 1.2),mul:0.3
+\fs20 ))*Decay2.ar(
+\fs18 Henon
+\fs20 N.ar(16,
+\fs18 LFNoise2.kr(2, 0.4, 1.2),LFNoise2.kr([2.89,3], 0.1, 0.4)
+\fs20 ,mul:0.004),0.00,0.05) \};\
+\
+
+\fs18 ~b.source
+\fs20  = \{Pulse.ar(4,0.1, HenonN.ar(SampleRate.ir,
+\fs18 LFNoise2.kr(0.2, 0.3, 1.2),mul:0.1
+\fs20 ))*Decay2.ar(
+\fs18 Henon
+\fs20 N.ar(4,
+\fs18 LFNoise2.kr(2, 0.4, 1.2),LFNoise2.kr([3.99,4], 0.1, 0.4)
+\fs20 ,mul:0.003),0.00,0.2)\};\
+\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\fs18 \cf2 \
+(\
+SynthDef(\\pokey, \{|out= 0, gate= 1, f1= 0, c1= 0, f2= 0, c2= 0, f3= 0, c3= 0, f4= 0, c4= 0, ctl= 0, amp= 1, pan= 0|\
+	var e, z;\
+	e= EnvGen.kr(Env.adsr(0.04, 0.02,amp, 0.05), gate, doneAction:2);\
+	z= Pokey.ar(f1-MouseY.kr(0,5), c1, f2+MouseY.kr(0,125), c2, f3, c3-MouseX.kr(0, 15), f4, c4, ctl);\
+	Out.ar(out, Pan2.ar(z*e, pan));\
+\}).store;\
+SynthDef(\\pokeySquare, \{|out= 0,f1=1,gate= 1, amp= 1, pan= 0|\
+	var e, z;\
+	e= EnvGen.kr(Env.asr(0.01, amp, 0.4), gate, doneAction:2);\
+	z= PokeySquare.ar(Line.kr(f1, f1+126, 8), 6, 25);\
+	Out.ar(out, Pan2.ar(z*e, pan));\
+\}).store\
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs20 \cf2 \
+\pard\pardeftab560\ql\qnatural
+
+\fs18 \cf2 \
+(\
+Ppar([\
+	Pbind(\\instrument, \\pokey, \\dur, Pseq([0.25,0.5]/2, inf), \\f1, 3, \\c1, 2r01011011,\\pan,Pwhite(-0.5,0.5)),\
+	Pbind(\\instrument, \\pokey, \\dur, 0.5, \\f2, 120, \\c2, 2r01100111,\\pan,Pwhite(-1,1)),\
+	Pbind(\\instrument, \\pokeySquare, \\dur, 1.25, \\legato, 0.02, \\f1, Pseq([5,22],inf),\\amp,1,\\pan,Pwhite(-0.3,0.3)),\
+	Pbind(\
+	\\instrument, \\pokey,\
+	\\dur, Pseq([0.25,0.5]/2, inf),\
+	\\amp, Prand([0.8,0.3],inf),\
+	\\ctl, 2r00001111,\
+	\\f1, Pbrown(0, 20, 9)*Prand([0.25, 1], inf),\
+	\\c1, Prand([2r01001111, 2r10001111, 2r00000111, 2r01000111,2r10100111], inf)\
+)\
+]).play\
+)\
+\
+\
+o=AudioMeter.new\
+o.autoreset_(0.25)\
+Tempo.bpm=80;\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \
+\
+ProxySpace.push(s);\
+\
+~a.play;\
+(\
+~a.source=\{\
+AllpassC.ar(Mix.fill(5,\{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf2 Trig.ar(
+\fs18 HenonN.ar(3.5,HenonN.ar(30,mul:2.8)),
+\fs24  0.5)*PMOsc.ar(920.xrand,14240.rand,
+\fs18 LFNoise1.kr([0.3,0.7],8,2)
+\fs24 ,0.0,0.1)
+\fs18 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \}),[0.25,0.6])\};\
+)\
+\
+}

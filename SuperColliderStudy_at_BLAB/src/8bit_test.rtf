@@ -1,0 +1,437 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fswiss\fcharset77 Helvetica-Bold;}
+{\colortbl;\red255\green255\blue255;\red3\green3\blue3;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs20 \cf2 Tempo.bpm=123;\
+(\
+SynthDef("bleep1",\{arg freq,gate=1,out=0;\
+var src;\
+src=Pan2.ar(Pulse.ar(freq,0.25,0.6)-SinOsc.ar(freq,0,0.6),0.6)*EnvGen.ar(Env.adsr(0.0,0.2,0.36,0),gate,doneAction:2);\
+Out.ar(out,src);\
+\}).store;\
+\
+SynthDef("bleep2",\{arg freq,gate=1,out=0;\
+var src;\
+src=Pan2.ar(Pulse.ar(freq,0.2,0.6)-SinOsc.ar(freq,0,0.6),-0.3)*EnvGen.ar(Env.adsr(0.0,0.2,0.36,0),gate,doneAction:2);\
+Out.ar(out,src);\
+\}).store;\
+\
+SynthDef("kick",\{arg freq,gate=1,out=0;\
+var src;\
+src=RLPF.ar(LFNoise1.ar(freq,0.8),9956,0.3).dup*EnvGen.ar(Env.adsr(0,1,0.88,0.3),gate,doneAction:2);\
+Out.ar(out,src);\
+\}).store;\
+\
+SynthDef("snr",\{arg freq,gate=1,out=0;\
+var src;\
+src=Pan2.ar(BPF.ar(LFNoise1.ar(Lag.kr(freq,0.4),0.7),freq),LFNoise2.ar(0.5,0.8))*EnvGen.ar(Env.adsr(0,0.8,0.6,0.1,0.75,-1),gate,doneAction:2);\
+Out.ar(out,src);\
+\}).store\
+)\
+\
+(\
+Pdef(\\bit1,\
+	Ppar([\
+	\
+		Pbind(\\scale,#[0,3,7,12],\\degree,Pseq([\
+			Pseq([1,0,-4,2,5,\\,-2,\\,0,3,\\,0,4,\\,\\,\\],inf),\
+		],inf),\\dur,1,\\instrument,\\bleep,\\out,Prand([0,10,20,30,40,50],inf)),\
+\
+		Pbind(\\scale,#[0,3,7,12],\\degree,Pseq([\
+			Pseq([0,3,36,\\,0,-2,\\,8,0,\\,1,24,\\,0,3,-2]-12,1),\
+			Pseq([\\,\\,\\,6,0,5,\\,0,\\,4,-1,\\,-3,\\,\\,-2]-7,1)]\
+		,inf),\\dur,0.75,\\instrument,\\bleep,\\out,Prand([0,10,20,30,40,50],inf)),\
+\
+		Pbind(\\dur,0.25,\\instrument,\\snr,\\legato,0.02,\\freq,Pseq([Pshuf		([9345,\\,10324,\\,4467,\\,1424,534,556,\\,\\,8467,\\,\\,4545,22000])\
+		,Pshuf([9345,2234,10324,\\,467,15645,\\,534.3,556,\\,\\,8467,467,\\,4545,\\reset],\\out,Prand([0,10,20,30,40,50],inf))\
+		],inf)),\
+		\
+		Pbind(\\dur,0.25,\\instrument,\\kick,\\legato,0.2,\\freq,Pseq		([1845,\\,\\1845,\\,\\,123,547,\\,\\,\\,\\,\\,344,\\,\\,\\],inf),\\out,Prand([0,0,0,0,40,50],inf)),\
+		])\
+	)\
+)\
+\
+//\\break\
+(\
+Pdef(\\bit1,\
+	Ppar([\
+		Pbind(\\scale,#[0,3,7,12],\\degree,Pseq([\
+			Pseq([1,0,-4,9,5,1,-2,\\,0,3,\\,\\,4,0,\\,9],1),\
+			Pseq([0,\\,2,\\,1,\\,5,0,\\,3,-5,2,\\,0,4,\\,0],1),\
+			Pseq([1,2,3,5,6,\\,\\,\\,7,\\,2,-3,\\,0,-4,\\,\\],1),\
+			Pseq([1,0,-4,9,5,\\,-2,\\,0,3,1,0,-4,\\]+5,1)\
+		],1),\\dur,Pseq([0.75,0.5,0.25],inf),\\instrument,\\bleep,\\out,Prand([0,10,20,30,40,50],inf)),\
+\
+		Pbind(\\scale,#[0,3,7,12],\\degree,Pseq([\
+			Pseq([\\,3,36,\\,0,-3,0,8,28,\\,1,24,1,\\,3,-2]-12,1),\
+			Pseq([0,1,0,26,\\,2,\\,0,\\,4,-1,\\,-3,\\,\\,-2]-5,1)]\
+		,inf),\\dur,Pseq([0.5,0.5,0.5,0.125,0.5,0.25,0.125,0.5],8),\\instrument,\\bleep,\\out,Prand([0,10,20,30,40,50],inf)),\
+\
+		Pbind(\\dur,0.25,\\instrument,\\snr,\\legato,0.02,\\freq,Pseq([Pshuf		([9345,2234,10324,\\,4467,15645,1424,532,556,\\,\\,8467,467,\\,4545,22000])\
+		,Pshuf([9345,2234,10324,\\,467,15645,1424,534,556,\\,\\,8467,467,\\,4545,\\reset])\
+		],4),\\out,Prand([10,20,30,40,50],inf)),\
+		\
+		Pbind(\\dur,0.25,\\instrument,\\kick,\\legato,0.2,\\freq,Pseq		([445,\\,\\,1235,\\,\\,824,\\,\\,547,\\,\\,2467,\\,\\,\\],8),\\out,Prand([10,20,30,40,50],inf)),\
+		])\
+	)\
+)\
+//\\break2\
+(\
+Pdef(\\bit1,\
+	Ppar([\
+		Pbind(\\scale,#[0,3,7,12],\\degree,Pseq([\
+			Pseq([1,0,-4,9,5,\\,-2,\\,0,3,\\,0,4,0,\\,3],1),\
+			Pseq([0,-3,12,0,1,0,-5,0,\\,-12,-5,2,\\,5,-14,\\,5]+3,1),\
+			Pseq([1,-2,3,4,5,0,\\,0,1,0,2,-3,\\,0,-4,\\,\\]+5,1),\
+		],inf),\\dur,0.25,\\instrument,\\bleep),\
+\
+		Pbind(\\scale,#[0,3,7,12],\\degree,Pseq([\
+			Pseq([0,3,36,0,0,-2,\\,8,28,0,1,24,1,0,3,-2]-12,1),\
+			Pseq([0,1,\\,26,0,5,\\,0,0,4,-1,\\,-3,\\,\\,-2]-7,1)]\
+		,inf),\\dur,0.5,\\instrument,\\bleep),\
+\
+		])\
+	)\
+)\
+Pdef(\\bit1).play;\
+Pdef(\\bit1).stop;\
+\
+/////////////////sd\
+\
+\
+(\
+Pdef(\\bit1,\
+Ppar([\
+\
+//lead chorus\
+Pbind(\
+	\\note,Pseq([\
+		4,4,11,4,11,4,\\,4,4,6,7,9,7,6,4,\
+		4,4,11,4,11,4,\\,4,4,6,7,9,7,6,2,\
+		0,0,11,0,11,\\,0,0,16,14,12,11,\
+		0,0,11,0,11,\\,0,4,2,9,7,6,\
+	],inf),\
+		\
+	\\dur,Pseq([\
+		2,2,2,1,3,2,2,2,2,2,2,1,3,4,2,\
+		2,2,2,1,3,2,2,2,2,2,2,1,3,4,2,\
+		2,2,2,1,6,3,2,2,2,4,4,2,\
+		2,2,2,1,6,3,2,2,2,4,4,2,\
+	]/4,inf),\\instrument,\\bleep1),\
+\
+//bass line\
+ 	Pbind(\
+	\\note,Pseq([\
+		-3,-3,-3,0,-3,-10,\\,0,-3,-3,-3,\\,-3,-3,0,-3,\
+		-3,-1,-3,0,-3,\\,-10,-6,-3,-3,\\,0,-3,-5,-7,\
+		-7,0,5,0,\\,-10,-3,0,5,\
+		-7,-1,2,0,\\,-7,-5,0,-6,-5,\
+	]-17,inf),\
+		\
+	\\dur,Pseq([\
+		2,3,1,1,3,2,1,3,2,1,2,1,1,4,3,2,\
+		2,3,1,1,5,1,3,2,1,2,1,1,4,3,2,\
+		6,2,3,6,1,2,2,6,4,\
+		6,2,3,6,1,2,2,4,4,2,\
+	]/4,inf),\\instrument,\\bleep2),\
+	\
+//back chorus\
+	Pbind(\
+	\\note,Pseq([\
+		[4,11],[0,4],\
+		[4,11],[-5,7],\
+		[4,7,12],\
+		[4,12],\
+	],inf),\
+	\\dur,Pseq([4,4,4,4,8,8],inf),\\instrument,\\bass),\
+	\
+//solo	\
+	Pbind(\
+	\\note,Prand([\
+		4,4,11,4,11,4,\\,4,\\,6,7,\\,7,6,4,\
+		4,4,11,4,11,4,\\,4,\\,6,7,9,7,6,2,\
+		0,0,11,-12,11,\\,0,\\,16,\\,12,11,\
+		0,0,11,-8,11,\\,0,\\,2,9,7,6,\
+	]+12,inf),\
+		\\dur,Pshuf([\
+		2,1,2,1,2,2,1,4,2,12,\
+		1,1,1,1,1,2,2,4,6,2,\
+	]/4,inf),\\instrument,\\bleep3),\
+\
+	\
+		Pbind(\\dur,0.25,\\instrument,Prand([\\snr,\\lecola],inf),\\legato,0.1,\\freq,Pseq([Pseq		([9345,8234,10324,\\,9467,\\,8424,6532,6556,\\,8467,4667,\\,\\,3454,\\])\
+		,Pshuf([2234,10324,\\,5467,\\,2534,\\,\\,5656,\\,\\,8467,467,\\,4545,\\reset])\
+		],inf)),\
+		\
+		Pbind(\\dur,0.25,\\instrument,\\kick,\\legato,0.2,\\freq,Pseq		([445,\\,\\,1235,\\,\\,824,\\,\\,\\,\\,\\,2467,\\,\\,\\],inf)),\
+		])\
+	).play\
+)\
+\
+\
+(\
+SynthDef("bleep1",\{arg freq,gate=1,out=0;\
+var src;\
+src=SinOsc.ar(freq+LFNoise2.ar(0.9,4),SinOsc.ar(freq,0,LFNoise1.ar(0.3,2,6)).abs*EnvGen.ar(Env.adsr(0.001,0.2,0.5,0.1,4,-4)),Lag.ar(Pulse.ar(XLine.kr(8,20,0.03),0.25,0.3).abs,0.01))*EnvGen.ar(Env.adsr(0.0,0.5,0.8,0.4,1,2),gate,doneAction:2);\
+Out.ar(out,Pan2.ar(src,0.5));\
+\}).store;\
+\
+\
+SynthDef("bleep1",\{arg freq,gate=1,out=0;\
+var src;\
+src=SinOsc.ar(freq+LFNoise2.ar(0.9,24),SinOsc.ar(LFNoise1.ar(0.8,4,6).abs,0,LFNoise1.ar(0.3,1,6)).abs*EnvGen.ar(Env.adsr(0.001,0.2,0.5,0.1,3,-4)),SinOsc.ar(freq*2,0,0.3).abs)*EnvGen.ar(Env.adsr(0.0,0.5,0.6,0.0,1,6),gate,doneAction:2);\
+Out.ar(out,Pan2.ar(src,0.5));\
+\}).store;\
+\
+\
+SynthDef("bleep2",\{arg freq,gate=1,out=0;\
+var src;\
+src=Pan2.ar(SinOsc.ar(freq,SinOsc.ar(freq,0,LFNoise1.ar(8.3,1,6))*EnvGen.ar(Env.adsr(0.01,0.05,0.2,0.1,3,4)),SinOsc.ar(freq*0.2,0,0.3))+SinOsc.ar(freq*2,SinOsc.ar(freq/2,0,4),0.3),-0.1)*EnvGen.ar(Env.adsr(0.0,0.6,0.2,0.02,1,6),gate,doneAction:2);\
+Out.ar(out,src);\
+\}).store;\
+\
+\
+SynthDef("bleep3",\{arg freq,gate=1,out=0;\
+var src;\
+src=SinOsc.ar(freq+LFNoise2.ar(10.9,4),SinOsc.ar(freq*2,0.1,2)*EnvGen.ar(Env.adsr(0.0,0.2,0.4,0.3,2,10)),0.3)+Pulse.ar(freq,0.25,0.3)*EnvGen.ar(Env.adsr(0.0,0.2,0.3,0.0,1,-1),gate,doneAction:2);\
+Out.ar(out,Pan2.ar((src*1243).softclip*0.1,0.4));\
+\}).store;\
+\
+\
+SynthDef("bass",\{arg freq,gate=1,out=0;\
+var src;\
+src=Pan2.ar(SinOsc.ar([freq,freq*0.99]+LFNoise2.ar(40.9,3),SinOsc.ar(freq/2,0,4)*EnvGen.ar(Env.adsr(0.01,0.2,0.1,0.5,2,-5)),0.3),0.3)*EnvGen.ar(Env.adsr(0.01,0.2,0.3,1.7,0.5,-1),gate,doneAction:2);\
+Out.ar(out,src);\
+\}).store;\
+\
+\
+SynthDef("kick",\{arg freq,gate=1,out=0;\
+var src;\
+src=SinOsc.ar(55+XLine.kr(320,5,0.04),0,0.5)+LFNoise1.ar(350,0.4).dup*EnvGen.ar(Env.adsr(0.0,0.6,0.8,0.3),gate,doneAction:2);\
+Out.ar(out,src);\
+\}).store;\
+\
+\
+SynthDef("snr",\{arg freq,gate=1,out=0;\
+var src;\
+src=Pan2.ar(BPF.ar(LFNoise1.ar(freq),Lag.kr(freq,0.15)),LFNoise2.ar(0.5))*EnvGen.ar(Env.adsr(0,0.4,0.5,0.2,1,-3),gate,doneAction:2);\
+Out.ar(out,src);\
+\}).store;\
+)\
+/////////\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 (\
+SynthDef("tooth",\{arg gate=1;\
+	var trig, seq, freq;\
+	trig = Dust.kr(5);\
+	seq = Drand([Drand((0,4..85),8), Drand((0,4..25), 8)], 8000);\
+	freq = Demand.kr(trig, 0, seq*300);\
+	\
+	Out.ar(0,((Impulse.ar(freq + [0,0.7],0).cubed.cubed * 0.3)+\
+	(SinOsc.ar(freq + [0.3,1.1]/100,Impulse.ar(freq),0.3).distort)\
+	+((PMOsc.ar([freq,freq*1.01],freq*2,2,0.3,Saw.ar(freq/2,0.8)).softclip)*0.04))*EnvGen.ar(Env.adsr(0.0,1,0.8,0.0),gate,doneAction:2));\
+\}).play;\
+)\
+\
+\
+\
+SynthDef("rev1",\{arg amp=1;\
+Out.ar(0,FreeVerb2.ar(In.ar(20,1),In.ar(21,1),0.3,0.3,0.1,1.5));\
+\}).store;\
+\
+y = Synth.new("rev1", [\\amp, 1],
+\f1\b\fs26 addAction:
+\f0\b0\fs20 \\addToTail);\
+y.free;\
+\
+\
+\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 PathName.new("sounds/").dumpToDoc("hoge");\
+\
+PathName.new("sounds/").dumpTree;\
+\
+Help.all;
+\f1\b\fs38 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\b0\fs20 \cf2 /////////////////////FXSynth!!\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SynthDef("modalFX",\{|out=0,mod=60|\
+var fx0,fx1,fx2,fx3,fx4,fx5,fx6;\
+fx0=FreeVerb2.ar(In.ar(10,1),In.ar(11,1),0.6,0.5,mul:0.88);\
+fx1=In.ar([20,21])*SinOsc.ar(mod+(LFNoise2.ar(6,10).midicps),0,0.5) clip2: SinOsc.ar([20,35],0,0.3)*0.78;\
+fx2=(In.ar([30,31])*240).softclip*0.1;\
+fx3=Out.ar(10,Pan2.ar((In.ar(40)*240).softclip*0.12,LFNoise1.ar(4)));\
+5.do(\{fx4=CombC.ar(In.ar([50,51])*0.75,0.5,\{[0.04.rand,0.05.rand]\},0.28)\});\
+fx5=Resonz.ar(In.ar(60,2),LFNoise2.ar(2,30,80).midicps,0.15 wrap2: SinOsc.ar(10,0,0.5))*0.78;\
+fx6=Pan2.ar(CombL.ar(In.ar(70)*0.5,0.1,0.5,0.75),LFNoise2.ar(0.8));\
+OffsetOut.ar(out,fx0+fx1+fx2+fx4+fx5+fx6);\
+\}).store;\
+)\
+\
+s.sendMsg(11,3);\
+\
+s.sendMsg(21,3,1,1);\
+s.sendMsg(9, "modalFX", 9400, 1, 3) \
+s.sendMsg(11,9400);\
+\
+\
+////////////////////////////spcFXs//\
+\
+(\
+Pdef(\\bit1,\
+Ppar([\
+\
+//lead chorus\
+Pbind(\
+	\\midinote,Pwhite(12,84),\
+		\
+	\\dur,Pseq([2,1,2,1],inf),\\instrument,\\bleep1,\\out,Prand([0,50,20,70,0,0,60,80],inf),\\legato,0.09),\
+\
+//bass line\
+ 	Pbind(\
+	\\note,Pseq([0,5,7,10],inf),\
+		\
+	\\dur,Pseq([\
+		2,3,1,1,3,3,5,7,5,7,1,2,3\
+	]*4,inf),\\instrument,\\bleep2,\\out,Prand([20,60,70,50,60,60],inf),\\legato,Pwhite(0.2,0.4)),\
+	\
+//back chorus\
+	Pbind(\
+	\\note,Pseq([\
+		[0,5],[12,7],\
+		[0,9],[0,5],\
+		[12,7],[0,4],\
+		[0,9],\
+	],inf),\
+	\\dur,Prand([4.343,4.341,8,3.5,3.235,3.544],inf),\\instrument,\\bass,\\out,Prand([10,60,10,0,10,0,60,60,40],inf)),\
+	\
+//solo	\
+	Pbind(\
+	\\note,Prand([\
+		4,\\,11,\\,11,\\,\\,4,\\,6,7,\\,7,6,4,\
+		0,\\,\\,-12,11,\\,0,\\,16,\\,12,11,\
+		0,\\,\\,-8,11,\\,0,\\,2,9,7,6,\
+	],inf),\
+		\\dur,Pshuf([0.25,0.75,0.125,0.2345,0.55646],inf),\\instrument,\\bleep3,\\out,Prand([10,10,10,60,10,50,70],inf),\\legato,0.23),\
+\
+	\
+		Pbind(\\dur,0.25,\\instrument,Prand([\\snr,\\lecola,\\
+\fs18 \cf2 clicks2
+\fs20 \cf2 ],inf),\\legato,Prand([0.1,0.4,0.05,0.3],inf),\\freq,Pseq([Pseq		([9345,8234,10324,\\,9467,\\,8424,6532,6556,\\,8467,4667,\\,13567,3454,\\])\
+		,Pshuf([5234,10324,\\,5467,\\,2534,\\,\\,9656,\\,\\,8467,2467,\\,4545,\\reset])\
+		],inf),\\out,Prand([0,10,20,60,40,50,70],inf)),\
+		\
+		Pbind(\\dur,Prand([0.75,0.25],inf),\\instrument,Prand([\\snr,\\lecola,\\
+\fs18 \cf2 clicks
+\fs20 \cf2 ],inf),\\legato,Prand([0.8,0.2,0.05,0.2,2],inf),\\freq,Pseq([Pshuf([\\,\\,9467,\\,6424,532,556,\\,	467,4667,\\])\
+		,Pshuf([\\,\\,\\,1231,\\,3552,3453,\\,\\,\\,1232,2421,\\,\\,\\,\\5234,10324,1534,9656,\\,4545,\\reset])\
+		],inf),\\out,Prand([70,20,0,50,70,70],inf)),\
+		\
+		Pbind(\\dur,0.5,\\instrument,\\kick,\\legato,0.1,\\freq,Pseq		([\\,445,\\,1235,\\,\\,\\,\\,\\,342,\\,2467,734,\\,\\],inf),\\out,Prand([0,0,0,70],inf)),\
+		])\
+	).play;\
+	Tempo.bpm=94\
+)\
+\
+Pdef(\\bit1).stop;\
+\
+(\
+SynthDef("bleep1",\{arg freq,gate=1,out=0;\
+var src;\
+src=Pan2.ar(SinOsc.ar(freq+LFNoise2.ar(20.9,24),SinOsc.ar(freq/10,0,LFNoise1.ar(5.3,1,3)),0.2),-0.4)*EnvGen.ar(Env.adsr(0.0,0.5,0.6,0.0,1,12),gate,doneAction:2);\
+Out.ar(out,Pan2.ar(src,0.5));\
+\}).store;\
+\
+SynthDef("bass",\{arg freq,gate=1,out=0;\
+var src;\
+src=Pan2.ar(SinOsc.ar(Pulse.ar([freq,freq*0.99]+LFNoise2.ar(20.9,3),0.1),SinOsc.ar(freq/2,0,3)*EnvGen.ar(Env.adsr(0.01,0.2,0.1,0.5,2,5)),0.3),0.3)*EnvGen.ar(Env.adsr(0.01,0.2,0.7,1.7,0.5,-1),gate,doneAction:2);\
+Out.ar(out,src);\
+\}).store;\
+\
+\
+SynthDef("snr",\{arg freq,gate=1,out=0;\
+var src;\
+src=Pan2.ar(Resonz.ar(Impulse.ar(freq),Lag.kr(freq,0.5)),LFNoise2.ar(0.5))*EnvGen.ar(Env.adsr(0,0.03,0.2,0.0,1,-3),gate,doneAction:2);\
+Out.ar(out,src);\
+\}).store;\
+\
+\
+SynthDef("bass",\{arg freq,gate=1,out=0;\
+var src;\
+src=Pan2.ar(SinOsc.ar([freq,freq*0.99]+LFNoise2.ar(20.9,3),SinOsc.ar(freq/2,0.2,2)*EnvGen.ar(Env.adsr(0.01,0.5,0.1,0.5,1,-5)),SinOsc.ar(freq*12,0,0.3)),0.3)*EnvGen.ar(Env.adsr(0.1,0.5,0.4,0.9,0.3,3),gate,doneAction:2);\
+Out.ar(out,src);\
+\}).store;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs18 \cf2 \
+\
+\
+SynthDef("snr1",\{arg gate;\
+var dom;\
+dom=18;\
+Out.ar(0,Pan2.ar(Pulse.ar(XLine.kr(dom,6200,0.05),0.5,0.3)*Decay2.ar(Impulse.ar(10), 0.01, 0.14, 5)*\
+EnvGen.kr(Env.adsr(0.01,0.097,0.2,0.0,1,-4), gate, doneAction:2),LFNoise1.kr(4,1)))\
+\}).store;\
+\
+\
+SynthDef("snr2",\{arg gate=1,gain=800,lpf=1024,out=0;\
+var cout;\
+y=Pan2.ar(ClipNoise.ar(0.6)*Decay2.ar(Impulse.ar(9), 0.01, 0.02, 5)*\
+EnvGen.kr(Env.perc(0.11,0.18,1,1), 1, doneAction: 2),LFNoise1.kr(4,1));\
+    cout = (y*gain)*gate/12;\
+	w = y;\
+	w = AllpassN.ar(w, 0.1,\{[0.1.rand, 0.1.rand]\}.dup(2), 1.0);\
+	y = (y * -0.5) + (w * 0.5);\
+\
+Out.ar(out,y);\
+\}).store;\
+\
+SynthDef("clicks",\{arg amp=0,out=0,gate=1;  \
+var v,y,a,b,env;\
+env=LFNoise2.kr(0.5,0.1,0.2);\
+a=Pulse.ar(33,0.5,0.5);\
+b=Pulse.ar(127,0.5,0.3);\
+v=(a clip2:b)*\
+EnvGen.ar(Env.adsr(0.0,env,0.2,0.2,1,4),gate, doneAction:2);\
+Out.ar(out,Pan2.ar(v,LFNoise1.kr(2)));\
+\}).store;\
+\
+SynthDef("clicks2",\{arg amp=0,gate=1;  \
+var v,y,a,b,env;\
+env=LFNoise2.kr(2,0.1,0.02);\
+a=Pulse.ar(20,0.1,0.7);\
+b=Dust2.ar([17000,17400]);\
+v=(a clip2:b)*\
+EnvGen.ar(Env.adsr(0.004,env,0.31,0.0,0.8,4),gate, doneAction:2)*amp;\
+Out.ar(0,Pan2.ar(v,LFNoise1.kr(6)));\
+\}).store;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs20 \cf2 \
+\
+SynthDef("bleep3",\{arg freq,gate=1,out=0;\
+var src;\
+src=SinOsc.ar(freq+LFNoise2.ar(3.9,4),SinOsc.ar(freq*2,0.1,2)*EnvGen.ar(Env.adsr(0.0,0.2,0.4,0.0,1,10)),0.3)+Pulse.ar(freq,0.5,0.2)*EnvGen.ar(Env.adsr(0.0,0.4,0.5,0.0,1,4),gate,doneAction:2);\
+Out.ar(out,Pan2.ar(src,0.4));\
+\}).store;\
+)\
+\
+\
+o=AudioMeter.new\
+o.autoreset_(0.25)\
+\
+\
+\pard\pardeftab560\ql\qnatural
+
+\fs18 \cf2 \
+\{Nes2.ar(Impulse.kr(680), d0:2r00100111, d2:LFNoise1.kr(0.4, 130, 3), smask:2r00001010).dup\}.play}

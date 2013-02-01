@@ -1,0 +1,109 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fswiss\fcharset77 Helvetica-Bold;\f2\fswiss\fcharset77 Helvetica;
+}
+{\colortbl;\red255\green255\blue255;\red3\green3\blue3;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 SynthDef("deft",\{arg freq;\
+var out;\
+out=Mix.fill(6,\{Blip.ar((
+\fs24 freq.midicps)*[0.5,2/3,0.1,2,3/4].choose,[5,1,3,4,12].choose,0.35*LFNoise2.ar(0.2)
+\fs18 )\})*EnvGen.ar(Env.perc(1.1,9,1,12),doneAction:2);\
+Out.ar(0,Pan2.ar(out,-0.1));\
+\}).store;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SynthDef("deft2",\{arg freq;\
+var out;\
+out=Mix.fill(5,\{SinOsc.ar(XLine.ar((
+\fs24 freq.midicps*[0.5,1,2,2/3,0.5].choose)*[0.99,1.01],220.rand,0.2),0,0.4*LFNoise2.ar(4)
+\fs18 )\})*EnvGen.ar(Env.perc(0.01,0.9,1,-12),doneAction:2);\
+2.do(\{out=AllpassL.ar(out,0.1,\{[0.01.rand,0.01.rand]\},-0.32)\});\
+Out.ar(10,Pan2.ar(out,10));5\}).store;\
+\
+\
+SynthDef("deft3",\{arg freq;\
+var out,fc;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf2 fc = LinExp.kr(LFNoise1.kr(Rand(0.35,0.08)), -1,0.5,500,3600);
+\fs18 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 out=Pan2.ar(Mix.fill(4,\{SinOsc.ar(freq*[0.99,1.01]*[1,3/4,2,2/3].choose,0,0.3)\})*EnvGen.ar(Env.perc(0.1,2.23,1,8),doneAction:2),0.2);\
+out=
+\fs20 RHPF.ar(out, fc, 0.3);
+\fs18 \
+Out.ar(10,out);\
+\}).store;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+#x, y ,z= \{EventPatternProxy.basicNew\} ! 3;\
+\
+(\
+x.play;\
+y.play; \
+z.play;\
+x.fadeTime = 3.0;\
+z.fadeTime = 3.0;\
+)\
+\
+\
+(\
+x.stop;\
+y.stop; \
+z.stop;\
+x.fadeTime = 3.0;\
+)\
+(\
+x.source = Pbind(\\freq,\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 Pseq([0,5,0,7,3,5,0,3,0,0,5]+82-12,inf),\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \\dur, Prand([0.2,0.5,0.6,0.11],inf)+6, \\instrument, \\deft,\\amp,Pseq([4,1,3,1,4,1,4,1]/4,inf));\
+\
+y.source = Pbind(\\freq,\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 Prand([0,7,3,5,0,7,3,5,0,3,9]+94,inf),\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \\dur, Prand([0.2,0.25,0.5,0.5,1],inf), \\instrument, \\deft2,\\amp,Pseq([4,1,3,1,4,1,4,1]/4,inf));\
+\
+\
+z.source = Pbind(\\midinote,\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 Prand([0,7,3,5,0,7,3,5,0,3,9]+46,inf),\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \\dur, Prand([0.2,0.25,0.5,0.5,1],inf), \\instrument, \\deft3);\
+)\
+\
+s.latency=0.05;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 c=ExternalClock(5).play;\
+(	\
+a=BBCut2(CutGroup([
+\fs20 CutFunc(\{arg i;NetAddr("127.0.0.1", 5500).sendMsg("tr",i)\}),
+\fs18 CutStream1.new(10,
+\f1\b\fs24 relprop:0.9,curve:5,dutycycle:1.75
+\f0\b0\fs18 ),CutMixer(0,1.5,1,CutPan1.new(\{0.2.rand2\}))]),CageCut.new(34.0,[1.545,2.46,1.563,1.42,1.25,0.546,2.4,3.5]),BBCutQuantise1.new(
+\f2\fs24 0.5
+\f0\fs18 )).play(c);\
+)\
+a.play(c);\
+\
+a.stop; \
+\
+a.resume;\
+\
+a.end;\
+\
+t=TempoClock.new;\
+Tempo.bpm=60;\
+\
+Instr("kfea",\{arg amp;\
+var out;\
+out=RHPF.ar(PinkNoise.ar(0.2)+Dust2.ar(14,0.5)*amp,[1240,1275,12000,3053],0.25);\
+4.do(\{out=AllpassC.ar(out,0.2,\{[0.03.rand,0.03.rand]\},0.45)\});\
+Out.ar(0,out);\
+\}).test;\
+}

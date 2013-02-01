@@ -1,0 +1,533 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fswiss\fcharset77 Helvetica;\f2\fswiss\fcharset77 Helvetica-Bold;
+}
+{\colortbl;\red255\green255\blue255;\red191\green0\blue0;\red0\green0\blue0;\red0\green0\blue191;
+\red96\green96\blue96;\red0\green115\blue0;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs20 \cf2 //////////////////mseq0.2!!!!!//////////////\cf3 \
+(\
+\cf4 var\cf3  w,mMenu,scrMenu,vol,startButton,instrname;\
+\cf4 var\cf3  ampControl,durControl;\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf4 var\cf3  makingButton, amp0, amp1, amp2, amp3;\
+\cf4 var\cf3  gain0,gain1,gain2,gain3,weta,feedbacker,delayer;\
+\cf4 var\cf3  id, cmdPeriodFunc;\
+\cf4 var\cf3  dataseq,dataArray;\
+\cf4 var\cf3  textColors;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \
+\cf4 var\cf3  bb1,bb2,bb3,bclok1,bbut1,bbut2,bbut3,clocktex;\
+\
+w = \cf4 SCWindow\cf3 (\cf5 "mseq"\cf3 , \cf4 Rect\cf3 (120, 134, 820, 520));\
+w.alpha = 0.85;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 w.view.decorator = \cf4 FlowLayout\cf3 (w.view.bounds);\
+w.view.background = \cf4 Color\cf3 (0.9,0.9,0.8,0.8);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 textColors=\cf4 Color\cf3 .new(0.2,0.2,0.3,0.9);\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \
+\cf2 ////////////////////////////////repetition of gui////////////////////////////\cf3 \
+\
+\
+5.do(\{ \cf4 arg\cf3  i,ide,idp,idr,idlega,dur,outbus,seqb,seqArray,seqr,seqArrayr,seqlega,seqlegaArrayr;\
+\
+	ide=\cf4 EventPatternProxy\cf3 .basicNew;\
+	dur=\cf4 NumberEditor\cf3 (0.25,\cf6 \\dur\cf3 );\
+	outbus=\cf4 NumberEditor\cf3 (0,\cf6 \\out\cf3 );\
+	idp = \cf4 PatternProxy\cf3 .basicNew;\
+	idp.source = \cf4 Pseq\cf3 ([0.5],\cf4 inf\cf3 );\
+	idr= \cf4 PatternProxy\cf3 .basicNew;\
+	idr.source = \cf4 Pseq\cf3 ([1],\cf4 inf\cf3 );\
+	idlega= \cf4 PatternProxy\cf3 .basicNew;\
+	idlega.source = \cf4 Pseq\cf3 ([1],\cf4 inf\cf3 );\
+	ide.source = \cf4 Pbind\cf3 (\cf6 \\dur\cf3 ,dur,\cf6 \\out\cf3 ,outbus,\cf6 \\amp\cf3 ,idp,\cf6 \\rate\cf3 ,idr,\cf6 \\
+\fs18 legato\cf3 ,idlega,\\instrument,"bits"
+\fs20 );\
+	ide
+\fs18 .quant = 4;
+\fs20 \
+\
+\cf2 //////pattern graff///////\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 	\cf4 SCStaticText\cf3 ( w, \cf4 Rect\cf3 (0, 0, 50, 25)).string_(\cf5 "pattern"\cf3 ).align_(\cf6 \\center\cf3 ).stringColor_(textColors);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \
+	seqb = \cf4 SCMultiSliderView\cf3 (w, \cf4 Rect\cf3 (0, 0, 100, 25));\
+	seqb.strokeColor_(\cf4 Color\cf3 (0.0,0.0,0.0,1));\
+	\cf2 //seqb.valueThumbSize_(1);\cf3 \
+	seqArray = \cf4 Array\cf3 .new;\
+	
+\fs18 32.do(\{\cf4 arg\cf3  i;\
+				
+\fs20 seqArray
+\fs18  = 
+\fs20 seqArray.add(1.0.rand)
+\fs18 ;\
+				\})
+\fs20 ;\
+	\cf2 //seqArray.postln;\cf3 \
+	seqb.value_(seqArray);\
+	seqb.indexThumbSize_(2);\
+	seqb.gap_(1);\
+	seqb.step_(0.5);\
+	seqb.
+\fs18 strokeColor_(\cf4 Color\cf3 .new(0.2,0.2,0.3));\
+	
+\fs20 seqb.
+\fs18 fillColor_ 
+\fs20 (
+\fs18 \cf4 Color\cf3 .new(0.2,0.2,0.3)
+\fs20 );\
+	seqb.action = \{\cf4 arg\cf3  seqb;\
+		idp.source=\cf4 Pseq\cf3 (seqb.value,\cf4 inf\cf3 );\
+		seqArray=seqb.value;\
+		idp
+\fs18 .quant = 8;
+\fs20 \
+		\};\
+\
+\
+\cf2 ////////seqArray scrambler menu////////////\cf3 \
+\
+	m = [	\cf5 "
+\fs18 reverse"\cf3 ,
+\fs20 \cf5 "mirror"\cf3 ,\
+		\cf5 "mirror1"\cf3 ,\cf5 "mirror2"\cf3 ,\cf5 "rotate(1)"\cf3 ,\cf5 "rotate(2)"\cf3 ,\cf5 "rotate(3)"\cf3 ,\cf5 "rotate(4)"\cf3 ,
+\fs18 \cf5 "stutter(2)"\cf3 ,\cf5 "stutter(1)"\cf3 ,\cf5 "stutter		(2)"\cf3 ,\cf5 "stutter(3)"\cf3 ,\cf5 "pyramid(1)"\cf3 ,\cf5 "pyramid(2)"\cf3 ,\cf5 "pyramid(3)"\cf3 ,\cf5 "permute(2)"
+\fs20 \cf3 \
+		];\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 	scrMenu=
+\fs18 \cf4 SCListView
+\fs20 \cf3 (w,\cf4 Rect\cf3 (0,0,90,30));\
+	scrMenu.items = m;\
+	scrMenu.
+\fs18 hiliteColor_(
+\fs20 \cf4 Color\cf3 .new(0.2,0.6,0.4,0.6)
+\fs18 );
+\fs20 \
+	scrMenu.
+\fs18 font_(\cf4 Font\cf3 (\cf5 "
+\f1\fs24 Helvetica"
+\f0\fs18 \cf3 ,10));
+\fs20 \
+	scrMenu.background_(\cf4 Color\cf3 .white);\
+	scrMenu.action=\{\cf4 arg\cf3  scrMenu;\
+\
+		\cf2 //newarray=("."++m.at(scrMenu.value)).asString;\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 		seqArray=(seqArray.
+\fs18 asString
+\fs20 ++(\cf5 "."\cf3 ++m.at(scrMenu.value)).asString).
+\fs18 compile.value
+\fs20 ;\
+		seqArray.value.postln;\
+		\cf2 //newarray.postln;\cf3 \
+		idp.source=\cf4 Pseq\cf3 (seqArray,\cf4 inf\cf3 );\
+		\};\
+\
+\cf2 //////rate graff///////\cf3 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 	\cf4 SCStaticText\cf3 ( w, \cf4 Rect\cf3 (0, 0, 27, 25)).string_(\cf5 "rate"\cf3 ).align_(\cf6 \\center\cf3 ).stringColor_(textColors);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \
+	seqr = \cf4 SCMultiSliderView\cf3 (w, \cf4 Rect\cf3 (0, 0, 55, 20));\
+	seqr.strokeColor_(\cf4 Color\cf3 (0.9,0.5,0.6,0.8));\
+	seqArrayr =[1,0.5,0.75,1];\
+	4.do(\{\cf4 arg\cf3  i;\
+		seqArrayr = seqArrayr.add(1.0).scramble;\
+		\});\
+	seqArrayr.postln;\
+	seqr.value_(seqArrayr);\
+\
+	seqr.xOffset_(18);\
+	seqr.thumbSize_(1);\
+	seqr.strokeColor_(\cf4 Color\cf3 .black);\
+	seqr.drawLines_(\cf4 true\cf3 );\
+	seqr.drawRects_(\cf4 true\cf3 );\
+	seqr.indexThumbSize_(0);\
+	seqr.valueThumbSize_(2);\
+	seqr.step_(1/8);\
+	seqr.action = \{\cf4 arg\cf3  seqr;\
+		idr.source=\cf4 Pseq\cf3 ((seqr.value),\cf4 inf\cf3 );\
+		\};\
+\
+\cf2 //////lagato graff///////\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 	\cf4 SCStaticText\cf3 ( w, \cf4 Rect\cf3 (0, 0, 35, 20)).string_(\cf5 "legato"\cf3 ).align_(\cf6 \\center\cf3 ).stringColor_(textColors);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \
+	seqlega = \cf4 SCMultiSliderView\cf3 (w, \cf4 Rect\cf3 (0, 0, 55, 20));\
+	seqlega.strokeColor_(\cf4 Color\cf3 (0.9,0.5,0.6,0.8));\
+	seqlegaArrayr = [1,0.1,0.8,0.2];\
+	4.do(\{\cf4 arg\cf3  i;\
+		seqlegaArrayr = seqlegaArrayr.scramble;\
+		\});\
+	seqArrayr.postln;\
+	seqlega.value_(seqlegaArrayr);\
+\
+	\cf2 //seqlega.xOffset_(12);\cf3 \
+	\cf2 //seqlega.thumbSize_(3);\cf3 \
+	seqlega
+\fs18 .isFilled_(\cf4 true\cf3 );
+\fs20 \
+	seqlega.strokeColor_(\cf4 Color\cf3 .black);\
+	\cf2 //seqlega.drawLines_(true);\cf3 \
+	\cf2 //seqlega.drawRects_(true);\cf3 \
+	\cf2 //seqlega.indexThumbSize_(10);\cf3 \
+	seqlega.valueThumbSize_(1);\
+	seqlega.step_(1/6);\
+	seqlega.action = \{\cf4 arg\cf3  seqr;\
+			idlega.source=\cf4 Pseq\cf3 ((seqlega.value+0.05),\cf4 inf\cf3 );\
+			\};\
+\
+\cf2 //////startButton///////\cf3 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 	startButton = \cf4 SCButton\cf3 (w, 60 @ 24);\
+	startButton.states = [\
+			[\cf5 "Start"\cf3 , \cf4 Color\cf3 .white, \cf4 Color\cf3 (0.5,0.2,0.8,0.3)],\
+			[\cf5 "Stop"\cf3 , \cf4 Color\cf3 .white, \cf4 Color\cf3 (0.3,0.3,0.8,0.8)]\
+		];\
+\
+	startButton.action = \{\cf4 |view|\cf3 \
+		if (view.value == 1) \{\
+			ide.play;\
+			\};\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 	if (view.value == 0) \{\
+			ide.stop;\
+			\};\
+		\};\
+\
+\
+\cf2 ///////instrment textbox//////\cf3 \
+\
+	instrname = \cf4 SCTextField\cf3 (w, \cf4 Rect\cf3 (0, 0, 69, 20));\
+	instrname.action = \{\
+			\cf4 arg\cf3  field;\
+			ide.set(\cf6 \\instrument\cf3 ,\\++field.value);\
+			\};\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 	//instrname.string=\cf5 "bits"\cf3 ++i;\
+	\
+	\cf2 if(i==0,\{\cf3 \
+		instrname.string=\cf5 "bits"\cf3 ;\
+		ide.set(\cf6 \\instrument\cf3 ,\cf6 \\bits\cf3 );\
+	\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 ///////ofstdur selectbox//////\cf3 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 	durControl = \cf4 EZSlider\cf3 (w, 160 @ 19, \cf5 "ofstdur"\cf3 , \cf4 ControlSpec\cf3 (0.25, 2, \cf6 \\lin\cf3 , 0.25), \
+	\{\cf4 |ez|\cf3  dur.value=ez.value; \}, 0.25,numberWidth:40).labelView.stringColor_(textColors);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \
+\cf2 ///////outBus selector gui////////\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 	\cf4 SCStaticText\cf3 ( w, \cf4 Rect\cf3 (0, 0, 25, 20)).string_(\cf5 "out"\cf3 ).align_(\cf6 \\center\cf3 ).stringColor_(textColors);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \
+	l = [	\cf5 "0"\cf3 ,\
+			\cf5 "10"\cf3 ,\cf5 "20"\cf3 ,\cf5 "30"\cf3 ,\cf5 "40"\cf3 \
+		];\
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 	mMenu=\cf4 SCPopUpMenu\cf3 (w,\cf4 Rect\cf3 (100,15,30,20));\
+	mMenu.items = l;\
+	mMenu.background_(\cf4 Color\cf3 .white);\
+	mMenu.action=\{\cf4 arg\cf3  mMenu;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 			outbus.value=l.at(mMenu.value).asInteger;\
+			\};\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 	w.view.decorator.nextLine;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 ////////////////////////mixing gui////////////////\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf4 SCStaticText\cf3 ( w, \cf4 Rect\cf3 (360, 212, 40, 20)).string_(\cf5 "Mixer"\cf3 ).align_(\cf6 \\center\cf3 ).stringColor_(textColors);\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf3 s.sendMsg(\cf5 "/b_alloc"\cf3 , 0, 44100 * 2, 2);
+\fs20 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+\cf4 SynthDef\cf3 (\cf5 "mixer1"\cf3 ,\{\
+	\cf4 arg\cf3  	gate=1,a0=0,a1=0,a2=0,a3=0,g0=1,g1=1,g2=1,g3=1,wet=0.3,buffer,delayTime=2,feedback=0.9;\
+	\cf4 var\cf3  a,b,c,d,y,z,g
+\f1\fs24 , env;
+\f0\fs20 \
+	
+\f1\fs24 env = \cf4 Linen\cf3 .kr(gate, 0.1, 1, 0.2,2);\
+	
+\f0\fs20 \
+	a=((\cf4 In\cf3 .ar([10,11])*g0).softclip)*a0;\
+	b=((\cf4 In\cf3 .ar([20,21])*g1).softclip)*a1;\
+	c=((\cf4 In\cf3 .ar([30,31])*g2).softclip)*a2;\
+\
+	d=((\cf4 In\cf3 .ar(40,2)*g3).softclip)*a3;\
+	z = \cf4 PingPong\cf3 .ar(0,d, 4.0/(delayTime), feedback, 1);\
+	y=z;\
+	8.do(\{ y = \cf4 AllpassN\cf3 .ar(y, 0.1, \{[0.02.rand,0.04.rand] \}, 0.75) \});\
+	
+\f1\fs24 \cf4 XOut\cf3 .ar(80, 
+\f0\fs20  wet*env 
+\f1\fs24 , 
+\f0\fs20 y 
+\f1\fs24 );
+\f0\fs20 \
+	\cf4 Out\cf3 .ar(0,
+\f2\b\fs24 \cf4 Limiter
+\f0\b0\fs18 \cf3 .ar(
+\fs20 \cf4 Mix\cf3 .new([a,b,c,d,\cf4 In\cf3 .ar([80,81]),z])
+\fs18 ,0.98
+\fs20 ));		\}).store;\
+\
+id = s.nextNodeID;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 makingButton = \cf4 SCButton\cf3 (w, 75 @ 24);\
+makingButton.states = [\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 	[\cf5 "Start"\cf3 , \cf4 Color\cf3 .white, \cf4 Color\cf3 (0.3,0.9,0.5,0.3)],\
+	[\cf5 "Stop"\cf3 , \cf4 Color\cf3 .white, \cf4 Color\cf3 (0.5,0.9,0.2,0.9)]\
+	];\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 makingButton.action = \{\cf4 |view|\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 		if (view.value == 1) \{\
+			\cf2 // start sound\cf3 \
+			s.sendMsg(\cf5 "/s_new"\cf3 , \cf5 "mixer1"\cf3 , id, 1, 0, \
+				\cf5 "a0"\cf3 , amp0.value,\
+				\cf5 "a1"\cf3 , amp1.value,\
+				\cf5 "a2"\cf3 , amp2.value,\
+				\cf5 "a3"\cf3 , amp3.value,\
+				\cf5 "g0"\cf3 , gain0.value,\
+				\cf5 "g1"\cf3 , gain1.value,\
+				\cf5 "g2"\cf3 , gain2.value,\
+				\cf5 "g3"\cf3 , gain3.value,\
+				\cf5 "wet"\cf3 , weta.value,\
+				\cf5 "feedback"\cf3 ,feedbacker.value,\
+				\cf5 "delayTime"\cf3 ,delayer.value\
+				);\
+		\};\
+		if (view.value == 0) \{\
+			s.sendMsg(\cf5 "/n_free"\cf3 , id);\
+		\};\
+\};\
+\
+w.view.decorator.nextLine;\
+amp0 = \cf4 EZSlider\cf3 (w, 300 @ 20, \cf5 "Amp10"\cf3 , \cf6 \\amp\cf3 , \
+	\{\cf4 |ez|\cf3  s.sendMsg(\cf5 "/n_set"\cf3 , id, \cf5 "a0"\cf3 , ez.value); \}, 0);\
+	\
+w.view.decorator.nextLine;\
+gain0 = \cf4 EZSlider\cf3 (w, 270 @ 18, \cf5 "gain10"\cf3 , [0.8,2048,\cf6 \\exponential\cf3 ,0], \
+	\{\cf4 |ez|\cf3  s.sendMsg(\cf5 "/n_set"\cf3 , id, \cf5 "g0"\cf3 , ez.value); \}, 0.8);\
+	\
+	\
+w.view.decorator.nextLine;\
+amp1 = \cf4 EZSlider\cf3 (w, 300 @ 20, \cf5 "Amp20"\cf3 ,\cf6 \\amp\cf3 , \
+	\{\cf4 |ez|\cf3  s.sendMsg(\cf5 "/n_set"\cf3 , id, \cf5 "a1"\cf3 , ez.value); \}, 0);\
+\
+w.view.decorator.nextLine;\
+gain1 = \cf4 EZSlider\cf3 (w, 270 @ 18, \cf5 "gain20"\cf3 , [0.8,2048,\cf6 \\exponential\cf3 ,0], \
+	\{\cf4 |ez|\cf3  s.sendMsg(\cf5 "/n_set"\cf3 , id, \cf5 "g1"\cf3 , ez.value); \}, 0.8);\
+	\
+	\
+w.view.decorator.nextLine;\
+amp2 = \cf4 EZSlider\cf3 (w, 300 @ 20, \cf5 "Amp30"\cf3 ,\cf6 \\amp\cf3 , \
+	\{\cf4 |ez|\cf3  s.sendMsg(\cf5 "/n_set"\cf3 , id, \cf5 "a2"\cf3 , ez.value); \}, 0);\
+\
+w.view.decorator.nextLine;\
+gain2 = \cf4 EZSlider\cf3 (w, 270 @ 18, \cf5 "gain30"\cf3 , [0.8,2048,\cf6 \\exponential\cf3 ,0], \
+	\{\cf4 |ez|\cf3  s.sendMsg(\cf5 "/n_set"\cf3 , id, \cf5 "g2"\cf3 , ez.value); \}, 0.8);\
+	\
+w.view.decorator.nextLine;\
+amp3 = \cf4 EZSlider\cf3 (w, 300 @ 20, \cf5 "Amp40"\cf3 , \cf6 \\amp\cf3 , \
+	\{\cf4 |ez|\cf3  s.sendMsg(\cf5 "/n_set"\cf3 , id, \cf5 "a3"\cf3 , ez.value); \}, 0);\
+	\
+w.view.decorator.nextLine;\
+gain3 = \cf4 EZSlider\cf3 (w, 270 @ 18, \cf5 "gain40"\cf3 , [0.8,2048,\cf6 \\exponential\cf3 ,0], \
+	\{\cf4 |ez|\cf3  s.sendMsg(\cf5 "/n_set"\cf3 , id, \cf5 "g3"\cf3 , ez.value); \}, 0.8);\
+	\
+w.view.decorator.nextLine;\
+weta = \cf4 EZSlider\cf3 (w, 270 @ 22, \cf5 "Wet"\cf3 , [0,0.4,\cf6 \\linear\cf3 ,0], \
+	\{\cf4 |ez|\cf3  s.sendMsg(\cf5 "/n_set"\cf3 , id, \cf5 "wet"\cf3 , ez.value); \}, 0);\
+	\
+w.view.decorator.nextLine;\
+feedbacker = \cf4 EZSlider\cf3 (w, 270 @ 22, \cf5 "FeedBack"\cf3 , [0,1,\cf6 \\linear\cf3 ,0], \
+	\{\cf4 |ez|\cf3  s.sendMsg(\cf5 "/n_set"\cf3 , id, \cf5 "feedback"\cf3 , ez.value); \}, 0);\
+	\
+w.view.decorator.nextLine;\
+delayer = \cf4 EZSlider\cf3 (w, 270 @ 22, \cf5 "DelayTime"\cf3 , [0.4,8,\cf6 \\linear\cf3 ,0], \
+	\{\cf4 |ez|\cf3  s.sendMsg(\cf5 "/n_set"\cf3 , id, \cf5 "delayTime"\cf3 , ez.value); \}, 1.25);\
+	\
+\
+	amp0.labelView.stringColor_(textColors);\
+	amp1.labelView.stringColor_(textColors);\
+	amp2.labelView.stringColor_(textColors);\
+	amp3.labelView.stringColor_(textColors);\
+\
+	gain0.labelView.stringColor_(textColors);\
+	gain1.labelView.stringColor_(textColors);\
+	gain2.labelView.stringColor_(textColors);\
+	gain3.labelView.stringColor_(textColors);\
+\
+	weta.labelView.stringColor_(textColors);\
+	feedbacker.labelView.stringColor_(textColors);\
+	delayer.labelView.stringColor_(textColors);\
+	\
+	\
+	cmdPeriodFunc = \{ makingButton.value = 0; \};\
+	\cf4 CmdPeriod\cf3 .add(cmdPeriodFunc);\
+\
+w.onClose = \{\
+	s.sendMsg(\cf5 "/n_free"\cf3 , id);\
+	\cf4 CmdPeriod\cf3 .remove(cmdPeriodFunc);\
+	\};\
+	\
+\cf2 /////////////datamatrix GUI/////////////\cf3 \
+\cf2 //	w.view.decorator.nextLine;\cf3 \
+\cf2 //	w.view.decorator.
+\fs18 \cf2 shift(320,-280)
+\fs20 \cf2 ;\cf3 \
+\cf2 //\cf3 \
+\cf2 //	SCStaticText( w, Rect(0, 0, 50, 25)).string_("dataplex").align_(\\center).stringColor_(textColors);\cf3 \
+\cf2 //	w.view.decorator.nextLine;\cf3 \
+\cf2 //	w.view.decorator.
+\fs18 \cf2 shift(340,0)
+\fs20 \cf2 ;\cf3 \
+\cf2 //\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 //	dataseq = SCMultiSliderView(w, Rect(0, 0, 350, 180));\cf3 \
+\cf2 //	dataseq.strokeColor_(Color(0.0,0.0,0.0,1));\cf3 \
+\cf2 //	dataseq.valueThumbSize_(100);\cf3 \
+\cf2 //	
+\fs18 200.do(\{arg i;\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 //				
+\fs20 dataArray
+\fs18  = 
+\fs20 dataArray.add(1.0.rand)
+\fs18 ;\cf3 \
+\cf2 //				\})
+\fs20 ;\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 //	//dataArray.postln;\cf3 \
+\cf2 //	dataseq.value_(dataArray);\cf3 \
+\cf2 //	dataseq.indexThumbSize_(1.0);\cf3 \
+\cf2 //	dataseq.gap_(0);\cf3 \
+\cf2 //	dataseq.step_(0.25);\cf3 \
+\cf2 //	dataseq.
+\fs18 strokeColor_(Color.new(0.2,0.2,0.3));\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 //	
+\fs20 dataseq.
+\fs18 fillColor_ 
+\fs20 (
+\fs18 Color.new(0.2,0.2,0.3)
+\fs20 );\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 //	dataseq.action = \{arg seqb;\cf3 \
+\cf2 //		idp.source=Pseq(seqb.value,inf);\cf3 \
+\cf2 //		seqArray=seqb.value;\cf3 \
+\cf2 //		idp
+\fs18 .quant = 8;
+\fs20 \cf3 \
+\cf2 //		\};\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 \
+	\
+	\
+	\
+\cf2 //	w.view.decorator.
+\fs18 \cf2 shift(53,-230)
+\fs20 \cf2 ;\cf3 \
+\cf2 //	o=EZSlider.new(
+\fs26 \cf2 w, 230 @ 14, "Cutoff", ControlSpec(200, 5000, \\exp), \cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 //	\{|ez| s.sendMsg("/n_set", id, "fc", ez.value); \}, 1000)
+\fs20 \cf2 ;\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 //	w.view.decorator.nextLine;\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 //	w.view.decorator.
+\fs18 shift(323,0)
+\fs20 ;\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 //	o=EZSlider.new(
+\fs26 \cf2 w, 230 @ 14, "Cutoff", ControlSpec(200, 5000, \\exp), \cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 //	\{|ez| s.sendMsg("/n_set", id, "fc", ez.value); \}, 1000)
+\fs20 \cf2 ;\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 //	w.view.decorator.nextLine;\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 //	w.view.decorator.
+\fs18 shift(323,0)
+\fs20 ;\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 //	o=EZSlider.new(
+\fs26 \cf2 w, 230 @ 14, "Cutoff", ControlSpec(200, 5000, \\exp), \cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 //	\{|ez| s.sendMsg("/n_set", id, "fc", ez.value); \}, 1000)
+\fs20 \cf2 ;\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 //	w.view.decorator.nextLine;\cf3 \
+\
+\
+\cf2 ////////Tempo.GUI///////////////\cf3 \
+\
+	\cf2 //w.view.decorator.
+\fs18 \cf2 shift(0,240)
+\fs20 \cf2 ;\cf3 \
+	t = \cf4 Tempo\cf3 .new;\
+	t.bpm = 124;\
+	t.gui(w);\
+	w.front; \
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf3 \
+\cf2 ///////SampleSynthDef "TestSynth"//////\cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs24 \cf4 SynthDef\cf3 (\cf6 \\TestSynth\cf3 ,\{\
+		\cf4 arg\cf3 	
+\fs22 out=0,amp,rate,gate=1;\
+		\cf4 var\cf3  src,env;\
+		src=\cf4 SinOsc\cf3 .ar([600,1200]*rate,0,0.3*amp);\
+		env=\cf4 EnvGen\cf3 .ar(\cf4 Env\cf3 .
+\f2\b\fs24 adsr(0,1,1,0),gate
+\f0\b0\fs22 ,doneAction:2);\
+		\cf4 Out\cf3 .ar(out,src*env);\
+
+\fs24 	\}).store;\
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs20 \cf3 )\
+\cf2 ////////////2006 "mseq0.2" SuperCollider3 Code Written by moxuse http://moxuse.org/////////////\cf3 \
+}

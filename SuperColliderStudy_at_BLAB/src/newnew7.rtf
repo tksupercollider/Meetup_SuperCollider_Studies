@@ -1,0 +1,204 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fnil\fcharset78 HiraKakuPro-W3;\f2\fswiss\fcharset77 Helvetica-Bold;
+\f3\fnil\fcharset78 Osaka-Mono;}
+{\colortbl;\red255\green255\blue255;\red3\green3\blue3;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs22 \cf2 s.boot;\
+(\
+SynthDef("act2",\{arg amp=0.95,dur,rate;\
+     var out;\
+	out= Pan2.ar(Klank.ar(`[[16725, 1245, 262], nil, [0.8, 0.8, 0.9]],ClipNoise.ar(0.025)),LFNoise2.ar(0.04,0.9))*amp*\
+EnvGen.kr(Env.perc(0.01,0.05,1,2), 1, doneAction:2);\
+Out.ar(0,out);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf2 SendTrig.kr(Impulse.kr(1),0,1);
+\fs22 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \}).store;\
+\
+\
+SynthDef("act3",\{arg amp=0.95,dur,rate;\
+     var out;\
+	out= Pan2.ar(RLPF.ar(ClipNoise.ar(0.5)*SinOsc.ar(12),LFNoise2.ar(0.04,23,100).midicps*rate,0.2),LFNoise2.ar(0.04,0.9)) *amp*\
+EnvGen.kr(Env.perc(0.01,0.03,1,5), 1, doneAction:2);\
+Out.ar(0,out);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf2 SendTrig.kr(Impulse.kr(1),0,1);
+\fs22 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \}).store;\
+\
+SynthDef("act1",\{arg amp=0.95,dur,rate;\
+     var out;\
+	out= Pan2.ar(RLPF.ar(ClipNoise.ar(0.5)*Pulse.ar(55),LFNoise2.ar(0.04,23,80).midicps*rate,0.3) clip2: SinOsc.ar(12435,0,0.55),LFNoise2.ar(0.04,0.9)) *amp*\
+EnvGen.kr(Env.perc(0.01,0.05,1,5), 1, doneAction:2);\
+Out.ar(0,out);\
+\}).store;\
+\
+\
+SynthDef("act4",\{arg amp=0.95,dur,rate;\
+     var out;\
+	out= Pan2.ar(Formlet.ar(Dust.ar(80), 290*rate, 0.01, 0.25,1.25) clip2: SinOsc.ar(8425,0,0.5),LFNoise2.ar(0.04,0.7)) *amp*\
+EnvGen.kr(Env.perc(0.01,0.05,1,5), 1, doneAction:2);\
+Out.ar(0,out);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\fs18 \cf2 SendTrig.kr(Impulse.kr(1),1,1);
+\fs22 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \}).store;\
+\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SynthDef("act5",\{arg amp=0.95,dur,freq;\
+     var out;\
+	out= Pan2.ar(DynKlank.ar(`[[6724, 4545, 1362], nil, [0.5, 0.8, 0.6]], SinOsc.ar(freq,0,1))*amp*\
+EnvGen.kr(Env.perc(0.01,1.32*dur,1.2,2), 1, doneAction:2),LFNoise1.ar(0.06,0.7));\
+Out.ar(0,RLPF.ar(out,Duty.kr(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 				Dser([1.1955, 0.125,Drand([0.75,0.25,0.666],1),0.5,0.125], 12),\
+				0, \
+				Drand([43,Drand([4,-36,12,20],2), 30, -25,24,1]+80, 8).midicps))\
+			);\
+	
+\fs18 SendTrig.kr(Impulse.kr(0.25),3,1);
+\fs22 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \}).store;\
+\
+\
+s.sendMsg(\\b_allocRead, 10, "sounds/soz15.wav");\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 SynthDef("act6",\{arg amp,rate,dur;\
+var src;\
+src=Pan2.ar(PlayBuf.ar(1,10,rate,0,55543,1)*SinOsc.ar(LFNoise1.ar(0.1,20,20).midicps),LFNoise1.ar(0.06,0.7))*EnvGen.ar(Env.perc(0.02,dur*1.7,1.5,3),doneAction:2);\
+Out.ar(0,src);\
+
+\fs18 SendTrig.kr(Impulse.kr(0.25),4,1);
+\fs22 \
+\}).store;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \
+s.sendMsg(\\b_allocRead, 8, "sounds/
+\f1\fs28 kick12
+\f0\fs22 .wav");\
+SynthDef("kicks",\{ arg out=0,amp,rate;\
+	Out.ar(0, \
+		Pan2.ar(PlayBuf.ar(1, 8,rate, 1.0,0.0,0),0)*EnvGen.ar(Env.perc(0.01,0.5,1),doneAction:2,levelScale:amp);\
+		);\
+		
+\fs18 SendTrig.kr(Impulse.kr(0.25),2,1);
+\fs22 \
+\}).store;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 SynthDef("sine2",\{arg amp,freq,dur;\
+var src;\
+src=Pan2.ar(LFSaw.ar(freq/2/3,0,0.5),LFNoise1.ar(0.06,0.5,0.2))*EnvGen.ar(Env.perc(0.02,dur*0.3,1,5),doneAction:2);\
+Out.ar(0,RLPF.ar(src,LFNoise1.ar(0.5,22,75).midicps,0.3));\
+
+\fs18 SendTrig.kr(Impulse.kr(0.25),4,1);
+\fs22 \
+\}).store;\
+\
+SynthDef("sine3",\{arg amp,freq,dur;\
+var src;\
+src=Pan2.ar(Saw.ar(freq/1.5,0.5),LFNoise1.ar(0.06,0.5,0.2))*EnvGen.ar(Env.perc(0.02,dur,1,-5),doneAction:2);\
+Out.ar(0,RLPF.ar(src,LFNoise1.ar(2,32,95).midicps,0.3));\
+
+\fs18 SendTrig.kr(Impulse.kr(0.25),4,1);
+\fs22 \
+\}).store;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 )\
+\
+Pdef(\\moe0).play;\
+Pdef(\\moe0).stop;\
+\
+Tempo.bpm=110;\
+\
+(\
+Pdef(\\moe0,\
+Ppar([\
+Pbind(\\instrument,Prand(["act3","act1","act2"],inf),\\dur,0.5*Pshuf([1,0.5,2,1,1,0.5],inf),\\amp,Pseq([4,\\,4,3,\\,1,4]/4,inf),\\rate,Pshuf([1,1,0.75,0.6666,0.98,1.5],inf)),\
+\
+Pbind(\\instrument,Pseq(["kicks"],inf),\\dur,Prand([4],inf),\\amp,1,\\rate,Pshuf([1],inf)),\
+\
+Pbind(\\instrument,Pseq(["act4","act3"],inf),\\dur,Pseq([0.25,0.75,2],inf),\\amp,Pseq([\\,4,2,4,\\,2]/\
+4,inf),\\rate,Prand([1,0.82,0.75,0.6666,1,0.5],inf)),\
+\
+Pbind(\\instrument,"act5",\\dur,Pshuf([0.25,4,6,2,6,4,3,5,3],inf),\
+\\note,Prand([0,5,7,10,12,\\],inf)),\
+\
+Pbind(\\instrument,"act6",\\dur,Pseq([4.25,3.75,6,2],inf),\\rate,Pseq([1.2,0.5,0.6666,\\],inf)),\
+\
+//Pbind(\\instrument,"
+\fs18 sine2
+\fs22 ",\\dur,Pxrand([2,1,1,1,2]/4,inf),\
+//\\note,Prand([0,5,7,10,12],inf)),\
+//\
+//Pbind(\\instrument,"
+\fs18 sine3
+\fs22 ",\\dur,Pxrand([2,1,1]/2,inf),\
+//\\note,Prand([0,5,7,10,12],inf)),\
+\
+\
+Pbind(\\instrument,Prand(["act4","act1"],inf),\\dur,Pshuf([0.25,0.75,2],inf),\\amp,Pshuf([1,\\,\\,4,\\]/4,inf),\\rate,Prand([1,1,0.75,1,0.6666,0.5],inf)),\
+\
+Pbind(\\instrument,Pseq(["act3"],inf),\\dur,Pseq([1,2,4],inf)*Pseq([1,1,1,1,Pshuf([1/2,2/3,1/3],6)*Prand([2/3,1],6)*Prand([1,1,1,3/2,0.5],4),2],inf),\\amp,Pshuf([\\,4,3,\\,1,\\,4,1,2]/2,inf),\\rate,Pseq([1,0.6666,0.5,0.75,0.96],inf)),\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 ]))
+\fs18 .
+\f2\b\fs24 quant_(16)
+\f0\b0\fs22 ;\
+)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f3 \cf2 \
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f0\fs18 \cf2 o = OSCresponderNode(s.addr, '/tr', \{ arg time, responder, msg;\
+  if(msg[2] == 0)\{\
+	
+\fs22 NetAddr("localhost",5500).sendMsg("/func0",1.0.rand); \
+	\};\
+  
+\fs18 if(msg[2] == 1)\{\
+	
+\fs22 NetAddr("localhost",5500).sendMsg("/func1",1.0.rand); \
+	\};\
+ 
+\fs18  if(msg[2] == 2)\{\
+	
+\fs22 NetAddr("localhost",5500).sendMsg("/func2",1.0.rand); \
+	\};\
+
+\fs18   if(msg[2] == 3)\{\
+	
+\fs22 NetAddr("localhost",5500).sendMsg("/func3",1.0.rand); \
+	\};\
+
+\fs18   if(msg[2] == 4)\{\
+	
+\fs22 NetAddr("localhost",5500).sendMsg("/func4",1.0.rand); \
+	\};
+\fs18 \
+\}).add;
+\f3\fs22 \
+)\
+
+\f0 o.remove;\
+\
+}

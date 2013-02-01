@@ -1,0 +1,184 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fswiss\fcharset77 Helvetica;\f2\fnil\fcharset78 HiraKakuPro-W6;
+}
+{\colortbl;\red255\green255\blue255;\red26\green26\blue26;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs22 \cf2 s.sendMsg(\\b_allocRead, 50, "sounds/soz12.wav");\
+s.sendMsg(\\b_allocRead, 51, "sounds/soz4.wav");\
+s.sendMsg(\\b_allocRead, 52, "sounds/soz5.wav");\
+s.sendMsg(\\b_allocRead, 53, "sounds/kick6.wav");\
+s.sendMsg(\\b_allocRead, 54, "sounds/blow05.wav");\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs18 \cf2 \
+\
+(\
+SynthDef("astro0",\{arg pos=0,freq;\
+var src;\
+src=PlayBuf.ar(2,50,0.5,1,pos)*2 clip2:SinOsc.ar(8,0,0.5) *EnvGen.ar(Env.perc(0.01,0.08,1,6),doneAction:2);\
+Out.ar(0,src);\
+\}).store;\
+\
+SynthDef("astro1",\{arg pos=0;\
+var src;\
+src=PlayBuf.ar(2,51,1,1,pos)*2 clip2:SinOsc.ar(4,0,0.5) *EnvGen.ar(Env.perc(0.01,0.05,1,6),doneAction:2);\
+Out.ar(0,src);\
+\}).store;\
+\
+SynthDef("astro2",\{arg pos=0,freq,amp;\
+var src;\
+src=PlayBuf.ar(2,52,4,1,pos)*LFNoise2.ar(0.7,3) clip2: SinOsc.ar(freq/20,0.1,0.25) *EnvGen.ar(Env.perc(0.01,0.05,1,6),doneAction:2)*amp;\
+Out.ar(0,src);\
+\}).store;\
+\
+\
+\
+SynthDef("astro3",\{arg rate=1,amp=0;\
+	var b = 54, trate, dur,out;\
+	trate = MouseY.kr(2,120,1);\
+	dur = SinOsc.ar(0.4,0,3) +4 / trate;\
+	out=TGrains.ar(2, Impulse.ar(trate), b,rate, MouseX.kr(0,BufDur.kr(b)), dur, LFNoise1.kr(2), 4, 2)*amp*\
+EnvGen.kr(Env.perc(0.01,0.197,1.4,4), 1, doneAction:2);\
+Out.ar(0,out);\
+\}).store;\
+\
+\
+SynthDef("astro4",\{arg rate=1,amp=0;\
+var src;\
+src=PlayBuf.ar(2,53,1,1) *EnvGen.ar(Env.perc(0.01,0.5,1,2),doneAction:2);\
+Out.ar(0,src);\
+\}).store;\
+)\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs22 \cf2 Tempo.bpm=35;
+\fs18 \
+(\
+Pdef(\\soum,\
+Ppar([\
+Pbind(\\instrument,\\astro0,\\dur,Pwhite(0.75,5,inf),\\pos, Pwhite(0, 834545),\\note,Pseq([1,4,3,2,-21,3,-34,4,12,3],inf)),\
+Pbind(\\instrument,\\astro1,\\dur,Pwhite(0.75,5,inf),\\pos,Pwhite(0, 83455)),\
+Pbind(\\instrument,\\astro2,\\dur,Pwhite(0.75,5,inf),\\pos,Pwhite(0, 45455),\\amp,Pseq([0,0,0,1,0,0,0,0,0,0],inf),\\note,Pseq([1,4,3,2,-21,3,-34,4,12,3]-12,inf)),\
+Pbind(\\instrument,\\astro3,\\dur,Pshuf([0.482,0.723,1.446],inf),\\pos,Pwhite(0, 834545)),\
+Pbind(\\instrument,Prand(["astro3","astro4"],inf),\
+	\\dur,Prand([0.482,0.723,1.446],inf),\\amp,Pseq([2,1,1,1,4,1,1,1]/4,inf)),\
+])).play;\
+)\
+Pdef(\\soum).stop;\
+\
+\
+ProxySpace.push(s);\
+\
+~a.play;\
+(\
+~a.source=\{arg lpf=127;\
+RLPF.ar(AllpassN.ar(Mix.fill(2,\{Formant.ar(\{[0,-5,7,9,12,-2].choose+34\}.midicps*\{[1,0.5,2,0.666,0.75].choose\},11260.rand,610.rand,HenonL.ar(SampleRate.ir/15.rand, LFNoise2.ar(0.9,1.2),  LFNoise1.ar(0.5,0.9)) * 0.16 )\})\
+,0.25,\{[0.04.rand,0.15.rand]\},\{[1.4.rand,0.3.rand]\}),Lag.kr(lpf.midicps,0.05))\
+\};\
+)\
+~a.fadeTime=18;\
+~a.end;\
+\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs20 \cf2 ["/Users/morikouichirou/Desktop/
+\f2\b\fs18 cagecut2.sc
+\f1\b0\fs20 "].loadPath;
+\f0\fs18 \
+Instr("dlux",\
+\{ arg amp=0,freq=300,freql=20;\
+	var n,vocod;\
+	n = 5;\
+	vocod=0.004; \
+	LeakDC.ar(Mix.new( Pan2.ar(CombC.ar(Formant.ar(freq,160,200,SinOsc.kr(freql,0,amp*0.6)), 0.01,Array.fill(n, \{vocod.rand+0.0003\}),4),\
+			Array.fill(n,\{1.0.rand2\}) ), 0.995)\
+	)\
+\},#[ // specs\
+	\\unipolar,\
+	[0.723,20,\\linear,0.723],\
+	[5,300,\\linear,0]\
+	\
+]\
+).test;\
+\
+\
+p=Patch.new('as5' ,\
+	[\
+		StreamKrDur( \
+			Prand(Array.fill(rrand(4,16),\{ rrand(95,127) \}),inf),\
+			 0.8,// a float\
+			 0.02),\
+	  	StreamKrDur( \
+	  		Pbrown(40,100,100,inf), \
+	  		`[ 1,2, 0.25], // an array \
+	  		3)\
+	  ]);\
+	 	  \
+	 p.gui;\
+\
+Instr("as6", \{ arg out=0,note=64,note2=45;\
+var t,x,p,amp;\
+	p=SinOsc.ar(2500,0,0.8).abs;\
+	amp=SinOsc.ar(note2.midicps,0,0.1);\
+	x=Pulse.ar(note.midicps,p,amp).abs.dup;\
+	t=Mix.new(Array.fill(18,\{Resonz.ar(x,rrand(46,8990),0.1,0.5)\}));\
+	\
+	Out.ar(out,t);\
+\},#[nil,\
+[0,127,\\linear,1],\
+[0,127,\\linear,1]\
+]).test;\
+)\
+\
+\
+\
+  \
+////////////////sxdcftvgybhnj////////////////////\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 (\
+r="\{arg n, v,note;\
+var freq;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+
+\f1\fs24 \cf2 SendTrig.ar(Impulse.ar(0.0
+\f0\fs18 ;
+\f1\fs24 1),1,note.midicps);\
+v=
+\f0\fs18 Mix.fill(4,\{freq=(note+[0,5,7,12,72,-5,-12,-7].choose).midicps;\
+SinOsc.ar([freq,freq+(3.0.rand),freq/10,freq/11],SinOsc.ar(freq.midicps/2.4,0,0.25.rand),0.16)\})\
+*EnvGen.ar(Env.perc(0.1,8,0.99,-3),doneAction:2);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 arg amp=0.79,note;\
+	var b = 24, trate, dur;\
+		trate = MouseY.kr(2,200,1);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 	dur = 4 / trate;\
+	a=TGrains.ar(2,Dust.ar(note/5), b,note/800, note, dur,0,0.89,1)*amp;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 	//a=AllpassC.ar(a,0.1,\{[0.02.rand,0.03.rand]\},0.2);\
+	Out.ar(0,a);	\
+	arg amp=0.79,note;\
+	var b = 24, trate, dur;\
+		trate = MouseY.kr(2,200,1);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 	dur = 4 / trate;\
+	a=TGrains.ar(2,Dust.ar(note/5), b,note/800, note, dur,0,0.89,1)*amp;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 	//a=AllpassC.ar(a,0.1,\{[0.02.rand,0.03.rand]\},0.2);\
+	Out.ar(0,a);	\
+	\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 Out.ar(0,v);\
+\}";\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 NetAddr("127.0.0.1", 5500).sendMsg("/tr4",r,1);\
+)\
+\
+NetAddr("127.0.0.1", 5500).sendMsg("/free_n",0);}

@@ -1,0 +1,211 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fnil\fcharset78 HiraKakuPro-W3;}
+{\colortbl;\red255\green255\blue255;\red3\green3\blue3;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 s.boot;\
+Tempo.bpm=120;\
+(\
+s.sendMsg(\\b_allocRead, 1, "sounds/
+\f1\fs24 hh7
+\f0\fs18 .wav");\
+s.sendMsg(\\b_allocRead, 2, "sounds/
+\f1\fs24 hh11
+\f0\fs18 .wav");\
+s.sendMsg(\\b_allocRead, 3, "sounds/
+\f1\fs24 snr1
+\f0\fs18 .wav");\
+s.sendMsg(\\b_allocRead, 4, "sounds/
+\f1\fs24 hh24
+\f0\fs18 .wav");\
+s.sendMsg(\\b_allocRead, 8, "sounds/
+\f1\fs24 kick10
+\f0\fs18 .wav");\
+)\
+\
+(\
+s.sendMsg(\\b_allocRead, 10, "sounds/soz1.wav");\
+s.sendMsg(\\b_allocRead, 11, "sounds/soz4.wav");\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SynthDef("berif1",\{arg amp=0.95,dur;\
+     var out;\
+	out= Pan2.ar(Klank.ar(`[[6725, 12415, 3562], nil, [0.5, 0.8, 0.6]], SinOsc.ar(LFNoise2.ar(0.04,32,85).midicps,0,LFNoise2.ar(0.04)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 ) )*amp*\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 EnvGen.kr(Env.perc(0.01,1.5,1,-2), 1, doneAction:2),LFNoise1.ar(0.06));\
+Out.ar(0,out);\
+\}).store;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SynthDef("berif2",\{arg amp=0.95,dur;\
+     var out;\
+	out= Pan2.ar(Klank.ar(`[[14725, 9415, 62], nil, [0.5, 0.8, 0.6]], SinOsc.ar(LFNoise2.ar(0.04,32,85).midicps,0,LFNoise2.ar(0.04)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 ) )*amp*\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 EnvGen.kr(Env.perc(0.01,1.5,1,-2), 1, doneAction:2),LFNoise1.ar(0.06));\
+Out.ar(0,out);\
+\}).store;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+\
+SynthDef("berif4",\{arg amp,freq,dur;\
+var src;\
+src=Pan2.ar(PlayBuf.ar(1,11,Duty.kr(\
+				Drand([0.055, 1.125,0.13333,2.477,0.25]*3, inf),\
+				0, \
+				Drand([0.75,-0.25, -0.125, -0.75,0.666,1]*0.886, inf)\
+			),0,425,1),LFNoise2.ar(0.4))*EnvGen.ar(Env.perc(0.02,0.26*dur,1.6,12),doneAction:2);\
+Out.ar(0,src);\
+\}).store;\
+\
+\
+\
+SynthDef("berif3",\{arg amp,freq,dur;\
+var src;\
+src=Pan2.ar(SinOsc.ar(freq\
+			,0,0.4).distort,0)*EnvGen.ar(Env.perc(0.01,dur*0.53,1,-3),doneAction:2);\
+Out.ar(0,src);\
+\}).store;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \
+\
+SynthDef("act20",\{ arg out=0,note;\
+var src,lpf,ender;\
+src=SinOsc.ar(note.midicps,0,0.05);\
+ender=RLPF.ar(src,LFNoise2.ar(0.2,32,97).midicps,0.2)*EnvGen.ar(Env.perc(0.01,0.42,0.99,-2),doneAction:2);\
+//2.do(\{ender=AllpassL.ar(ender,0.5,\{[0.04.rand,0.04.rand]\},0.7)\});\
+Out.ar(0,ender);\
+\}).store;\
+\
+\
+\
+SynthDef("bass",\{ arg note=65,dur=0.2;\
+var src;\
+src=Pan2.ar(Mix.fill(5, \{SinOsc.ar((note+[0,5,9,-5,-12].choose).midicps*([1,1.01,0.993,1.017].choose),SinOsc.ar(note.midicps,0,0.5),0.2)\}),0)*EnvGen.ar(Env.perc(0.01,1.85*dur,1,-4),doneAction:2);\
+	Out.ar(0,src)\
+\}).store;\
+\
+\
+\
+SynthDef("act1",\{ arg out=0,amp,rate;\
+		var src; \
+		src=Pan2.ar(PlayBuf.ar(1, 1,rate, 1.0,45,1),LFNoise2.ar(0.04))*EnvGen.ar(Env.perc(0.01,0.17,1,-6),doneAction:2,levelScale:amp);\
+	Out.ar(0,src)\
+\}).store;\
+\
+SynthDef("act2",\{ arg dur,out=0,amp,rate;\
+		var src;\
+		src=Pan2.ar(PlayBuf.ar(1, 2,rate, 1.0,0.0,0),LFNoise2.ar(0.04))*EnvGen.ar(Env.perc(0.01,0.51,1,-3),doneAction:2,levelScale:amp);\
+		\
+		Out.ar(0,src);\
+\}).store;\
+\
+SynthDef("act3",\{ arg out=0,amp,rate;\
+var src;\
+		src=Pan2.ar(PlayBuf.ar(1, 4,rate, 1.0,0.0,0),LFNoise2.ar(0.04))*EnvGen.ar(Env.perc,doneAction:2,levelScale:amp);\
+		Out.ar(0,src)\
+\}).store;\
+\
+\
+SynthDef("kicks",\{ arg out=0,amp,rate;\
+	Out.ar(0, \
+		Pan2.ar(PlayBuf.ar(1, 8,rate*1.4, 1.0,0.0,0),0)*EnvGen.ar(Env.perc(0.01,0.5),doneAction:2,levelScale:amp);\
+		\
+	)\
+\}).store;\
+\
+SynthDef("act4",\{ arg out=0,amp,rate;\
+var src; \
+		src=Pan2.ar(PlayBuf.ar(1, 3,rate, 1.0,12.0,0),0)*EnvGen.ar(Env.perc(0.01,0.16),doneAction:2,levelScale:amp);\
+Out.ar(0,src);\
+\}).store;\
+\
+SynthDef("act5",\{arg amp=0,dur,rate;\
+     var out;\
+	out= Pan2.ar(Klank.ar(`[[17326,1592,5135], nil, [0.6, 0.6,1]], SinOsc.ar(371*rate,0,0.2)) *amp*\
+EnvGen.kr(Env.perc(0.001,0.6*dur,1,-4), 1, doneAction:2),LFNoise2.ar(0.04));\
+Out.ar(0,(out).softclip);\
+\}).store;\
+\
+\
+SynthDef("act6",\{arg amp=0,dur,rate;\
+     var out;\
+	out= Pan2.ar(Klank.ar(`[[10626,3162,8235], nil, [0.6, 0.6,1]], SinOsc.ar(371*1.75*rate,0,0.2)) *amp*\
+EnvGen.kr(Env.perc(0.001,0.6*dur,1,-4), 1, doneAction:2),LFNoise2.ar(0.04));\
+Out.ar(0,(out*5).softclip*0.09);\
+\}).store;\
+)\
+\
+\
+(\
+Pdef(\\moe0,Ppar([\
+\
+Pbind(\\instrument,Prand(["act1","act2","act3"],inf),\\dur,0.5*Pshuf([1,0.5,1,1,1,0.5]/3*2,inf),\\amp,Pseq([1,1,4,1,\\,1,4]/2,inf),\\rate,Pshuf([1,1,0.95,0.48,0.98,1.02],inf)),\
+\
+Pbind(\\instrument,Prand(["kicks"],inf),\\dur,Prand([4,2,5.4],inf),\\amp,Prand([4]/2,inf),\\rate,Pshuf([1,1,0.975,0.88,0.98,0.85],inf)),\
+\
+Pbind(\\instrument,Prand(["act4","act1"],inf),\\dur,Pseq([0.25,0.75,2]/3*2,inf),\\amp,Pseq([4,\\,2,4,1,4]/2,inf),\\rate,Pshuf([1,1,1.05,0.8,0.98,0.45],inf)),\
+\
+Pbind(\\instrument,Pshuf(["act1","act3","act3"],inf),\\dur,Pshuf([0.25,0.75,2]/4*3,inf),\\amp,Pshuf([1,1,1,4]/4,inf),\\rate,Pshuf([1,1,-3,6,3,5],inf)),\
+\
+Pbind(\\instrument,Pshuf(["act2","act1"],inf),\\dur,Prand([1,2,1,4]/5*2,inf)*Pseq([1,1,1,1,1,1,Pshuf([0.3333,0.33333,0.6666]/3,4)*Prand([0.5,1,0.25,1],4),1],inf),\\amp,Pshuf([2,1,1,\\,1,\\,1,1]/2,inf),\\rate,Pshuf([1,1,0.5,0.299,0.96],inf)),\
+\
+Pbind(\\instrument,Prand(["act3","act5"],inf),\\dur,Prand([1,2,1,3]/3*2,inf)*Pseq([1,1,1,1,1,1,Pshuf([0.3333,0.33333,0.6666]*1.5,8)*Prand([0.5,1,0.25,1],4),1],inf),\\amp,Pshuf([4,\\,1,4,\\,1,\\]/4,inf),\\rate,Pshuf([1,1,0.5,0.5999,0.36],inf)),\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+Pbind(\\instrument,"berif2",\\dur,Prand([0.6666]*6,inf),\
+\\note,Prand([3,6,2,4]+15,inf)),\
+\
+Pbind(\\instrument,"berif2",\\dur,Prand([0.5]*2,inf),\
+\\note,Prand([3,1,4]+60,inf)),\
+\
+//Pbind(\\instrument,"berif1",\\dur,Prand([0.75],inf)),\
+\
+Pbind(\\instrument,"berif4",\\dur,Prand([0.5,0.25,0.75,0.5,4,0.75,1.25]*4,inf),\
+\\note,Prand([0,5,\\n,7,]+32,inf)),\
+\
+Pbind(\\instrument,"berif3",\\dur,Prand([0.25],inf),\
+\\note,Prand([5,3,6,2]-21,inf)),\
+\
+Pbind(\\instrument,"act20",\\dur,Prand([0.5,0.25,0.5,0.5,4,0.75,1.25]/4,inf),\
+\\note,Prand([0,5,7,10,\\n,12,-5,-7]-21,inf)),\
+\
+Pbind(\\instrument,"bass",\\dur,Prand([4]*2,inf),\
+\\note,Prand([0,7,4]+35,inf))\
+\
+]));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 )\
+Pdef(\\cusm).play;\
+Pdef(\\moe0).stop;\
+\
+Tempo.bpm=144;\
+\
+\
+(\
+Pdef(\\cusm,Ppar([\
+\
+Pbind(\\instrument,Prand(["act1","act2","act3"],inf),\\dur,0.5*Pshuf([1,0.5,1,1,1,0.5],inf),\\amp,Pseq([1,\\,4,1,\\,1,4]/4,inf),\\rate,Pshuf([1,1,0.75,0.6666,0.98,1.5],inf)),\
+\
+Pbind(\\instrument,Prand(["kicks"],inf),\\dur,Prand([0.75,2.75,0.5,0.25],inf),\\amp,Prand([0.7,0.5,\\],inf),\\rate,Pshuf([1,1.25,1.75,1.3],inf)),\
+Pbind(\\instrument,Prand(["kicks"],inf),\\dur,Prand([4],inf),\\amp,Pshuf([1.3,1.3,1.3,\\],inf),\\rate,Pshuf([1],inf)),\
+\
+Pbind(\\instrument,Prand(["act4","act2"],inf),\\dur,Pseq([0.25,0.75,2],inf),\\amp,Pseq([\\,2,2,4,\\,2]/4,inf),\\rate,Prand([1,1,0.75,0.6666,1,0.5],inf)),\
+\
+Pbind(\\instrument,Pshuf(["act1","act3"],inf),\\dur,Pshuf([0.25,0.75,2],inf),\\amp,Pshuf([1,\\,\\,4]/4,inf),\\rate,Prand([1,1,0.75,1,0.6666,0.5],inf)),\
+\
+Pbind(\\instrument,Pshuf(["act3","act1"],inf),\\dur,Pseq([1,2,4],inf)*Pseq([1,1,1,1,Pshuf([1/2,2/3,1/3],6)*Prand([2/3,1],6),2],inf),\\amp,Pseq([\\,2,2,\\,2,\\,4,1]/2,inf),\\rate,Pseq([1,1,0.5,0.75,0.96],inf)),\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 Pbind(\\instrument,"act20",\\dur,Pshuf([0.25,4,6,2,6,4,3,5,3]/4,inf),\
+\\rate,Prand([0,5,7,10,12,\\,0.25,0.07],inf)),\
+]));\
+)\
+\
+o=AudioMeter.new\
+o.autoreset_(0.25);}

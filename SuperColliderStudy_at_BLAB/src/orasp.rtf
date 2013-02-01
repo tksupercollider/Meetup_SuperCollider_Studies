@@ -1,0 +1,259 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fswiss\fcharset77 Helvetica-Bold;\f2\fswiss\fcharset77 Helvetica;
+\f3\fnil\fcharset78 Osaka-Mono;}
+{\colortbl;\red255\green255\blue255;\red3\green3\blue3;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 s.sendMsg(\\b_allocRead, 30, "sounds/bent9.wav");\
+\
+s.sendMsg(\\b_allocRead, 20, "sounds/sui2.aif");\
+\
+s.sendMsg(\\b_allocRead, 10, "sounds/sui1.aif");\
+\
+\
+Tempo.bpm=60;\
+o=AudioMeter.new;\
+o.autoreset_(0.25);\
+__________\
+\
+(\
+SynthDef("kicks",\{arg amp=0,rate=0;\
+var out,mod;\
+mod = EnvGen.ar(Env.perc(0.001,0.01,1,-2)) * 6200;\
+out=SinOsc.ar(50+mod,pi/4,amp).dup*EnvGen.ar(Env.perc(0.0, 0.2, 0.7, 6),doneAction: 2);\
+Out.ar(0,out);\
+\}).store;\
+\
+SynthDef("kicks2",\{arg amp=0,rate=0;\
+var out,mod;\
+mod = EnvGen.ar(Env.perc(0.001,0.01,0.6,-4)) * 1200;\
+out=SinOsc.ar(50+mod,pi/4,amp).dup*EnvGen.ar(Env.perc(0.0, 0.2, 0.7, 6),doneAction: 2);\
+out=out+SinOsc.ar(11343,0,0.2)*EnvGen.ar(Env.perc(0.0, 0.3, 1, 12));\
+Out.ar(0,out);\
+\}).store;\
+\
+SynthDef("moes",\{arg rate=1,amp=0;\
+	var b = 10, trate, dur,out;\
+	trate = MouseY.kr(2,500,1);\
+	dur = SinOsc.ar(0.4,0,3) +4 / trate;\
+	out=TGrains.ar(2, Impulse.ar(trate), b,rate, MouseX.kr(0,BufDur.kr(b)), dur, LFNoise1.kr(2), 4, 2)*amp*\
+EnvGen.kr(Env.perc(0.01,0.07,1,4), 1, doneAction:2);\
+Out.ar(0,(out*113).softclip*0.05);\
+\}).store;\
+\
+\
+SynthDef("moes2",\{arg rate=1,amp=0;\
+	var b = 20, trate, dur,out;\
+	trate = MouseY.kr(2,500,1);\
+	dur = SinOsc.ar(0.4,0,3) +4 / trate;\
+	out=TGrains.ar(2, Impulse.ar(trate), b,rate, MouseX.kr(0,BufDur.kr(b)), dur, LFNoise1.kr(4), 4, 2)*amp*\
+EnvGen.kr(Env.perc(0.01,0.1,1,4), 1, doneAction:2);\
+Out.ar(0,(out*12).softclip*0.07);\
+\}).store;\
+\
+\
+SynthDef("moe2",\{arg rate=1,amp=0,trate = 80;\
+	var b = 30, dur,out;\
+	dur = SinOsc.ar(0.4,0,3) +4 / trate;\
+	out=TGrains.ar(2, Impulse.ar(trate), b,rate, MouseX.kr(0,BufDur.kr(b)), dur,LFNoise2.kr(3), 4, 2)*amp*\
+EnvGen.kr(Env.perc(0.21,0.197,1,-4), 1, doneAction:2);\
+Out.ar(0,(out*23).softclip*0.2);\
+\}).store;\
+\
+\
+\
+SynthDef("moe3",\{arg amp=0,rate=1,dur;\
+     var out;\
+	out= Pan2.ar(Klank.ar(`[[48, 5113, 93]*rate, nil, [1, 1, 1, 1]], ClipNoise.ar(0.03)) *amp*\
+EnvGen.kr(Env.perc(0.001,0.14*dur,0.8,5), 1, doneAction:2),-0.6);\
+Out.ar(0,(out*122).softclip*0.05);\
+\}).store;\
+\
+\
+\
+SynthDef("moe4",\{arg amp=0,rate;\
+     var out;\
+	out= Pan2.ar(Klank.ar(`[[11220, 53, 6324], nil, [1, 1, 1, 1]], ClipNoise.ar(0.06)) *amp*\
+EnvGen.kr(Env.perc(0.00,0.07,1,6), 1, doneAction:2),0.8);\
+Out.ar(0,(out*23).softclip*0.1);\
+\}).store;\
+\
+SynthDef("bass2",\{arg amp=0.95,dur,note;\
+     var out;\
+	out= Pan2.ar(Klank.ar(`[[14725, 9415, 4392], nil, [0.5, 0.8, 0.6]], SinOsc.ar(note.midicps,0,LFNoise2.ar(0.04)\
+) )*amp*\
+EnvGen.kr(Env.perc(0.01,0.75*dur,2,-5), 1, doneAction:2),LFNoise1.ar(0.06));\
+Out.ar(0,out);\
+\}).store;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\fs22 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SynthDef("bass",\{arg freq,amp,gate=1;\
+	var src;\
+	src=SinOsc.ar([freq,freq*1.01],LFPar.ar(freq/4.1624)*EnvGen.ar(Env.adsr(0.2,0.4,0.03,0.2,1,-3)),SinOsc.ar(freq/
+\f1\b\fs36 2
+\f0\b0\fs22 ,LFCub.ar(freq*24)*SinOsc.ar(freq*4),LFNoise2.kr(12,0.1,0.15)))*EnvGen.ar(Env.adsr(0.0,0.03,0.03,0.0,1,4,amp),gate,doneAction:2);\
+	Out.ar(0,src);\
+ \}).store;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 SynthDef("bass3",\{arg freq,amp,gate=1;\
+	var src;\
+	src=Pan2.ar(Shaper.ar(0,LFPar.ar(freq, 0, Line.kr(17,0,0.2)),0.6*SinOsc.ar(freq*2,LFCub.ar(freq*9)))\
+*EnvGen.ar(Env.adsr(0.1,0.4,0.4,0.1,amp),gate,doneAction:2),LFNoise1.ar(0.1));\
+	Out.ar(0,src.softclip);\
+ \}).store;
+\fs18 \cf2 \
+)\
+\
+\
+\
+____________________\
+\
+(\
+Pdef(\\moe0,\
+	Ppar([\
+\
+\
+Pbind(\\instrument,"moe2",\
+	\\dur,Prand([3,5,1,0.5]*2,inf),\\amp,0.3,\\trate,Prand([100,80,40],inf)),\
+\
+\
+Pbind(\\instrument,"kicks2",\
+	\\dur,Pshuf([4],inf),\\amp,0.89),\
+	\
+Pbind(\\instrument,Prand(["kicks","moes"],inf),\\dur,Prand([0.75,2.75,2.5,0.25]*2,inf),\\amp,Prand([0.4,0.5,\\],inf),\\rate,Pshuf([1,1.25,1.75,1.3],inf)),\
+\
+\
+Pbind(\\instrument,Prand(["moe3","moe4","moe3"],inf),\
+	\\dur,0.75,\\amp,Pseq([2,1,4,1,3,1,4,4]/4,inf),\\rate,Prand([1,0.75,0.2,1,0.12,17,\\,\\],inf)),\
+\
+\
+Pbind(\\instrument,Prand(["moe4","moe3"],inf),\
+	\\dur,Pseq([1,2,4],inf)*Pseq([1,1,1,1,Pshuf([1/2,2/3,1/3],7)*Prand([2/3,3],7)*Prand([1,1,1,3/2,0.5],3),2],inf),\\amp,Prand([\\,2,2,4,\\,1,\\,2,1]/4,inf),\\rate,Prand([0.3,0.75,0.5,1,\\,\\],inf)),\
+\
+\
+Pbind(\\instrument,Prand(["moes","moes2"],inf),\
+	\\dur,0.25,\\amp,Prand([1,1,\\,\\,0.5],inf),\\rate,Prand([4/5,1/2,3/4,2,-2,0.05,12],inf)),\
+	\
+	Pbind(\\instrument,"bass2",\\dur,Prand([7]*2,inf),\
+\\note,Pxrand([0,7,5]+62-12,inf)+Pxrand([0,0,-3,7,0,5,0,10],inf)),\
+\
+	Pbind(\\instrument,"bass2",\\dur,Prand([7,0.454,5,3.53,2.555,0.34,0.467]*2,inf),\\note,Pxrand([0,7,4,-12,-20,19,-24]+98,inf)),\
+	\
+//	
+\fs22 \cf2 		Pbind(\\instrument,\\bass,\\dur,Prand([
+\fs18 \cf2 0.75,0.5,2.5,0.75,4
+\fs22 \cf2 ],inf),\\amp,Pseq([1.7,2,2]/4,inf),\\midinote,Pxrand([[5,12],[7,0],[-5,0],[-5,12]]+71-24,inf),\\legato,Pwhite(0.12,0.3)),\
+//			\
+//		Pbind(\\instrument,\\bass3,\\dur,Pshuf([3,0.25,0.75,1,2]/2,inf),\\amp,1,\\midinote,Prand([2,3,7,8,12]+59,inf),\\legato,Pwhite(0.5,0.2)),\
+//		
+\fs18 \cf2 \
+	]))\
+)\
+Tempo.bpm=133;\
+d=Pdef(\\moe0).play(t,quant:4);\
+d.stop;\
+\
+t=TempoClock(
+\fs22 \cf2 2.21666666666
+\fs18 \cf2 );\
+\
+Pdef(\\moe0,\
+	Ppar([\
+Pbind(\\instrument,\\moes20,\\rate,\
+Pseq([1],inf),\\pos,0,\\dur,Pseq([4],inf),\\lega,12);\
+]));\
+\
+c.free\
+c=ExternalClock(t).play;\
+(\
+a=BBCut2(CutGroup([CutStream1.new(0),
+\f2\fs24 CutFunc(\{arg i;NetAddr("127.0.0.1", 5500).sendMsg("/tr0",i)\})
+\f0\fs18 ,CutBPF1(6000,drqfunc:0.5),CutMixer(0,0.8,RollAmplitude.new(0.59),CutPan1.new(\{(0.7.rand2)\}))]),SQPusher2(quant:\{[0.75,0.25,0.125/2].wchoose([0.9,0.1,0.1])\},
+\f1\b\fs24 scramble:0.99,bpsd:0.49
+\f0\b0\fs18 ));\
+)\
+a.play(c);\
+\
+a.pause; \
+\
+a.resume;\
+\
+c.free;
+\f2\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 a.free;\
+\
+\
+\
+\
+\
+\
+\
+\
+____________________________\
+____________________________\
+\
+o=AudioMeter.new\
+o.autoreset_(0.05)\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f2\fs24 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 ProxySpace.push(s);\
+\
+~a.fadeTime_(19);\
+~a.play;\
+(\
+~a.source=\{arg lpf=127;\
+RLPF.ar(AllpassC.ar(Mix.fill(12,\{SinOsc.ar(\{[0,3,7,9,12,-12].choose+86\}.midicps*\{[1,0.5,2,0.666,0.75].choose\},0.4.rand ,HenonC.ar(SampleRate.ir/12.rand, LFNoise2.ar(0.3,1.2),  LFNoise1.ar(0.2,0.9)) * 0.1 )\})\
+,0.25,\{[0.04.rand,0.05.rand]\},\{[1.4.rand,0.3.rand]\}),Lag.kr(lpf.midicps,0.1))\
+\};\
+)\
+(\
+~a.source=\{\
+AllpassC.ar(Mix.fill(6,\{SinOsc.ar(\{[0,5,7,9,12,-12].choose+56\}.midicps*\{[1,0.5,2,0.666,0.75].choose\},0.9.rand ,
+\f2\fs24 LinCongC
+\f0\fs18 .ar(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 	SampleRate.ir.rand, \
+	LFNoise0.kr(0.3, 0.1, 0.1), \
+	LFNoise0.kr(0.4, 0.5, 0.1),\
+	LFNoise0.kr(0.2, 0.5)\
+) * 0.2 )\})\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 ,0.25,\{[0.04.rand,0.05.rand]\},\{[1.4.rand,0.3.rand]\})\
+\};\
+)\
+\
+__________\
+(\
+~a.source=\{arg lpf=127;\
+RLPF.ar(AllpassC.ar(Mix.fill(12,\{SinOsc.ar(\{[0,3,7,9,12,-12].choose+56+12\}.midicps*\{[1,0.5,2,0.666,0.75].choose\},0.4.rand ,HenonC.ar(SampleRate.ir/12.rand, LFNoise2.ar(0.3,1.2),  LFNoise2.ar(3.2,0.9)) * 0.1 )\})\
+,0.25,\{[0.04.rand,0.05.rand]\},\{[1.4.rand,0.3.rand]\}),Lag.kr(lpf.midicps,0.1))\
+\};\
+)\
+_________\
+//~a.end
+\f3 \cf2 \'82\'b5\'82\'bf\'82\'e1\'82\'be\'82\'df\'81\'42
+\f0 \cf2 \
+~b.play;\
+~b.fadeTime_(12);\
+~b.source=(~a*120).softclip*0.19;\
+~a.end;\
+~b.end;\
+\
+\
+s.sendMsg(\\b_allocRead, 77, "sounds/moe55.wav");\
+\{
+\f1\b\fs24 PlayBuf.ar(2,77,1,1,9424,0)
+\f0\b0\fs18 \}.play;}

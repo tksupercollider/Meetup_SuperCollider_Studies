@@ -1,0 +1,181 @@
+{\rtf1\mac\ansicpg10001\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fnil\fcharset77 Monaco;\f1\fswiss\fcharset77 Helvetica;\f2\fswiss\fcharset77 Helvetica-Bold;
+}
+{\colortbl;\red255\green255\blue255;\red3\green3\blue3;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs18 \cf2 //mixing aoudio bus\
+(\
+var w, startButton, amp0, amp1, amp2;\
+var amp3, amp4,amp5;\
+var gain0,gain1,gain2,gain3,gain4,gain5,weta,feedbacker,delayer;\
+var id, cmdPeriodFunc;\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
+\cf2 s.sendMsg("/b_alloc", 0, 44100 * 2, 2);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 \
+//mixing SynthDef\
+SynthDef("mixer1",\{arg a0=0,a1=0,a2=0,a3=0,a4=0,a5=0,g0=1,g1=1,g2=1,g3=1,g4=1,g5=1,wet=0.3,buffer,delayTime=2,feedback=0.9,gate=1;\
+	var a,b,c,d,e,f,y,z,g,env;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf2 	env = Linen.kr(gate, 0.1, 1, 0.2,2);
+\f0\fs18 \
+	a=((In.ar([10,11])*g0).softclip)*a0;\
+	b=((In.ar([20,21])*g1).softclip)*a1;\
+	c=((In.ar([30,31])*g2).softclip)*a2;\
+	d=((In.ar([40,41])*g3).softclip)*a3;\
+	e=((In.ar([50,51])*g4).softclip)*a4;\
+	f=((In.ar(60,2)*g5).softclip)*a5;\
+	z = PingPong.ar(buffer,f, 1.0/(delayTime), feedback, 1); //pingpong delay\
+	y = z;\
+	
+\fs20 8.do(\{ y = AllpassN.ar(y, 0.1, \{[0.03.rand,0.04.rand] \}, [1.75,1.2]) \});\
+	
+\f1\fs24 XOut.ar(80, 
+\f0\fs20  wet*env 
+\f1\fs24 , 
+\f0\fs20 y 
+\f1\fs24 );
+\f0\fs18 \
+		
+\fs20 	Out.ar(0,
+\f2\b\fs24 Limiter
+\f0\b0\fs18 .ar(
+\fs20 Mix.new([a,b,c,d,e,In.ar([80,81]),z])
+\fs18 ,0.98
+\fs20 ));		\}).store;
+\fs18 \
+\
+\
+id = s.nextNodeID;\
+\
+// make the window\
+w = SCWindow("mixingGUI", Rect(20, 380, 360, 400));\
+w.front; // make window visible and front window.\
+w.view.decorator = FlowLayout(w.view.bounds);\
+\
+w.view.background = Color(0.5,0.6,0.6,0.3);\
+\
+// add a button to start and stop the mixing SynthDef.\
+startButton = SCButton(w, 75 @ 24);\
+startButton.states = [\
+		["Start", Color.white, Color(0.4,0.6,0.8,0.3)],\
+		["Stop", Color.white, Color(0.9,0.4,0.2)]\
+		];\
+startButton.action = \{|view|\
+		if (view.value == 1) \{\
+			// start sound\
+			s.sendMsg("/s_new", "mixer1", id, 1, 0, \
+				"a0", amp0.value,\
+				"a1", amp1.value,\
+				"a2", amp2.value,\
+				"a3", amp3.value,\
+				"a4", amp4.value,\
+				"a5", amp5.value,\
+				"g0", gain0.value,\
+				"g1", gain1.value,\
+				"g2", gain2.value,\
+				"g3", gain3.value,\
+				"g4", gain4.value,\
+				"g5", gain5.value,\
+				"wet", weta.value,\
+				"feedback",feedbacker.value,\
+				"delayTime",delayer.value\
+				\
+				);\
+		\};\
+		if (view.value == 0) \{\
+			// set gate to zero to cause envelope to release\
+			s.sendMsg("/n_free", id);\
+		\};\
+\};\
+\
+// create controls for all parameters\
+w.view.decorator.nextLine;\
+amp0 = EZSlider(w, 300 @ 20, "Amp10", \\amp, \
+	\{|ez| s.sendMsg("/n_set", id, "a0", ez.value); \}, 0);\
+	\
+w.view.decorator.nextLine;\
+gain0 = EZSlider(w, 270 @ 14, "gain10", [1,2048,\\exponential,0], \
+	\{|ez| s.sendMsg("/n_set", id, "g0", ez.value); \}, 1);\
+	\
+	\
+w.view.decorator.nextLine;\
+amp1 = EZSlider(w, 300 @ 20, "Amp20",\\amp, \
+	\{|ez| s.sendMsg("/n_set", id, "a1", ez.value); \}, 0);\
+\
+w.view.decorator.nextLine;\
+gain1 = EZSlider(w, 270 @ 14, "gain20", [1,2048,\\exponential,0], \
+	\{|ez| s.sendMsg("/n_set", id, "g1", ez.value); \}, 1);\
+	\
+	\
+w.view.decorator.nextLine;\
+amp2 = EZSlider(w, 300 @ 20, "Amp30",\\amp, \
+	\{|ez| s.sendMsg("/n_set", id, "a2", ez.value); \}, 0);\
+\
+w.view.decorator.nextLine;\
+gain2 = EZSlider(w, 270 @ 14, "gain30", [1,2048,\\exponential,0], \
+	\{|ez| s.sendMsg("/n_set", id, "g2", ez.value); \}, 1);\
+	\
+w.view.decorator.nextLine;\
+amp3 = EZSlider(w, 300 @ 20, "Amp40", \\amp, \
+	\{|ez| s.sendMsg("/n_set", id, "a3", ez.value); \}, 0);\
+	\
+w.view.decorator.nextLine;\
+gain3 = EZSlider(w, 270 @ 14, "gain40", [1,2048,\\exponential,0], \
+	\{|ez| s.sendMsg("/n_set", id, "g3", ez.value); \}, 1);\
+	\
+	\
+w.view.decorator.nextLine;\
+amp4 = EZSlider(w, 300 @ 20, "Amp50", \\amp, \
+	\{|ez| s.sendMsg("/n_set", id, "a4", ez.value); \}, 0);\
+	\
+w.view.decorator.nextLine;\
+gain4 = EZSlider(w, 270 @ 14, "gain50", [1,2048,\\exponential,0], \
+	\{|ez| s.sendMsg("/n_set", id, "g4", ez.value); \}, 1);\
+	\
+		\
+w.view.decorator.nextLine;\
+amp5 = EZSlider(w, 300 @ 20, "Amp60", \\amp, \
+	\{|ez| s.sendMsg("/n_set", id, "a5", ez.value); \}, 0);\
+	\
+\
+w.view.decorator.nextLine;\
+gain5 = EZSlider(w, 270 @ 14, "gain60", [1,2048,\\exponential,0], \
+	\{|ez| s.sendMsg("/n_set", id, "g5", ez.value); \}, 1);\
+	\
+	\
+\
+w.view.decorator.nextLine;\
+weta = EZSlider(w, 250 @ 20, "Wet", [0,0.4,\\linear,0], \
+	\{|ez| s.sendMsg("/n_set", id, "wet", ez.value); \}, 0);\
+	\
+w.view.decorator.nextLine;\
+feedbacker = EZSlider(w, 250 @ 20, "FeedBack", [0,1,\\linear,0], \
+	\{|ez| s.sendMsg("/n_set", id, "feedback", ez.value); \}, 0);\
+	\
+w.view.decorator.nextLine;\
+delayer = EZSlider(w, 250 @ 20, "DelayTime", [0.4,8,\\linear,0], \
+	\{|ez| s.sendMsg("/n_set", id, "delayTime", ez.value); \}, 1.25);\
+	\
+	\
+	\
+// set start button to zero upon a cmd-period\
+cmdPeriodFunc = \{ startButton.value = 0; \};\
+CmdPeriod.add(cmdPeriodFunc);\
+\
+// stop the sound when window closes and remove cmdPeriodFunc.\
+w.onClose = \{\
+	s.sendMsg("/n_free", id);\
+	CmdPeriod.remove(cmdPeriodFunc);\
+\};\
+\
+//tempo GUI\
+t = Tempo.new;\
+t.bpm = 120;\
+t.gui(w);\
+)\
+// SuperCollider3 Code written by moxuse: htttp://moxuse.org\
+}
