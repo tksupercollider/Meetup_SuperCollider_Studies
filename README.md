@@ -1,6 +1,6 @@
 #Meetup_SuperCollider_Studies
 
-過去のSuperCollider勉強会などで使用した資料です
+SuperCollider 勉強会 / Tokyo SuperCollider MTG などで使用した資料です
 
 Licence
 ---
