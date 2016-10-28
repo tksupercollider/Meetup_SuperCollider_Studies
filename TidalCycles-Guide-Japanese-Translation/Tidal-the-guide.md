@@ -111,13 +111,13 @@ All of the samples inside of a pattern get squashed into a single cycle. The pat
 
 ```d1 silence```
 
-If you want to set all the connections (from d1 to d9) to be silent at once, there’s a single-word shortcut for that:
+>If you want to set all the connections (from d1 to d9) to be silent at once, there’s a single-word shortcut for that:
 
 もし全てのコネクション（d1からd9まで）を一度に消音したい時は一文で表現できます。
 
 ```hush```
 
-You can also isolate a single connection and silence all others with the solo function:
+>You can also isolate a single connection and silence all others with the solo function:
 
 もしくは一つのコネクションを残して他の全てを消音したい時は：
 
@@ -137,6 +137,7 @@ Tidalのブレースシンタックスでパターンのグルーピングを作
 
 角カッコは一つのステップ内で複数のイベントを再生できます。上のパターンは二つのステップからなっています、最初のステップは三つの細かく分けられたステップからなる一つのステップです。つまり実際にはサンプルの密集状態を作り出すことができます。
 
+```
 d1 $ sound "bd [sn sn]"
 d1 $ sound "bd [sn sn sn]"
 d1 $ sound "bd [sn sn sn sn]"
@@ -222,7 +223,7 @@ d1 $ sound "bd*3" -- plays the bd sample three times each cycle
 
 >You can apply the * and / symbols on groups of patterns:
 
-* / シンボルはグループ内のパターン対しても使えます。
+(* /)シンボルはグループ内のパターン対しても使えます。
 
 ```
 d1 $ sound "[bd sn]*2 cp"
@@ -427,11 +428,12 @@ The following will multiply values:
 
 ここにはTidalで使えるエフェクターを簡単なリストに挙げます（Referenceで一覧を見ることができます）
 
-gain (changes volume, values from 0 to 1)
-pan (pans sound right and left, values from 0 to 1)
-shape (a type of amplifier, values from 0 to 1)
-vowel (a vowel formant filter, values include a, e, i, o, and u)
-speed (changes playback speed of a sample, see below)
+
+- gain (changes volume, values from 0 to 1)
+- pan (pans sound right and left, values from 0 to 1)
+- shape (a type of amplifier, values from 0 to 1)
+- vowel (a vowel formant filter, values include a, e, i, o, and u)
+- speed (changes playback speed of a sample, see below)
 
 ##Sample Playback Speed (and Pitch)
 
