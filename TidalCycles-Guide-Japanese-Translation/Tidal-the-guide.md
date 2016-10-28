@@ -1,4 +1,4 @@
-#Tidal: the guide
+#Tidal: the guide (Japanese translation)
 
 the original : [https://tidalcycles.org/patterns.html](https://tidalcycles.org/patterns.html) [Translated by Koichiro Mori Oct. 2016]
 
