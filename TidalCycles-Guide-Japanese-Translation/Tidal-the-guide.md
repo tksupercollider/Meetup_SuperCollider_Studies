@@ -23,7 +23,9 @@ TidalCyclesと(Super)Dirtをインストールしたら、そして多分いく�
 TidalはSuperDirtシンセと九つのコネクションで始まります。d1からd9という名前で('クラシック'Dirtをもし使っていればc1からc9という名前)　以下はバスドラムをサイクル毎に再生する最小限の例です。
 
 
-```d1 $ sound "bd"```
+```
+d1 $ sound "bd"
+```
 
 >Evaluate the above code in the Atom (or Emacs) editor by pressing Ctrl+Enter
 In the code above, sound tells us we’re making a pattern of sound samples, and "bd" is a pattern that contains a single sound. bd is a sample of a bass drum. Samples live inside the /samples folder which came with SuperDirt, and each sub-folder under /samples corresponds to a sample name (like bd).
@@ -37,7 +39,9 @@ We can pick a different sample in the bd folder by adding a colon (:) then a num
 SuperDirtサンプルを見つけるにはQuarksコマンドを使います。SuperColliderフォルダ（ペーストしてshift+enterします）そして'quark'プラグインパスが右側のポストウインドウに見えます。Dirt-Samplesサブフォルダにサンプルファイルがあるのがわかるでしょう。
 bdフォルダ内の別のサンプルファイルを選びたい場合、コロン(:)の後に数字で指定します。例えば以下は4番目のバスドラムを選んでいます（数字は0始まりです、なので:3はフォルダ内で4番目の音ファイルです）
 
-```d1 $ sound "bd:3"```
+```
+d1 $ sound "bd:3"
+```
 
 >If you specify a number greater than the number of samples in a folder, then Tidal just “wraps” around back to the first sample again (it starts counting at zero, e.g. in a folder with five samples, “bd:5” would play “bd:0”).
 
@@ -51,7 +55,9 @@ bdフォルダ内の別のサンプルファイルを選びたい場合、コロ
 実際にシーケンスを表現してみます。例えば以下はバスドラムとスネアのパターンです。
 
 
-```d1 $ sound "bd sn"```
+```
+d1 $ sound "bd sn"
+```
 
 >When you run the code above, you are replacing the previous pattern with another one on-the-fly. Congratulations, you’re live coding.
 
@@ -69,11 +75,13 @@ bdフォルダ内の別のサンプルファイルを選びたい場合、コロ
 複数のシーケンスを同時にならす最も簡単な方法は、複数のコネクションのシンセを使用することです。
 
 
-```d1 $ sound "bd sn"```
+```
+d1 $ sound "bd sn"
 
-```d2 $ sound "hh hh hh hh"```
+d2 $ sound "hh hh hh hh"
 
-```d3 $ sound "arpy"```
+d3 $ sound "arpy"
+```
 
 >NOTE: each connection must be evaluated separately in your text editor. That is, you must press Ctrl+Enter three times, once for each line above. Make sure that there is a blank line between them each pattern, or Tidal will evaluate them together and get confused (if you want to evaluate just one line, you can press shift-enter).
 
@@ -90,11 +98,13 @@ All of the samples inside of a pattern get squashed into a single cycle. The pat
 
 この普遍的なサイクルはあなたを拘束しないことに注意してください。例えば、一つのループの外であるパターンを伸ばしても、他のパターンもそれぞれ共通して変化します。後ほど触れますがこれにはいくつかの方法があります。一つのパターン内の全てのサンプルは一つのサイクル内で完結します。以下の全てのパターンは同じ時間内でループします。
 
-```d1 $ sound "bd sn"```
+```
+d1 $ sound "bd sn"
 
-```d1 $ sound "bd sn hh cp mt arpy drum"```
+d1 $ sound "bd sn hh cp mt arpy drum"
 
-```d1 $ sound "bd sn hh cp mt arpy drum odx bd arpy bass2 feel future"```
+d1 $ sound "bd sn hh cp mt arpy drum odx bd arpy bass2 feel future"
+```
 
 >Note how the more steps you add to the pattern, the faster it goes to fit them all in. No matter how many samples you put in a pattern in this way, they will always be distributed evenly within a single cycle.
 
@@ -109,19 +119,28 @@ All of the samples inside of a pattern get squashed into a single cycle. The pat
 
 空のパターンは無音と定義されます。もしパターンを切りたい時はこのように表現することができます。
 
-```d1 silence```
+```
+d1 silence
+```
 
 >If you want to set all the connections (from d1 to d9) to be silent at once, there’s a single-word shortcut for that:
 
 もし全てのコネクション（d1からd9まで）を一度に消音したい時は一文で表現できます。
 
-```hush```
+```
+
+ hush
+
+
+```
 
 >You can also isolate a single connection and silence all others with the solo function:
 
 もしくは一つのコネクションを残して他の全てを消音したい時は：
 
-```solo $ d1 $ sound "bd sn"```
+```
+solo $ d1 $ sound "bd sn"
+```
 
 ##Patterns Within Patterns
 
@@ -131,7 +150,9 @@ All of the samples inside of a pattern get squashed into a single cycle. The pat
 
 Tidalのブレースシンタックスでパターンのグルーピングを作る：
 
-```d1 $ sound "[bd sn sn] cp"```
+```
+d1 $ sound "[bd sn sn] cp"
+```
 
 >Square braces allow several events to be played inside of a single step. You can think of the above pattern as having two steps, with the first step broken down into a subpattern, which has three steps. Practically, this means you can create denser sub-divisions of samples:
 
@@ -150,7 +171,9 @@ d1 $ sound "[bd bd bd bd] [sn]"
 
 グループを入れ子にして複雑なパターンを作りでせます。
 
-```d1 $ sound "[bd bd] [bd [sn [sn sn] sn] sn]"```
+```
+d1 $ sound "[bd bd] [bd [sn [sn sn] sn] sn]"
+```
 
 ###Layering (Polyrhythms) Instead of Grouping
 
@@ -158,7 +181,9 @@ d1 $ sound "[bd bd bd bd] [sn]"
 
 カンマを使って違うパートにすることで、複数のループをレイヤーにすることができます。
 
-```d1 $ sound "[bd bd bd, sn cp sn cp]"```
+```
+d1 $ sound "[bd bd bd, sn cp sn cp]"
+```
 
 >This would play the sequence bd bd bd at the same time as sn cp sn cp. Note that the first sequence only has three events, and the second one has four. Because tidal ensures both loops fit inside the same cyclic duration, you end up with a polyrhythm.
 
@@ -168,13 +193,17 @@ d1 $ sound "[bd bd bd bd] [sn]"
 
 ポリリズムを作るのにいくつでもレイヤーにできます。
 
-```d1 $ sound "[bd bd bd, sn cp sn cp, arpy arpy, odx]"```
+```
+d1 $ sound "[bd bd bd, sn cp sn cp, arpy arpy, odx]"
+```
 
 >And of course you can use groupings inside of the layers:
 
 もちろんレイヤーの中でグループにすることもできます。
 
-```d1 $ sound "[bd bd bd, [sn sn] cp, arpy [arpy [arpy arpy] arpy arpy], odx]"```
+```
+d1 $ sound "[bd bd bd, [sn sn] cp, arpy [arpy [arpy arpy] arpy arpy], odx]"
+```
 
 ###Pattern Repetition and Speed
 
@@ -188,7 +217,9 @@ d1 $ sound "[bd bd bd bd] [sn]"
 
 *はパターンの中にパターンを何度繰り返したいかを表現できます。
 
-```d1 $ sound "bd*2"```
+```
+d1 $ sound "bd*2"
+```
 
 >This is the same as doing d1 $ sound "bd bd"
 The code above uses *2 to make a sample play twice.
@@ -199,7 +230,9 @@ The code above uses *2 to make a sample play twice.
 
 /はパターンを遅く、もしくは再生頻度を落とします。
 
-```d1 $ sound "bd/2"```
+```
+d1 $ sound "bd/2"
+```
 
 >The code above uses /2 to make a sample play half as often, or once every 2nd cycle.
 
@@ -253,13 +286,17 @@ For example, rev reverses a pattern:
 Tidalは様々な方法でパターンを変化させる関数を備えていますいます。
 例えばrevはパターンを反転させます。
 
-```d1 $ rev (sound "[bd bd] [bd [sn [sn sn] sn] sn]")```
+```
+d1 $ rev (sound "[bd bd] [bd [sn [sn sn] sn] sn]")
+```
 
 >That’s not so exciting, but things get more interesting when this is used in combination with another function. For example every takes two parameters: a number, a function and a pattern to apply the function to. The number specifies how often the function is applied to the pattern. For example, the following reverses the pattern every fourth repetition:
 
 これはあまり面白くありません、しかし他の関数と組み合わせれば面白くなります。例えばeveryは二つのパラメーターが必要です、一つは数、一つは関数に渡すパターン。数は関数が適応される頻度を指定します。例えば以下は四回毎にパターンを反転させます。
 
-```d1 $ every 4 (rev) (sound "bd*2 [bd [sn sn*2 sn] sn]")```
+```
+d1 $ every 4 (rev) (sound "bd*2 [bd [sn sn*2 sn] sn]")
+```
 
 >It takes a while to get used to how we’re using parenthesis here. In the previous example, rev takes one parameter, a pattern, and we had to ‘wrap up’ the pattern sound "[bd bd] [bd [sn [sn sn] sn] sn]" in brackets to pass it to rev. In the above example every takes three parameters: a number, a function and a pattern. We had to wrap up the pattern as before, but also rev in order to give it to every. This should become clearer with practice.
 
@@ -270,13 +307,17 @@ Tidalは様々な方法でパターンを変化させる関数を備えていま
 
 同じく再生のスピードアップスローダウンもできます、以下は四分の一のスピードになります。
 
-```d1 $ slow 4 $ sound "bd*2 [bd [sn sn*2 sn] sn]"```
+```
+d1 $ slow 4 $ sound "bd*2 [bd [sn sn*2 sn] sn]"
+```
 
 >And this four times the speed:
 
 そして以下は4倍のスピード
 
-```d1 $ density 4 $ sound "bd*2 [bd [sn sn*2 sn] sn]"```
+```
+d1 $ density 4 $ sound "bd*2 [bd [sn sn*2 sn] sn]"
+```
 
 >Note that slow 0.25 would do exactly the same as density 4.
 Again, this can be applied selectively:
@@ -284,7 +325,9 @@ Again, this can be applied selectively:
 slow 0.25はdensity 4と同じということに注意してください。
 繰り返しますが、これは一部に適応できます。
 
-```d1 $ every 4 (density 4) $ sound "bd*2 [bd [sn sn*2 sn] sn]"```
+```
+d1 $ every 4 (density 4) $ sound "bd*2 [bd [sn sn*2 sn] sn]"
+```
 
 >Note again the use of parenthesis, around density 4. This is needed, to group together the function density with its parameter 4, before being passed as a parameter to the function every.
 
@@ -294,7 +337,9 @@ slow 0.25はdensity 4と同じということに注意してください。
 
 上の例では、sound関数はサンプル名を受けとり、そしてシンセのトリガーのパターンを返します。完全に理解するのに時間がかかるかもしれませんが、覚えておく重要なことは"全てはパターンとなる"ということです。この場合、sound関数で与えられた外側のパターンではなくサンプル名の内側のパターンによってシンセのトリガーが操作できるということです。
 
-```d1 $ sound (every 4 (density 4) "bd*2 [bd [sn sn*2 sn] sn]")```
+```
+d1 $ sound (every 4 (density 4) "bd*2 [bd [sn sn*2 sn] sn]")
+```
 
 ###Where are all the functions?
 
@@ -317,7 +362,9 @@ TidalCyclesは多くのエフェクターが用意されています。単純に
 
 (#)演算子をとのパターンとの間に挟むことでエフェクターを使用します。
 
-```d1 $ sound "bd*4" # gain "0.5"```
+```
+d1 $ sound "bd*4" # gain "0.5"
+```
 
 >The above code decreases the volume of the “bd” sample by 50%.
 
@@ -327,7 +374,9 @@ TidalCyclesは多くのエフェクターが用意されています。単純に
 
 (#)演算子で区切ることで、複数のエフェクターを繋げることもできます。
 
-```d1 $ sound "bd*4" # gain "0.5" # delay "0.5"```
+```
+d1 $ sound "bd*4" # gain "0.5" # delay "0.5"
+```
 
 >The code above decreases the volume by 50% and also applies a “delay” effect at a level of 0.5.
 
@@ -339,19 +388,25 @@ TidalCyclesは多くのエフェクターが用意されています。単純に
 
 ダブルクォーテーションでエフェクターの値が指定されていることに気がつきましたか。これはエフェクターの値もパターンであるということを意味します。
 
-```d1 $ sound "bd*4" # gain "1 0.8 0.5 0.7"```
+```
+d1 $ sound "bd*4" # gain "1 0.8 0.5 0.7"
+```
 
 >Effect patterns follow all the same grouping rules as sound patterns:
 
 エフェクターのパターンはsoundのパターンのグルーピングのルールとまったく同じです。
 
-```d1 $ sound "bd*4 sn*4" # gain "[[1 0.8]*2 [0.5 0.7]]/2"```
+```
+d1 $ sound "bd*4 sn*4" # gain "[[1 0.8]*2 [0.5 0.7]]/2"
+```
 
 >And you can also apply functions to effect patterns:
 
 そしてエフェクターのパターンに関数を適用できます。
 
-```d1 $ sound "bd*4" # gain (every 3 (rev) $ "1 0.8 0.5 0.7")```
+```
+d1 $ sound "bd*4" # gain (every 3 (rev) $ "1 0.8 0.5 0.7")
+```
 
 >Like with the sound example earlier, you must use parenthesis after gain in order to specify a function on the gain pattern.
 
@@ -363,7 +418,9 @@ TidalCyclesは多くのエフェクターが用意されています。単純に
 
 soundパターンの前でエフェクターを指定できます。
 
-```d1 $ gain "1 0.8 0.5 0.7" # sound "bd"```
+```
+d1 $ gain "1 0.8 0.5 0.7" # sound "bd"
+```
 
 >The order that you put things matters; the structure of the pattern is given by the pattern on the left of the #. In this case, only one bd sound is given, but you hear four, because the structure comes from the gain pattern on the left.
 
@@ -380,7 +437,9 @@ soundパターンの前でエフェクターを指定できます。
 
 しかしながらエフェクトの値はもう一方のパターンによっても変えられます。
 
-```d1 $ (|=| speed "2") $ sound "arpy*4" |=| speed "1"```
+```
+d1 $ (|=| speed "2") $ sound "arpy*4" |=| speed "1"
+```
 
 >In the code above, the left-most effect overrides the original effect that was specified on the right. In this case, speed will always equal 2.
 
@@ -390,7 +449,9 @@ soundパターンの前でエフェクターを指定できます。
 
 これには条件をつけることができます
 
-```d1 $ every 2 (|=| speed "2") $ sound "arpy*4" |=| speed "1"```
+```
+d1 $ every 2 (|=| speed "2") $ sound "arpy*4" |=| speed "1"
+```
 
 >There are other types of operators that allow you to perform arithmetic:
 
@@ -406,7 +467,9 @@ soundパターンの前でエフェクターを指定できます。
 演算を行う他の演算子も用意されています。
 たとえば|+|は加算として振る舞い、元の値に値を足します。
 
-```d1 $ every 2 (|+| speed "1") $ sound "arpy*4" |=| speed "1"```
+```
+d1 $ every 2 (|+| speed "1") $ sound "arpy*4" |=| speed "1"
+```
 
 >The code above results in a speed of “2” every other cycle.
 The following will multiply values:
@@ -414,13 +477,17 @@ The following will multiply values:
 上のコードでspeedの値は"2"に二回に一回なります。
 以下のコードは乗算を行います。
 
-```d1 $ every 2 (|*| speed "1.5") $ sound "arpy*4" |=| speed "1"```
+```
+d1 $ every 2 (|*| speed "1.5") $ sound "arpy*4" |=| speed "1"
+```
 
 >More complex patterns and chaining can be done, and with any effect, of course:
 
 より複雑なパターンを繋げられます、またどんなエフェクトでも。
 
-```d1 $ every 3 (|-| up "3") $ every 2 (|+| up "5") $ sound "arpy*4" |=| up "0 2 4 5"```
+```
+d1 $ every 3 (|-| up "3") $ every 2 (|+| up "5") $ sound "arpy*4" |=| up "0 2 4 5"
+```
 
 ####Some Common Effects
 
@@ -461,13 +528,17 @@ d1 $ sound "arpy" # speed "2"
 
 他のエフェクターと同じように、パターンによって値を指定できます。
 
-```d1 $ sound "arpy*4" # speed "1 0.5 2 1.5"```
+```
+d1 $ sound "arpy*4" # speed "1 0.5 2 1.5"
+```
 
 >You can also reverse a sample by specifying negative values:
 
 負の値で逆再生もできます。
 
-```d1 $ sound "arpy*4" # speed "-1 -0.5 -2 -1.5"```
+```
+d1 $ sound "arpy*4" # speed "-1 -0.5 -2 -1.5"
+```
 
 ####Play a sample at multiple speeds simultaneously
 
@@ -486,7 +557,9 @@ d1 $ sound "arpy*4" # speed "[1 0.5, 1.5 2 3 4]"
 
 また、up関数によっってもスピードを変えられます。up関数は12音階の半音での変化に対応したエフェクタのショートカットです。例えば、以下はクロマティック音階です。
 
-```d1 $ sound "arpy*12" # up "0 1 2 3 4 5 6 7 8 9 10 11"```
+```
+d1 $ sound "arpy*12" # up "0 1 2 3 4 5 6 7 8 9 10 11"
+```
 
 >You can also use the run function to create an incrementing pattern of integers: d1 $ sound "arpy*12" # up (run 12). The run function will be discussed later.
 
@@ -501,13 +574,17 @@ run関数によって整数インクリメントのパターンも作り出せ�
 
 パターン要素の後に丸カッコで二つのを与えると、Tidalは最初の値の数を二番目の数のステップだけ配分します。
 
-```d1 $ sound "bd(5,8)"```
+```
+d1 $ sound "bd(5,8)"
+```
 
 >You can also use the e function to do this. e takes the same two arguments as what is used in the parenthesis above:
 
 これをe関数によってもできます。e関数は丸カッコのといとおなじように二つの引数を受けます。
 
-```d1 $ e 5 8 $ sound "bd"```
+```
+d1 $ e 5 8 $ sound "bd"
+```
 
 >You can use the parenthesis notation within a single element of a pattern:
 
@@ -522,13 +599,17 @@ d1 $ sound "bd(3,8) sn(5,8)"
 
 3つ目の引数も指定できます、これはパターンを '回転'させますつまり別のステップで始まります。
 
-```d1 $ sound "bd(5,8,2)"```
+```
+d1 $ sound "bd(5,8,2)"
+```
 
 >You can also use the e function to apply a Euclidean algorithm over a complex pattern, although the structure of that pattern will be lost:
 
 e関数での複雑なパターンでユークリッドアルゴリズムを作れます、しかしパターン構造は失われます。
 
-```d1 $ e 3 8 $ sound "bd*2 [sn cp]"```
+```
+d1 $ e 3 8 $ sound "bd*2 [sn cp]"
+```
 
 >In the above, three sounds are picked from the pattern on the right according to the structure given by the e 3 8. It ends up picking two bd sounds, a cp and missing the sn entirely.
 
@@ -538,7 +619,9 @@ e関数での複雑なパターンでユークリッドアルゴリズムを作�
 
 特典として、丸カッコ内にパターンが書けます、例えば要素を3から5オルタネートするには
 
-```d1 $ sound "bd([5 3]/2,8)"```
+```
+d1 $ sound "bd([5 3]/2,8)"
+```
 
 >These types of sequences use “Bjorklund’s algorithm”, which wasn’t made for music but for an application in nuclear physics, which is exciting. More exciting still is that it is very similar in structure to the one of the first known algorithms written in Euclid’s book of elements in 300 BC. You can read more about this in the paper The Euclidean Algorithm Generates Traditional Musical Rhythms by Toussaint. Some examples from this paper are included below, including rotation in some cases.
 
