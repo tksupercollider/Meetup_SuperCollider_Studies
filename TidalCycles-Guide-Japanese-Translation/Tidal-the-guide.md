@@ -410,7 +410,7 @@ d1 $ sound "bd*4" # gain (every 3 (rev) $ "1 0.8 0.5 0.7")
 
 >Like with the sound example earlier, you must use parenthesis after gain in order to specify a function on the gain pattern.
 
-先のsaoundの例のように、gainの後にgainパターンへ渡すために丸カッコでくくる必要があります。
+先のsoundの例のように、gainの後にgainパターンへ渡すために丸カッコでくくる必要があります。
 
 ####Effect pattern order
 
@@ -658,18 +658,25 @@ d1 $ sound "bd([5 3]/2,8)"
 >If you’ve made it this far without changing the tempo in all these examples, then you’re probably ready to change it up.
 
 
-Tidal’s core unit of time is cycles per second. It can be set with the cps function:
+>Tidal’s core unit of time is cycles per second. It can be set with the cps function:
 
+```
 cps 1
-You can execute cps just like a pattern (using Shift+Enter in your editor).
+```
 
-cps accepts a positive numeric value that can include a decimal:
+>You can execute cps just like a pattern (using Shift+Enter in your editor).
 
+>cps accepts a positive numeric value that can include a decimal:
+
+```
 cps 1.5
 cps 0.75
 cps 10
-Setting BPM
-Tidal also includes a helper function called bps to set “beats per second”. To set beats-per-minute, call bps with your bpm value, divided by 60:
+```
+
+###Setting BPM
+
+>Tidal also includes a helper function called bps to set “beats per second”. To set beats-per-minute, call bps with your bpm value, divided by 60:
 
 -- sets a tempo of 170 BPM:
 bps (120/60)
