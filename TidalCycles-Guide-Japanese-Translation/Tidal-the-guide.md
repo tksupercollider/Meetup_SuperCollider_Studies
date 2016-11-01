@@ -657,8 +657,12 @@ d1 $ sound "bd([5 3]/2,8)"
 
 >If you’ve made it this far without changing the tempo in all these examples, then you’re probably ready to change it up.
 
+ここまでの全ての例でtempoを変更することなく作ったのであれば、おそらく変更する準備は整っています。
+
 
 >Tidal’s core unit of time is cycles per second. It can be set with the cps function:
+
+Tidalのコアユニットの時間はcycle/秒です。これはcps関数で指定します。
 
 ```
 cps 1
@@ -666,7 +670,11 @@ cps 1
 
 >You can execute cps just like a pattern (using Shift+Enter in your editor).
 
+パターンのようにcpsを実行できます（エディタの中でShift+Enterを使って）
+
 >cps accepts a positive numeric value that can include a decimal:
+
+cps は10進数も含めた正の数を受け付けます
 
 ```
 cps 1.5
@@ -678,218 +686,376 @@ cps 10
 
 >Tidal also includes a helper function called bps to set “beats per second”. To set beats-per-minute, call bps with your bpm value, divided by 60:
 
+Tidalはbpsという”ビート毎秒”を指定するヘルパー関数も用意されています。ビート毎秒を指定するには60で割った、bpm数をbps関数に与えて呼びます。
+
 -- sets a tempo of 170 BPM:
+
+```
 bps (120/60)
+```
 
 Or you might want to divide it by 120 instead, to create a pattern twice as
 long (or half the speed, depending on how you think about it:
 
 -- sets a tempo of 100 BPM:
-bps (100/120)
-The Run Function
-Run
-There is a special utility function called run which will return a pattern of integers up to a specified maximum. You can use run with effects to aid in automatically generating a linear pattern:
 
+```
+bps (100/120)
+```
+
+##The Run Function
+
+###Run
+
+>There is a special utility function called run which will return a pattern of integers up to a specified maximum. You can use run with effects to aid in automatically generating a linear pattern:
+
+runと呼ばれる指定した最大値によって整数値を返す特別なユーティリティ関数が用意されています。
+runを使って自動に補完する線形のパターンを生成できます。
+
+
+```
 d1 $ sound "arpy*8" # up (run 8)
 d1 $ sound "arpy*8" # speed (run 8)
-In the above we’re specifying the number of sounds twice - in the sound pattern as well as the up or speed pattern. There’s actually a neat way of only having to specify this once, simply by switching them round, so the effect parameter is on the left:
+```
 
+>In the above we’re specifying the number of sounds twice - in the sound pattern as well as the up or speed pattern. There’s actually a neat way of only having to specify this once, simply by switching them round, so the effect parameter is on the left:
+
+上の例では
+
+
+```
 d1 $ up (run 8) # sound "arpy"
-This works because TidalCycles always takes the structure of a pattern from the parameter that’s on the left. We usually want the structure to come from the sound parameter, but not always.
+```
+
+>This works because TidalCycles always takes the structure of a pattern from the parameter that’s on the left. We usually want the structure to come from the sound parameter, but not always.
 
 Because run returns a pattern, you can apply functions to its result:
 
+```
 d1 $ sound "arpy*8" # up (every 2 (rev) $ run 8)
-For a more practical example of using run, read below about selecting samples from folders.
+```
 
-(Algorithmically) Selecting Samples
-Sample Selection
-The sound parameter we’ve been using up to now can actually be broken into two seperate parameters, making it easy to select samples with a pattern. These parameters are s that gives the name of the sample set, and n which gives the number of the sample within that set. For example, the following two patterns do exactly the same:
+>For a more practical example of using run, read below about selecting samples from folders.
 
+##(Algorithmically) Selecting Samples
+
+###Sample Selection
+
+>The sound parameter we’ve been using up to now can actually be broken into two seperate parameters, making it easy to select samples with a pattern. These parameters are s that gives the name of the sample set, and n which gives the number of the sample within that set. For example, the following two patterns do exactly the same:
+
+```
 d1 $ sound "arpy:0 arpy:2 arpy:3"
 d1 $ n "0 2 3" # s "arpy"
-It’s possible to break the sound parameter into two different patterns, namely s that gives the name of the sample set, and n which gives the index of the sample within that set. For example, the following two patterns are the same:
+```
 
+>It’s possible to break the sound parameter into two different patterns, namely s that gives the name of the sample set, and n which gives the index of the sample within that set. For example, the following two patterns are the same:
+
+```
 d1 $ sound "arpy:0 arpy:2 arpy:3"
 d1 $ n "0 2 3" # s "arpy"
-This allows us to separate the sample folder name from the index inside the folder, possibly with surprising results!
+```
 
-There is also special function called samples that lets you do the same using the sound parameter.
+>This allows us to separate the sample folder name from the index inside the folder, possibly with surprising results!
 
+>There is also special function called samples that lets you do the same using the sound parameter.
+
+```
 d1 $ sound $ samples "drum*4" "0 1 2 3"
+```
 
 -- the code above equals this:
+```
 d1 $ sound "drum:0 drum:1 drum:2 drum:3"
-Whether you use n and s together, or sound with samples is up to you, although you might find the former to be more flexible.
+```
 
-Remember the run function? Since run generates a pattern of integers, it can be used with n to automatically “run” through the sample indices of a folder:
+>Whether you use n and s together, or sound with samples is up to you, although you might find the former to be more flexible.
 
+>Remember the run function? Since run generates a pattern of integers, it can be used with n to automatically “run” through the sample indices of a folder:
+
+```
 d1 $ n (run 4) # s "drum"
 d1 $ sound $ samples "drum*4" (run 4) -- or with samples
-And of course you can specify a different pattern of sample names:
+```
 
+>And of course you can specify a different pattern of sample names:
+
+```
 d1 $ s "drum arpy cp hh" # n (run 10)
-Again, by swapping the order of the s and n parameters, you can hear the difference between taking the structure from one or the other:
+```
 
+
+>Again, by swapping the order of the s and n parameters, you can hear the difference between taking the structure from one or the other:
+
+```
 d1 $ n (run 10) # s "drum arpy cp hh"
-NOTE: if you specify a run value that is greater than the number of samples in a folder, then the higher number index will “wrap” to the beginning of the samples in the folder (just like with the colon notation).
+```
+
+>NOTE: if you specify a run value that is greater than the number of samples in a folder, then the higher number index will “wrap” to the beginning of the samples in the folder (just like with the colon notation).
 You might sometimes see the samples function wrapped in parenthesis:
 
+```
 d1 $ sound (samples "drum arpy cp hh" (run 10))
-Combining Types of Patterns
-Combining Patterns
-Ok, remember when we started adding effects:
+```
 
+
+##Combining Types of Patterns
+
+###Combining Patterns
+
+>Ok, remember when we started adding effects:
+
+```
 d1 $ sound "bd sn drum arpy" # pan "0 1 0.25 0.75"
-What we’re actually doing in the code above is combining two patterns together: the sound pattern, and the pan pattern. The special pipe operators (|=|, |+|, |-|, |*|, |/|), allow us to combine two patterns. Remember that # is shorthand for |=|.
+```
 
-We can actually swap sides and it sounds the same:
+>What we’re actually doing in the code above is combining two patterns together: the sound pattern, and the pan pattern. The special pipe operators (|=|, |+|, |-|, |*|, |/|), allow us to combine two patterns. Remember that # is shorthand for |=|.
 
+>We can actually swap sides and it sounds the same:
+
+```
 d1 $ pan "0 1 0.25 0.75" # sound "bd sn drum arpy"
-As we touched on earlier, the main thing to know when combining patterns like this is that the left-most pattern determines the rhythmic structure of the result. Removing one of the elements from the pan pattern on the left results in a cycle with three samples played:
+```
 
+>As we touched on earlier, the main thing to know when combining patterns like this is that the left-most pattern determines the rhythmic structure of the result. Removing one of the elements from the pan pattern on the left results in a cycle with three samples played:
+
+```
 d1 $ pan "0 1 0.25" # sound "bd sn drum arpy"
-In the code above, the pan pattern determines the rhythm because it is the left-most pattern. The sound pattern now only determines what samples are played at what time. The sound pattern gets mapped onto the pan pattern.
+```
 
-You might be wondering how TidalCycles decides which sound values get matched with which pan values in the above. (If not, there is no need to read the rest of this paragraph just now!) The rule is, for each value in the pattern on the left, values from the right are matched where the start (or onset) of the left value, fall within the timespan of the value on the right. For example, the second pan value of 1 starts one third into its pattern, and the second sound value of sn starts one quarter into its pattern, and ends at the halfway point. Because the former onset (one third) falls inside the timespan of the latter timespan (from one quarter until one half), they are matched. The timespan of arpy doesn’t contain any onsets from the pan pattern, and so it doesn’t match with anything, and isn’t played.
+>In the code above, the pan pattern determines the rhythm because it is the left-most pattern. The sound pattern now only determines what samples are played at what time. The sound pattern gets mapped onto the pan pattern.
 
-The rule described above may seem like a lot to keep in mind while composing patterns, but in practice there is no need. Our advice is to not worry, write some patterns and get a feel for how they fit together.
+>You might be wondering how TidalCycles decides which sound values get matched with which pan values in the above. (If not, there is no need to read the rest of this paragraph just now!) The rule is, for each value in the pattern on the left, values from the right are matched where the start (or onset) of the left value, fall within the timespan of the value on the right. For example, the second pan value of 1 starts one third into its pattern, and the second sound value of sn starts one quarter into its pattern, and ends at the halfway point. Because the former onset (one third) falls inside the timespan of the latter timespan (from one quarter until one half), they are matched. The timespan of arpy doesn’t contain any onsets from the pan pattern, and so it doesn’t match with anything, and isn’t played.
 
-Anyway, this composition of pattern parameters allows us to do some unique things:
+>The rule described above may seem like a lot to keep in mind while composing patterns, but in practice there is no need. Our advice is to not worry, write some patterns and get a feel for how they fit together.
 
+>Anyway, this composition of pattern parameters allows us to do some unique things:
+
+```
 d1 $ up "0 0*2 0*4 1" # sound "[arpy, bass2, bd]"
-Above, the sound pattern is merely specifying three samples to play on every note. Both the rhythm and pitch of these notes is defined by the up pattern.
+```
 
-Oscillation with Continuous Patterns
-Continuous Patterns
-So far we’ve only been working with discrete patterns, by which we mean patterns which containing events which begin and end. Tidal also supports continuous patterns which instead vary continually over time. You can create continuous patterns using functions which give sine, saw, triangle, and square waves:
+>Above, the sound pattern is merely specifying three samples to play on every note. Both the rhythm and pitch of these notes is defined by the up pattern.
 
+##Oscillation with Continuous Patterns
+
+###Continuous Patterns
+
+>So far we’ve only been working with discrete patterns, by which we mean patterns which containing events which begin and end. Tidal also supports continuous patterns which instead vary continually over time. You can create continuous patterns using functions which give sine, saw, triangle, and square waves:
+
+
+```
 d1 $ sound "bd*16" # pan sine1
-The code above uses the sine1 function to generate a sine wave oscillation of values between 0 and 1 for the pan values, so the bass drum moves smoothly between the left and right speakers.
+```
 
-In addition to sine1, there is also a sine function. What is the difference?
+>The code above uses the sine1 function to generate a sine wave oscillation of values between 0 and 1 for the pan values, so the bass drum moves smoothly between the left and right speakers.
+
+>In addition to sine1, there is also a sine function. What is the difference?
 
 sine produces values between -1 and 1
 sine1 produces values between 0 and 1
 Thus, the “1” suffix means only positive values.
 
-In addition to the sine/sine1 functions, Tidal also has saw/saw1, tri/tri1, and square/square1.
+>In addition to the sine/sine1 functions, Tidal also has saw/saw1, tri/tri1, and square/square1.
 
 Just like discrete patterns, you can control the speed of continuous patterns with slow or density:
 
+```
 d1 $ sound "bd*16" # pan (slow 8 $ saw1)
 d1 $ sound "bd*8 sn*8" # pan (density 1.75 $ tri1)
 d1 $ sound "bd*8 sn*8" # speed (density 2 $ tri)
-You can also combine them in different ways:
+```
 
+>You can also combine them in different ways:
+
+```
 d1 $ sound "bd*16" # pan (slowcat [sine1, saw1, square1, tri1])
 d1 $ sound "sn:2*16" # (speed $ scale 0.5 3 sine1) |*| (speed $ slow 4 saw1)
-Scaling Oscillation
-You can tell the oscillation functions to scale themselves and oscillate between two values:
+```
 
+##Scaling Oscillation
+
+>You can tell the oscillation functions to scale themselves and oscillate between two values:
+
+```
 d1 $ sound "bd*8 sn*8" # speed (scale 1 3 $ tri1)
 d1 $ sound "bd*8 sn*8" # speed (slow 4 $ scale 1 3 $ tri1)
-You can also scale to negative values, but make sure to wrap negative values in parens (otherwise the interpreter thinks you’re trying to subtract 2 from something):
+```
 
+>You can also scale to negative values, but make sure to wrap negative values in parens (otherwise the interpreter thinks you’re trying to subtract 2 from something):
+
+```
 d1 $ sound "bd*8 sn*8" # speed (scale (-2) 3 $ tri1)
-This technique works well for a slow low-pass filter cutoff:
+```
 
+>This technique works well for a slow low-pass filter cutoff:
+
+```
 d1 $ sound "hh*32" # cutoff (scale 300 1000 $ slow 4 $ sine1) # resonance "0.4"
 d1 $ sound "hh*32" # cutoff (scale 0.001 0.1 $ slow 4 $ sine1) # resonance "0.1"
-NOTE 1: If you’re using SuperDirt to produce sound (the default install choice), cutoff is specified in Hertz, as in the first example above. If you’re using the older “classic” dirt, then you will instead need to specify cutoff between 0 and 1, as in the second example.
-NOTE 2: Despite the fact that the oscillator functions produce continuous values, you still need to map them to discrete sound events.
-Rests
-Rests
-So far we have produced patterns that keep producing more and more sound. What if you want a rest, or gap of silence, in your pattern? You can use the “tilde” ~ character to do so:
+```
+		
+>NOTE 1: If you’re using SuperDirt to produce sound (the default install choice), cutoff is specified in Hertz, as in the first example above. If you’re using the older “classic” dirt, then you will instead need to specify cutoff between 0 and 1, as in the second example.
 
+>NOTE 2: Despite the fact that the oscillator functions produce continuous values, you still need to map them to discrete sound events.
+
+##Rests
+
+###Rests
+
+>So far we have produced patterns that keep producing more and more sound. What if you want a rest, or gap of silence, in your pattern? You can use the “tilde” ~ character to do so:
+
+```
 d1 $ sound "bd bd ~ bd"
-Think of the ~ as an ‘empty’ step in a sequence, that just produces silence.
 
-Polymeters
-Polymeter
-We talked about polyrhythms earlier, but Tidal can also produce polymeter sequences. A polymeter pattern is one where two patterns have different sequence lengths, but share the same pulse or tempo.
+```
 
-You use curly brace syntax to create a polymeter rhythm:
+>Think of the ~ as an ‘empty’ step in a sequence, that just produces silence.
 
+##Polymeters
+
+###Polymeter
+
+>We talked about polyrhythms earlier, but Tidal can also produce polymeter sequences. A polymeter pattern is one where two patterns have different sequence lengths, but share the same pulse or tempo.
+
+>You use curly brace syntax to create a polymeter rhythm:
+
+```
 d1 $ sound "{bd hh sn cp, arpy bass2 drum notes can}"
-The code above results in a five-note rhythm being played at the pulse of a four-note rhythm. If you switch the groups around, it results in a four-note rhythm over a five-note rhythm:
+```
 
+>The code above results in a five-note rhythm being played at the pulse of a four-note rhythm. If you switch the groups around, it results in a four-note rhythm over a five-note rhythm:
+
+```
 d1 $ sound "{arpy bass2 drum notes can, bd hh sn cp}"
-Sometimes you might want to create an odd polymeter rhythm without having to explicitly create a base rhythm. You could do this with rests:
+```
 
+>Sometimes you might want to create an odd polymeter rhythm without having to explicitly create a base rhythm. You could do this with rests:
+
+```
 d1 $ sound "{~ ~ ~ ~, arpy bass2 drum notes can}"
-But a more efficient way is to use the % symbol after the closing curly brace to specify the number of notes in the base pulse:
+```
 
+>But a more efficient way is to use the % symbol after the closing curly brace to specify the number of notes in the base pulse:
+
+```
 d1 $ sound "{arpy bass2 drum notes can}%4"
+```
+
 
 -- the above is the same as this:
-d1 $ sound "{~ ~ ~ ~, arpy bass2 drum notes can}"
-If “polymeter” sounds a bit confusing, there’s a good explanation here: http://music.stackexchange.com/questions/10488/polymeter-vs-polyrhythm
 
-Shifting Time
-Shifting Time
-You can use the ~> and <- functions to shift patterns forwards or backwards in time, respectively. With each of these functions, you can specify an amount, in cycle units.
+```d1 $ sound "{~ ~ ~ ~, arpy bass2 drum notes can}"```
 
+>If “polymeter” sounds a bit confusing, there’s a good explanation here: http://music.stackexchange.com/questions/10488/polymeter-vs-polyrhythm
+
+
+##Shifting Time
+
+###Shifting Time
+
+>You can use the ~> and <- functions to shift patterns forwards or backwards in time, respectively. With each of these functions, you can specify an amount, in cycle units.
+
+```
 d1 $ (0.25 <~) $ sound "bd*2 cp*2 hh sn"
 d1 $ (0.25 ~>) $ sound "bd*2 cp*2 hh sn"
-The above code shifts the patterns over by one quarter of a cycle.
+```
 
-You can hear this shifting effect best when applying it conditionally. For example, the below shifts the pattern every third cycle:
+>The above code shifts the patterns over by one quarter of a cycle.
 
+>You can hear this shifting effect best when applying it conditionally. For example, the below shifts the pattern every third cycle:
+
+```
 d1 $ every 3 (0.25 <~) $ sound "bd*2 cp*2 hh sn"
 d1 $ every 3 (0.25 ~>) $ sound "bd*2 cp*2 hh sn"
-You can shift patterns as little or as much as you’d like:
+```
 
+>You can shift patterns as little or as much as you’d like:
+
+```
 d1 $ every 3 (0.0625 <~) $ sound "bd*2 cp*2 hh sn"
 d1 $ every 3 (1000 ~>) $ sound "bd*2 cp*2 hh sn"
 d1 $ every 3 (1000.125 ~>) $ sound "bd*2 cp*2 hh sn"
-However, in the above case every cycle is the same, so you won’t here a difference between shifting it 1 or 1000 cycles.
+```
 
-You can also express time as a fraction, for example 1%4 instead of 0.25. However, due to the way Haskell’s parser works, you’ll need to put this in parenthesis:
+>However, in the above case every cycle is the same, so you won’t here a difference between shifting it 1 or 1000 cycles.
 
+>You can also express time as a fraction, for example 1%4 instead of 0.25. However, due to the way Haskell’s parser works, you’ll need to put this in parenthesis:
+
+```
 d1 $ every 3 ((1%4) <~) $ sound "bd*2 cp*2 hh sn"
-Introducing Randomness
-Randomness
-Tidal can produce random patterns of integers and decimals. It can also introduce randomness into patterns by removing random events.
+```
 
-Random Decimal Patterns
-You can use the rand function to create a random value between 0 and 1. This is useful for effects:
+##Introducing Randomness
 
+
+###Randomness
+
+>Tidal can produce random patterns of integers and decimals. It can also introduce randomness into patterns by removing random events.
+
+###Random Decimal Patterns
+
+>You can use the rand function to create a random value between 0 and 1. This is useful for effects:
+
+```
 d1 $ sound "arpy*4" # pan (rand)
-As with run and all numeric patterns, the values that rand give you can be scaled, for example the below gives random numbers between 0.25 and 0.75:
+```
 
+>As with run and all numeric patterns, the values that rand give you can be scaled, for example the below gives random numbers between 0.25 and 0.75:
+
+```
 d1 $ sound "arpy*4" # pan (scale 0.25 0.75 $ rand)
-Random Integer Patterns
-Use the irand function to create a random integer up to a given maximum. The most common usage of irand is to produce a random pattern of sample indices (similar to run):
+```
 
+###Random Integer Patterns
+
+>Use the irand function to create a random integer up to a given maximum. The most common usage of irand is to produce a random pattern of sample indices (similar to run):
+
+```
 d1 $ s "arpy*8" # n (irand 30)
-The code above randomly chooses from 30 samples in the “arpy” folder.
+```
 
-Hairy detail: rand and irand are actually continuous patterns, which in practical terms means they have infinite detail - you can treat them as pure information! As with all patterns they are also deterministic, stateless functions of time, so that if you retriggered a pattern from the same logical time point, exactly the same numbers would be produced. Furthermore, if you use a rand or irand in two different places, you would get the same ‘random’ pattern - if this isn’t what you want, you can simply shift or slow down time a little for one of them, e.g. slow 0.3 rand.
+>The code above randomly chooses from 30 samples in the “arpy” folder.
+
+>Hairy detail: rand and irand are actually continuous patterns, which in practical terms means they have infinite detail - you can treat them as pure information! As with all patterns they are also deterministic, stateless functions of time, so that if you retriggered a pattern from the same logical time point, exactly the same numbers would be produced. Furthermore, if you use a rand or irand in two different places, you would get the same ‘random’ pattern - if this isn’t what you want, you can simply shift or slow down time a little for one of them, e.g. slow 0.3 rand.
 Removing or “Degrading” Pattern events
 Tidal has a few ways to randomly remove events from patterns. You can use the shorthand ? symbol if you want to give an event a 50/50 chance of happening or not on every cycle:
 
+```
 d1 $ sound "bd?"
-In the code above, the “bd” sample has a 50% chance of being played on every cycle.
+```
 
-You can add the ? after the completion of any event or group in a pattern:
+>In the code above, the “bd” sample has a 50% chance of being played on every cycle.
 
+>You can add the ? after the completion of any event or group in a pattern:
+
+```
 d1 $ sound "bd*16?"
 d1 $ sound "bd sn? cp hh?"
 d1 $ sound "[bd sn cp hh]?"
-The ? symbol is shorthand for the degrade function. The two lines below are equivalent:
+```
 
+>The ? symbol is shorthand for the degrade function. The two lines below are equivalent:
+
+```
 d1 $ sound "bd*16?"
 d1 $ degrade $ sound "bd*16"
-Related to degrade is the degradeBy function, where you can specify the probability (from 0 to 1) that events will be removed from a pattern:
+```
 
+>Related to degrade is the degradeBy function, where you can specify the probability (from 0 to 1) that events will be removed from a pattern:
+
+```
 d1 $ degradeBy 0.25 $ sound "bd*16"
-There is also sometimesBy, which executes a function based on a probability:
+```
 
+>There is also sometimesBy, which executes a function based on a probability:
+
+```
 d1 $ sometimesBy 0.75 (slow 2) $ sound "bd*16"
-The code above has a 75% chance of calling slow 2 on every event in the pattern.
+```
 
-There are other aliases for sometimesBy:
+>The code above has a 75% chance of calling slow 2 on every event in the pattern.
+
+>There are other aliases for sometimesBy:
 
 sometimes = sometimesBy 0.5
 often = sometimesBy 0.75
@@ -897,130 +1063,194 @@ rarely = sometimesBy 0.25
 almostNever = sometimesBy 0.1
 almostAlways = sometimesBy 0.9
 
+```
 d1 $ sometimes (density 2) $ sound "bd*8"
 d1 $ rarely (density 2) $ sound "bd*8"
-Creating Variation in Patterns
-Variation
-You can create a lot of cyclic variations in patterns by layering conditional logic:
+```
 
+##Creating Variation in Patterns
+
+###Variation
+
+>You can create a lot of cyclic variations in patterns by layering conditional logic:
+
+```
 d1 $ every 5 (|+| speed "0.5") $ every 4 (0.25 <~) $ every 3 (rev) $
    sound "bd sn arpy*2 cp"
    # speed "[1 1.25 0.75 -1.5]/3"
-In addition to every you can also use the whenmod conditional function. whenmod takes two parameters; it executes a function when the remainder of the current loop number divided by the first parameter is less than the second parameter.
+```
 
-For example, the following will play a pattern normally for cycles 1-6, then play it in reverse for cycles 7-8. Then normally again for six cycles, then in reverse for two, and so on:
+>In addition to every you can also use the whenmod conditional function. whenmod takes two parameters; it executes a function when the remainder of the current loop number divided by the first parameter is less than the second parameter.
 
+>For example, the following will play a pattern normally for cycles 1-6, then play it in reverse for cycles 7-8. Then normally again for six cycles, then in reverse for two, and so on:
+
+```
 d1 $ whenmod 8 6 (rev) $ sound "bd*2 arpy*2 cp hh*22"
-Creating "Fills" and using "const"
-Fills
-You can think of a “fill” as a change to a regular pattern that happens regularly. e.g. every 4 cycles do “xya”, or every 8 cycles do “abc”.
+```
 
-We’ve already been using every and whenmod to do pattern function fills:
+##Creating "Fills" and using "const"
 
+###Fills
+
+>You can think of a “fill” as a change to a regular pattern that happens regularly. e.g. every 4 cycles do “xya”, or every 8 cycles do “abc”.
+
+>We’ve already been using every and whenmod to do pattern function fills:
+
+```
 d1 $ every 8 (rev) $ every 4 (density 2) $ sound "bd hh sn cp"
 d1 $ whenmod 16 14 (# speed "2") $ sound "bd arpy*2 cp bass2"
-However, what if you wanted to conditionally replace the pattern with a new one? You can use the const function to completely replace a playing pattern.
+```
 
-Let’s start with a trivial example where we use const to replace an entire pattern all the time:
+>However, what if you wanted to conditionally replace the pattern with a new one? You can use the const function to completely replace a playing pattern.
 
+>Let’s start with a trivial example where we use const to replace an entire pattern all the time:
+
+```
 d1 $ const (sound "arpy*3") $ sound "bd sn cp hh"
-In the code above, we’ve completely replaced the “bd sn cp hh” pattern with an “arpy” pattern. const specifies the new pattern.
+```
 
-We can conditionally apply const using every or whenmod:
+>In the code above, we’ve completely replaced the “bd sn cp hh” pattern with an “arpy” pattern. const specifies the new pattern.
 
+>We can conditionally apply const using every or whenmod:
+
+```
 d1 $ whenmod 8 6 (const $ sound "arpy(3,8) bd*4") $ sound "bd sn bass2 sn"
 d1 $ every 12 (const $ sound "bd*4 sn*2") $ sound "bd sn bass2 sn"
-Composing Multi-Part Patterns
-Composing_patterns
-There are a few ways that you can compose new patterns from multiple other patterns. You can concatenate or “append” patterns in serial, or you can “stack” them and play them together in parallel.
+```
 
-Concatenating patterns in serial
-You can use the cat function to add patterns one after another:
+##Composing Multi-Part Patterns
 
+###Composing_patterns
+
+>There are a few ways that you can compose new patterns from multiple other patterns. You can concatenate or “append” patterns in serial, or you can “stack” them and play them together in parallel.
+
+###Concatenating patterns in serial
+
+>You can use the cat function to add patterns one after another:
+
+```
 d1 $ cat [sound "bd sn:2" # vowel "[a o]/2",
           sound "casio casio:1 casio:2*2"
          ]
-The cat function squeezes all the patterns into the space of one. The more patterns you add to the list, the faster each pattern will be played so that all patterns can fit into a single cycle.
+```
 
+>The cat function squeezes all the patterns into the space of one. The more patterns you add to the list, the faster each pattern will be played so that all patterns can fit into a single cycle.
+
+```
 d1 $ cat [sound "bd sn:2" # vowel "[a o]/2",
           sound "casio casio:1 casio:2*2",
           sound "drum drum:2 drum:3 drum:4*2"
          ]
-slowcat will maintain the original playback speed of the patterns:
+```
 
+>slowcat will maintain the original playback speed of the patterns:
+
+```
 d1 $ slowcat [sound "bd sn:2" # vowel "[a o]/2",
               sound "casio casio:1 casio:2*2",
               sound "drum drum:2 drum:3 drum:4*2"
              ]
-slowcat is a great way to create a linear sequence of patterns (a sequence of sequences), giving a larger form to multiple patterns.
+```
+ 
+>slowcat is a great way to create a linear sequence of patterns (a sequence of sequences), giving a larger form to multiple patterns.
 
-There’s also randcat, which will play a random pattern from the list.
+?There’s also randcat, which will play a random pattern from the list.
 
-Playing patterns together in parallel
-The stack function takes a list of patterns and combines them into a new pattern by playing all of the patterns in the list simultaneously.
+###Playing patterns together in parallel
 
+>The stack function takes a list of patterns and combines them into a new pattern by playing all of the patterns in the list simultaneously.
+
+```
 d1 $ stack [
   sound "bd bd*2",
   sound "hh*2 [sn cp] cp future*4",
   sound (samples "arpy*8" (run 16))
 ]
-This is useful if you want to apply functions or effects on the entire stack:
+```
 
+>This is useful if you want to apply functions or effects on the entire stack:
+
+```
 d1 $ every 4 (slow 2) $ whenmod 5 3 (# speed "0.75 1.5") $ stack [
   sound "bd bd*2",
   sound "hh*2 [sn cp] cp future*4",
   sound (samples "arpy*8" (run 16))
 ] # speed "[[1 0.8], [1.5 2]*2]/3"
-Truncating samples with "cut"
-Cut
-So far, all of our examples have used short samples. However, maybe you’ve experimented with some long samples. Maybe you’ve noticed that really long samples can cause a lot of bleed and unwanted sound.
+```
 
-With Tidal’s cut effect, you can “choke” a sound and stop it from playing when a new sample is triggered.
+##Truncating samples with "cut"
 
-Consider the following example where we have a pattern of “arpy” sounds, played at a low speed, so there is a lot of bleed into each sample:
+###Cut
 
+>So far, all of our examples have used short samples. However, maybe you’ve experimented with some long samples. Maybe you’ve noticed that really long samples can cause a lot of bleed and unwanted sound.
+
+>With Tidal’s cut effect, you can “choke” a sound and stop it from playing when a new sample is triggered.
+
+>Consider the following example where we have a pattern of “arpy” sounds, played at a low speed, so there is a lot of bleed into each sample:
+
+```
 d1 $ sound $ samples "arpy*8" (run 8) # speed "0.25"
+```
 
-We can stop this bleed by using cut and assigning the pattern a cut group of “1”:
+>We can stop this bleed by using cut and assigning the pattern a cut group of “1”:
 
+```
 d1 $ sound $ samples "arpy*8" (run 8) # speed "0.25" # cut "1"
-No more bleed!
+```
 
-You can use any number for the cut group.
+>No more bleed!
 
-Cut groups are global, to the Tidal process, so if you have two Dirt connections, use two different cut group values to make sure the patterns don’t choke each other:
+>You can use any number for the cut group.
 
+>Cut groups are global, to the Tidal process, so if you have two Dirt connections, use two different cut group values to make sure the patterns don’t choke each other:
+
+```
 d1 $ sound $ samples "arpy*8" (run 8) # speed "0.25" # cut "1"
 d2 $ sound $ samples "bass2*6" (run 6) # speed "0.5" # cut "2"
-This also works in a stack:
+```
 
+>This also works in a stack:
+
+```
 d1 $ stack [
    sound $ samples "arpy*8" (run 8) # speed "0.25" # cut "1",
    sound $ samples "bass2*6" (run 6) # speed "0.5" # cut "2" ]
-Transitions Between Patterns
-Transitions
-Changing the pattern on a channel takes effect (almost) immediately. This may not be what you want, especially when performing live!
+```
 
-That’s why Tidal allows you to choose a transition that will introduce another pattern, eventually replacing the current one.
+##Transitions Between Patterns
 
-For every Dirt channel, there’s a transition channel that accepts a transition function and a new pattern.
+###Transitions
 
-So instead of directly sending the new pattern to d1, we’ll send it to the corresponding transition channel t1 and give it a nice transition function:
+>Changing the pattern on a channel takes effect (almost) immediately. This may not be what you want, especially when performing live!
 
+>That’s why Tidal allows you to choose a transition that will introduce another pattern, eventually replacing the current one.
+
+>For every Dirt channel, there’s a transition channel that accepts a transition function and a new pattern.
+
+>So instead of directly sending the new pattern to d1, we’ll send it to the corresponding transition channel t1 and give it a nice transition function:
+
+```
 d1 $ sound (samples "hc*8" (iter 4 $ run 4))
 t1 anticipate $ sound (samples "bd(3,8)" (run 3))
-To transition from here, simply change the pattern within t1, and in this case also change the transition function:
+```
 
+>To transition from here, simply change the pattern within t1, and in this case also change the transition function:
+
+```
 t1 (xfadeIn 16) $ sound "bd(5,8)"
-The above will fade over 16 cycles from the former pattern to the given new one.
+```
 
-Apart from anticipate and xfadeIn there are a lot more transition functions e.g. some that will force you to keep changing your patterns to avoid repetitive performances…
+>The above will fade over 16 cycles from the former pattern to the given new one.
 
-Samples
-Samples
-If you’re using SuperDirt, all the default samples can be found in the Dirt-Samples folder - you can open it by running Quarks.gui in SuperCollider, clicking on “Dirt-Samples” and then “open folder”. If you’re using classic dirt, look in its samples subfolder. Here’s some you could try:
+>Apart from anticipate and xfadeIn there are a lot more transition functions e.g. some that will force you to keep changing your patterns to avoid repetitive performances…
 
-flick sid can metal future gabba sn mouth co gretsch mt arp h cp
+##Samples
+
+###Samples
+
+>If you’re using SuperDirt, all the default samples can be found in the Dirt-Samples folder - you can open it by running Quarks.gui in SuperCollider, clicking on “Dirt-Samples” and then “open folder”. If you’re using classic dirt, look in its samples subfolder. Here’s some you could try:
+
+>flick sid can metal future gabba sn mouth co gretsch mt arp h cp
 cr newnotes bass crow hc tabla bass0 hh bass1 bass2 oc bass3 ho
 odx diphone2 house off ht tink perc bd industrial pluck trump
 printshort jazz voodoo birds3 procshort blip drum jvbass psr
@@ -1028,25 +1258,39 @@ wobble drumtraks koy rave bottle kurt latibro rm sax lighter lt
 arpy feel less stab ul
 Each one is a folder containing one or more wav files. For example when you put bd:1 in a sequence, you’re picking up the second wav file in the bd folder. If you ask for the ninth sample and there are only seven in the folder, it’ll wrap around and play the second one.
 
-If you want to add your own samples, just create a new folder in the samples folder, and put wav files in it.
+>If you want to add your own samples, just create a new folder in the samples folder, and put wav files in it.
 
-Synths
-Synths
-SuperDirt is created with SuperCollider, a fantastic synthesis engine and language with huge sonic possibilities. You can trigger custom SuperCollider synths from TidalCycles in much the same way as you trigger samples. For example:
+##Synths
 
+###Synths
+
+>SuperDirt is created with SuperCollider, a fantastic synthesis engine and language with huge sonic possibilities. You can trigger custom SuperCollider synths from TidalCycles in much the same way as you trigger samples. For example:
+
+```
 d1 $ midinote "60 62*2" # s "supersaw"
-The above plays note 60 and 62 of the MIDI scale, using the midinote parameter. You can alternatively specify notes by name, using n:
+```
 
+>The above plays note 60 and 62 of the MIDI scale, using the midinote parameter. You can alternatively specify notes by name, using n:
+
+```
 d1 $ n "c5 d5*2" # s "supersaw"
-You can also specify note numbers with n, but where 0 is middle c (rather than 60 with midinote).
+```
 
+>You can also specify note numbers with n, but where 0 is middle c (rather than 60 with midinote).
+
+```
 d1 $ n "0 5" # s "supersaw"
-The default sustain length is a bit long so the sounds will overlap, you can adjust this using the sustain parameter
+```
 
+>The default sustain length is a bit long so the sounds will overlap, you can adjust this using the sustain parameter
+
+```
 d1 $ n "c5 d5*2" # s "supersaw" # sustain "0.4 0.2"
-Many example synths can be found in the default-synths.scd file in the SuperDirt/synths folder. These include:
+```
 
-a series of tutorials: tutorial1, tutorial2, tutorial3, tutorial4, tutorial5
+>Many example synths can be found in the default-synths.scd file in the SuperDirt/synths folder. These include:
+
+>a series of tutorials: tutorial1, tutorial2, tutorial3, tutorial4, tutorial5
 examples of modulating with the cursor or sound input: pmsin, in, inr
 physical modeling synths: supermandolin, supergong, superpiano, superhex
 a basic synth drumkit: superkick, superhat, supersnare, superclap, super808
@@ -1054,8 +1298,9 @@ four analogue-style synths: supersquare, supersaw, superpwm, supercomparator
 two digital-style synths: superchip, supernoise
 To find the SuperDirt folder, simply run Quarks.folder in supercollider. The full folder location should appear in the postwindow (which is usually in the bottom right).
 
-Many of the above synths accept additional Tidal Parameters or interpret the usual parameters in a slightly different way. For complete documentation, see default-synths.scd, but here are some examples to try:
+>Many of the above synths accept additional Tidal Parameters or interpret the usual parameters in a slightly different way. For complete documentation, see default-synths.scd, but here are some examples to try:
 
+```
 d1 $ jux (# accelerate "-0.1") $ s "supermandolin*8" # midinote "[80!6 78]/8"
   # sustain "1 0.25 2 1"
 d1 $ midinote (slow 2 $ fmap ((+50) . (*7)) $ run 8) # s "supergong" # decay "[1 0.2]/4"
@@ -1083,4 +1328,7 @@ d2 $ every 4 (echo (negate 3/32)) $ n "c5*4" # s "supernoise"
 d1 $ s "supernoise/8" # midinote (fmap (+30) $ irand 10) # sustain "8"
  # accelerate "0.5" # voice "0.5" # pitch1 "0.15" # slide "-0.5" # resonance "0.7"
  # attack "1" # release "20" # room "0.9" # size "0.9" # orbit "1"
-This is all quite new and under ongoing development, but you can read about modifying and adding your own synths to SuperDirt at its github repository.
+
+```
+ 
+>This is all quite new and under ongoing development, but you can read about modifying and adding your own synths to SuperDirt at its github repository.
