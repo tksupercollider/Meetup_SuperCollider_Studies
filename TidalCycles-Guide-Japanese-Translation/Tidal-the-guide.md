@@ -694,8 +694,10 @@ Tidalはbpsという”ビート毎秒”を指定するヘルパー関数も用
 bps (120/60)
 ```
 
-Or you might want to divide it by 120 instead, to create a pattern twice as
+>Or you might want to divide it by 120 instead, to create a pattern twice as
 long (or half the speed, depending on how you think about it:
+
+または120で割りたい場合、パターンをに倍の長さで作りましょう（もしくはspeedを半分に、あなたが思うように）
 
 -- sets a tempo of 100 BPM:
 
@@ -720,16 +722,18 @@ d1 $ sound "arpy*8" # speed (run 8)
 
 >In the above we’re specifying the number of sounds twice - in the sound pattern as well as the up or speed pattern. There’s actually a neat way of only having to specify this once, simply by switching them round, so the effect parameter is on the left:
 
-上の例では
-
+上の例では音を二回指定しています、soundのパターンの中とupもしくはspeedの中で。これにはエフェクターの値を左側にすることで、シンプルに繰り返し切り替える、一度で指定できるもっと整理された方法があります。
 
 ```
 d1 $ up (run 8) # sound "arpy"
 ```
 
 >This works because TidalCycles always takes the structure of a pattern from the parameter that’s on the left. We usually want the structure to come from the sound parameter, but not always.
-
 Because run returns a pattern, you can apply functions to its result:
+
+これはTidalCyclesが常にパターン構造を左の値から組み立てるためです。普通ならsoundパラメータからの構造を考えたくなりますが、常にそうとは限りません。
+なぜならrun関数はパターンを返しその結果を使えるからです。
+
 
 ```
 d1 $ sound "arpy*8" # up (every 2 (rev) $ run 8)
@@ -737,11 +741,15 @@ d1 $ sound "arpy*8" # up (every 2 (rev) $ run 8)
 
 >For a more practical example of using run, read below about selecting samples from folders.
 
+run関数のより実践的な例は、フォルダからのサンプル読み込みに関する以下の章を読んでください。
+
 ##(Algorithmically) Selecting Samples
 
 ###Sample Selection
 
 >The sound parameter we’ve been using up to now can actually be broken into two seperate parameters, making it easy to select samples with a pattern. These parameters are s that gives the name of the sample set, and n which gives the number of the sample within that set. For example, the following two patterns do exactly the same:
+
+今まで使ってきたsoundパラメータは実際は二つのパラメータへと分解でき、サンプルをパターンで選択するのをより簡単にします。そのパラメータはサンプル名を指定するsとサンプルのセットの番号を指定するnです。例えば、以下の二つの例は全く同じ事をしています。
 
 ```
 d1 $ sound "arpy:0 arpy:2 arpy:3"
@@ -750,6 +758,8 @@ d1 $ n "0 2 3" # s "arpy"
 
 >It’s possible to break the sound parameter into two different patterns, namely s that gives the name of the sample set, and n which gives the index of the sample within that set. For example, the following two patterns are the same:
 
+soundパラメータは二つの違うパターンに分解できます、一つはsで指定するサンプルセットの名前、そして一つはnで指定するサンプルセットの中でのインデックスです。例えば、以下の二つの例は同じです。
+
 ```
 d1 $ sound "arpy:0 arpy:2 arpy:3"
 d1 $ n "0 2 3" # s "arpy"
@@ -757,18 +767,26 @@ d1 $ n "0 2 3" # s "arpy"
 
 >This allows us to separate the sample folder name from the index inside the folder, possibly with surprising results!
 
+これによってフォルダ内のインデックスとサンプルフォルダ名を分離できます、そして驚きの結果になるでしょう。
+
 >There is also special function called samples that lets you do the same using the sound parameter.
+
+samples関数という特別な関数によって同じようなsoundパラメータの操作ができます。
 
 ```
 d1 $ sound $ samples "drum*4" "0 1 2 3"
 ```
 
 -- the code above equals this:
+上のコードは以下と同じです
+
 ```
 d1 $ sound "drum:0 drum:1 drum:2 drum:3"
 ```
 
 >Whether you use n and s together, or sound with samples is up to you, although you might find the former to be more flexible.
+
+nとsを一緒に使うか、samplesを使うかどうかはあなた次第、ですが前者の方がより柔軟だと気づくでしょう。
 
 >Remember the run function? Since run generates a pattern of integers, it can be used with n to automatically “run” through the sample indices of a folder:
 
