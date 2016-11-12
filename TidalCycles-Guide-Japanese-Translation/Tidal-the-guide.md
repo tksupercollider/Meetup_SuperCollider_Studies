@@ -4,7 +4,7 @@ the original : [https://tidalcycles.org/patterns.html](https://tidalcycles.org/p
 
 >You’ve installed TidalCycles and (Super)Dirt, maybe even made a few sounds, but now you’re ready to get to business and start really learning. This guide will help you get started with simple patterns and walk you through all the way to complex compositions.
 
-TidalCyclesと(Super)Dirtをインストールしたら、そして多分いくつかの音を作り、今学習を始める準備ができました。このガイドは簡単なパターンから初めて複雑なコンポジションまで至るための助けになるでしょう。
+TidalCyclesと(Super)Dirtをインストールしたら、そして多分いくつかの音を作り、今学習を始める準備ができました。このガイドは簡単なパターンから始めて複雑なコンポジションまで至るための助けになるでしょう。
 
 
 >Why not play with the code as you read, running your own experiments by changing the examples, and seeing where they take you?
@@ -36,7 +36,7 @@ In the code above, sound tells us we’re making a pattern of sound samples, and
 >To find the SuperDirt samples on your system, run the command Quarks.folder in SuperCollider (paste it in, press shift-enter), and the ‘quark’ plugin path will be shown in the postwindow on the right. You’ll find the samples in the Dirt-Samples subfolder.
 We can pick a different sample in the bd folder by adding a colon (:) then a number. For example this picks the fourth bass drum (it counts from zero, so :3 gives you the fourth sound in the folder):
 
-SuperDirtサンプルを見つけるにはQuarksコマンドを使います。SuperColliderフォルダ（ペーストしてshift+enterします）そして'quark'プラグインパスが右側のポストウインドウに見えます。Dirt-Samplesサブフォルダにサンプルファイルがあるのがわかるでしょう。
+SuperDirtサンプルを見つけるには、SuperColliderでQuarks.folderコマンドを実行します（ペーストしてshift+enterします）。そして'quark'プラグインパスが右側のポストウインドウに見えます。Dirt-Samplesサブフォルダにサンプルファイルがあるのがわかるでしょう。
 bdフォルダ内の別のサンプルファイルを選びたい場合、コロン(:)の後に数字で指定します。例えば以下は4番目のバスドラムを選んでいます（数字は0始まりです、なので:3はフォルダ内で4番目の音ファイルです）
 
 ```
