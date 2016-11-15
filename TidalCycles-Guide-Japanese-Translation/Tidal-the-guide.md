@@ -686,7 +686,7 @@ cps 10
 
 >Tidal also includes a helper function called bps to set “beats per second”. To set beats-per-minute, call bps with your bpm value, divided by 60:
 
-Tidalはbpsという”ビート毎秒”を指定するヘルパー関数も用意されています。ビート毎秒を指定するには60で割った、bpm数をbps関数に与えて呼びます。
+Tidalはbpsという”ビート毎秒”を指定するヘルパー関数も用意されています。BPMを指定するには、その値を60で割ったものをbps関数に与えます。
 
 -- sets a tempo of 170 BPM:
 
@@ -697,7 +697,7 @@ bps (120/60)
 >Or you might want to divide it by 120 instead, to create a pattern twice as
 long (or half the speed, depending on how you think about it:
 
-または120で割りたい場合、パターンをに倍の長さで作りましょう（もしくはspeedを半分に、あなたが思うように）
+またはパターンを二倍の長さで作る場合には、BPMを120で割りたいと思うかもしれません（もしくはspeedを半分にするかですが、これはあなたがどう考えるかに依ります）
 
 -- sets a tempo of 100 BPM:
 
