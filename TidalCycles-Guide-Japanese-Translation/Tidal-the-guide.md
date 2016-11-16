@@ -424,7 +424,7 @@ d1 $ gain "1 0.8 0.5 0.7" # sound "bd"
 
 >The order that you put things matters; the structure of the pattern is given by the pattern on the left of the #. In this case, only one bd sound is given, but you hear four, because the structure comes from the gain pattern on the left.
 
-それぞれの記述の順番は;パターンの構造は#の左側で決まります。この場合、bd一つがありますが、側で与えたパターンにより4回聞こえます。
+それぞれの記述の順番は;パターンの構造は#の左側で決まります。この場合、bd一つがありますが、左側で与えたパターンにより4回聞こえます。
 
 
 ####Modifying effect values
@@ -555,7 +555,7 @@ d1 $ sound "arpy*4" # speed "[1 0.5, 1.5 2 3 4]"
 
 >You can also use the up function to change playback speed. up is a shortcut effect that matches speeds to half steps on a 12-tone scale. For example, the following plays a chromatic scale:
 
-また、up関数によっってもスピードを変えられます。up関数は12音階の半音での変化に対応したエフェクタのショートカットです。例えば、以下はクロマティック音階です。
+また、up関数によってもスピードを変えられます。up関数は12音階の半音での変化に対応したエフェクタのショートカットです。例えば、以下はクロマティック音階です。
 
 ```
 d1 $ sound "arpy*12" # up "0 1 2 3 4 5 6 7 8 9 10 11"
@@ -563,7 +563,7 @@ d1 $ sound "arpy*12" # up "0 1 2 3 4 5 6 7 8 9 10 11"
 
 >You can also use the run function to create an incrementing pattern of integers: d1 $ sound "arpy*12" # up (run 12). The run function will be discussed later.
 
-run関数によって整数インクリメントのパターンも作り出せます: d1 $ sound "arpy*12" # up。run関数は後で触れます。
+run関数によって整数インクリメントのパターンも作り出せます: d1 $ sound "arpy*12" # up (run 12)。run関数は後で触れます。
 
 
 ##Euclidean Sequences
@@ -686,7 +686,7 @@ cps 10
 
 >Tidal also includes a helper function called bps to set “beats per second”. To set beats-per-minute, call bps with your bpm value, divided by 60:
 
-Tidalはbpsという”ビート毎秒”を指定するヘルパー関数も用意されています。ビート毎秒を指定するには60で割った、bpm数をbps関数に与えて呼びます。
+Tidalはbpsという”ビート毎秒”を指定するヘルパー関数も用意されています。BPMを指定するには、その値を60で割ったものをbps関数に与えます。
 
 -- sets a tempo of 170 BPM:
 
@@ -697,7 +697,7 @@ bps (120/60)
 >Or you might want to divide it by 120 instead, to create a pattern twice as
 long (or half the speed, depending on how you think about it:
 
-または120で割りたい場合、パターンをに倍の長さで作りましょう（もしくはspeedを半分に、あなたが思うように）
+またはパターンを二倍の長さで作る場合には、BPMを120で割りたいと思うかもしれません（もしくはspeedを半分にするかですが、これはあなたがどう考えるかに依ります）
 
 -- sets a tempo of 100 BPM:
 
