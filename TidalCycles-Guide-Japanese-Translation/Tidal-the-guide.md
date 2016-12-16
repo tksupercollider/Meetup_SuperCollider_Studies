@@ -790,12 +790,16 @@ nとsを一緒に使うか、samplesを使うかどうかはあなた次第、�
 
 >Remember the run function? Since run generates a pattern of integers, it can be used with n to automatically “run” through the sample indices of a folder:
 
+run関数を思い出してください。 run関数を使い整数を生成すれば、n関数と合わせて使ってフォルダの中のサンプルを舐めることができます。
+
 ```
 d1 $ n (run 4) # s "drum"
 d1 $ sound $ samples "drum*4" (run 4) -- or with samples
 ```
 
 >And of course you can specify a different pattern of sample names:
+
+そしてもちろん、違ったサンプル名も指定できます。
 
 ```
 d1 $ s "drum arpy cp hh" # n (run 10)
@@ -804,12 +808,17 @@ d1 $ s "drum arpy cp hh" # n (run 10)
 
 >Again, by swapping the order of the s and n parameters, you can hear the difference between taking the structure from one or the other:
 
+もう一度、sとnのパターンの順番を入れ替えることで、構造を入れ替えたときの違いを聴いて見ましょう。
+
 ```
 d1 $ n (run 10) # s "drum arpy cp hh"
 ```
 
 >NOTE: if you specify a run value that is greater than the number of samples in a folder, then the higher number index will “wrap” to the beginning of the samples in the folder (just like with the colon notation).
 You might sometimes see the samples function wrapped in parenthesis:
+
+注意：フォルダー何のサンプルの数より多いあ値をrun関数で指定した場合、はみ出した数はフォルダ内の先頭のサンプルに”ラップ”される（コロン表記の時のように）
+関数が丸カッコでラップされるサンプルを何度かも見たかもしれません:
 
 ```
 d1 $ sound (samples "drum arpy cp hh" (run 10))
@@ -822,13 +831,19 @@ d1 $ sound (samples "drum arpy cp hh" (run 10))
 
 >Ok, remember when we started adding effects:
 
+OK、ではエフェクトを加えたときを思い出しましょう。
+
 ```
 d1 $ sound "bd sn drum arpy" # pan "0 1 0.25 0.75"
 ```
 
 >What we’re actually doing in the code above is combining two patterns together: the sound pattern, and the pan pattern. The special pipe operators (|=|, |+|, |-|, |*|, |/|), allow us to combine two patterns. Remember that # is shorthand for |=|.
 
+上のコードでは実際二つのパターンを組み合えわせています:　soundのパターンとpanのパターン。特別なパイプ演算子は(|=|, |+|, |-|, |*|, |/|)、二つのパターンを組み合わせることを可能にします。#は|=|演算子の省略でした。
+
 >We can actually swap sides and it sounds the same:
+
+これは
 
 ```
 d1 $ pan "0 1 0.25 0.75" # sound "bd sn drum arpy"
