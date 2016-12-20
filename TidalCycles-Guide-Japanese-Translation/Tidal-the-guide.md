@@ -843,7 +843,7 @@ d1 $ sound "bd sn drum arpy" # pan "0 1 0.25 0.75"
 
 >We can actually swap sides and it sounds the same:
 
-これは
+実際は左右を入れ替えても同じように鳴ります。
 
 ```
 d1 $ pan "0 1 0.25 0.75" # sound "bd sn drum arpy"
@@ -851,17 +851,29 @@ d1 $ pan "0 1 0.25 0.75" # sound "bd sn drum arpy"
 
 >As we touched on earlier, the main thing to know when combining patterns like this is that the left-most pattern determines the rhythmic structure of the result. Removing one of the elements from the pan pattern on the left results in a cycle with three samples played:
 
+先に触れたように、このような組み合わせをした時に最も重要なことは左端のパターンがリズム構造を決めるということです。左側のpanのパターンの一つの要素を消すと一サイクルないで三つのサンプルが再生されます。
+
 ```
 d1 $ pan "0 1 0.25" # sound "bd sn drum arpy"
 ```
 
 >In the code above, the pan pattern determines the rhythm because it is the left-most pattern. The sound pattern now only determines what samples are played at what time. The sound pattern gets mapped onto the pan pattern.
 
+上のコードの場合、panのパターンが左端のパターンなのでリズムを決定します。soundのパターンはいつどのサンプルを再生するかだけを決めます。soundのパターンがpanのパターンへと適応されます。
+
 >You might be wondering how TidalCycles decides which sound values get matched with which pan values in the above. (If not, there is no need to read the rest of this paragraph just now!) The rule is, for each value in the pattern on the left, values from the right are matched where the start (or onset) of the left value, fall within the timespan of the value on the right. For example, the second pan value of 1 starts one third into its pattern, and the second sound value of sn starts one quarter into its pattern, and ends at the halfway point. Because the former onset (one third) falls inside the timespan of the latter timespan (from one quarter until one half), they are matched. The timespan of arpy doesn’t contain any onsets from the pan pattern, and so it doesn’t match with anything, and isn’t played.
+
+上のコードでTidalCyclesがどのようにsoundの値をpanの値に適応するのか疑問に思うかもしれません。(そうでなければ、この節の残りを全て読む必要は今はありません)ルールは、左のパターンの各値に対して、左の値の開始点、右の値のタイムスパンに収まります。例えば
+
 
 >The rule described above may seem like a lot to keep in mind while composing patterns, but in practice there is no need. Our advice is to not worry, write some patterns and get a feel for how they fit together.
 
+上のルールはパターンを作る上で覚えておくことが多いように思いますが、しかし実際にはその必要はありません。アドバイスとしては心配する必要はありません、パターンを書いてみてどのようにフィットされるかをかんじてみることです。
+
+
 >Anyway, this composition of pattern parameters allows us to do some unique things:
+
+とにかく、このパターンパラメーターのコンポジションはユニークな振る舞いをします。
 
 ```
 d1 $ up "0 0*2 0*4 1" # sound "[arpy, bass2, bd]"
@@ -869,11 +881,15 @@ d1 $ up "0 0*2 0*4 1" # sound "[arpy, bass2, bd]"
 
 >Above, the sound pattern is merely specifying three samples to play on every note. Both the rhythm and pitch of these notes is defined by the up pattern.
 
+上の例では、soundのパターンは単に三つのサンプルをそれぞれの音でなるように指定されています。音程とリズム両方がupのパターンで指定されています。
+
 ##Oscillation with Continuous Patterns
 
 ###Continuous Patterns
 
 >So far we’ve only been working with discrete patterns, by which we mean patterns which containing events which begin and end. Tidal also supports continuous patterns which instead vary continually over time. You can create continuous patterns using functions which give sine, saw, triangle, and square waves:
+
+これまでパターンの記述方法だけをみてきました、それはイベントの始まりから終わり。Tidalはまた時間をまたいで継続して変化するcontinuous patternsもサポートしています。sine, saw, triangle, squareなどの波形の関数によってcontinuous patternsを生成できます。
 
 
 ```
@@ -882,15 +898,27 @@ d1 $ sound "bd*16" # pan sine1
 
 >The code above uses the sine1 function to generate a sine wave oscillation of values between 0 and 1 for the pan values, so the bass drum moves smoothly between the left and right speakers.
 
+上のコードはsine1という関数を使ってpanの値を正弦波によって0から1の間で変化させています、そしてバスドラムは左右に滑らかに移動します。
+
 >In addition to sine1, there is also a sine function. What is the difference?
 
-sine produces values between -1 and 1
+sine1に加えてsine関数もあります。違いはなんでしょうか。
+
+>sine produces values between -1 and 1
 sine1 produces values between 0 and 1
 Thus, the “1” suffix means only positive values.
 
+sineは-1から１
+sine1は0から1までの値を生成します。
+したがって、1の末尾は正の値を意味します。
+
 >In addition to the sine/sine1 functions, Tidal also has saw/saw1, tri/tri1, and square/square1.
 
-Just like discrete patterns, you can control the speed of continuous patterns with slow or density:
+sine/sine1関数に加えてTidalにはsaw/saw1, tri/tri1, and square/square1関数があります。
+
+>Just like discrete patterns, you can control the speed of continuous patterns with slow or density:
+
+patterの記述と同じようにslow、 density関数によってcontinuous patternsの速さを変えられます。
 
 ```
 d1 $ sound "bd*16" # pan (slow 8 $ saw1)
@@ -900,6 +928,8 @@ d1 $ sound "bd*8 sn*8" # speed (density 2 $ tri)
 
 >You can also combine them in different ways:
 
+違った方法で組み合わせることもできます。
+
 ```
 d1 $ sound "bd*16" # pan (slowcat [sine1, saw1, square1, tri1])
 d1 $ sound "sn:2*16" # (speed $ scale 0.5 3 sine1) |*| (speed $ slow 4 saw1)
@@ -908,6 +938,8 @@ d1 $ sound "sn:2*16" # (speed $ scale 0.5 3 sine1) |*| (speed $ slow 4 saw1)
 ##Scaling Oscillation
 
 >You can tell the oscillation functions to scale themselves and oscillate between two values:
+
+二つの値の間をscale
 
 ```
 d1 $ sound "bd*8 sn*8" # speed (scale 1 3 $ tri1)
@@ -937,6 +969,8 @@ d1 $ sound "hh*32" # cutoff (scale 0.001 0.1 $ slow 4 $ sine1) # resonance "0.1"
 
 >So far we have produced patterns that keep producing more and more sound. What if you want a rest, or gap of silence, in your pattern? You can use the “tilde” ~ character to do so:
 
+これまで、音を次々と足していくことをしてきました。もしパターンの中で休憩を入れたい場合、もしくは無音を作りたいときは？"チルダ"~文字を使用します。
+
 ```
 d1 $ sound "bd bd ~ bd"
 
@@ -944,13 +978,19 @@ d1 $ sound "bd bd ~ bd"
 
 >Think of the ~ as an ‘empty’ step in a sequence, that just produces silence.
 
+~ が空のステップという意味のため、これで無音を作り出せます。
+
 ##Polymeters
 
 ###Polymeter
 
 >We talked about polyrhythms earlier, but Tidal can also produce polymeter sequences. A polymeter pattern is one where two patterns have different sequence lengths, but share the same pulse or tempo.
 
+先にポリリズムについて話しましたが、Tidalはポリミーターも生成できます。ポリミーターは違った長さの拍
+
 >You use curly brace syntax to create a polymeter rhythm:
+
+ニョロカッコ記法によってポリミーターリズムが作れます。
 
 ```
 d1 $ sound "{bd hh sn cp, arpy bass2 drum notes can}"
@@ -958,11 +998,15 @@ d1 $ sound "{bd hh sn cp, arpy bass2 drum notes can}"
 
 >The code above results in a five-note rhythm being played at the pulse of a four-note rhythm. If you switch the groups around, it results in a four-note rhythm over a five-note rhythm:
 
+上のコードは4拍のリズムで再生されてその上に5拍のリズムが重なります。もしグループを切り替えると、5拍のリズムで4拍のリズムが得られます。
+
 ```
 d1 $ sound "{arpy bass2 drum notes can, bd hh sn cp}"
 ```
 
 >Sometimes you might want to create an odd polymeter rhythm without having to explicitly create a base rhythm. You could do this with rests:
+
+しばしば、明確に基底の拍を持たせたくない単一のポリミーターリズムを作りたい場合があるでしょう。休符をつえば可能です。
 
 ```
 d1 $ sound "{~ ~ ~ ~, arpy bass2 drum notes can}"
@@ -970,10 +1014,11 @@ d1 $ sound "{~ ~ ~ ~, arpy bass2 drum notes can}"
 
 >But a more efficient way is to use the % symbol after the closing curly brace to specify the number of notes in the base pulse:
 
+しかしもっと有効な方法は、%シンボルをニョロカッコを閉じた後につけて基底の拍を指定指定します。
+
 ```
 d1 $ sound "{arpy bass2 drum notes can}%4"
 ```
-
 
 -- the above is the same as this:
 
@@ -986,7 +1031,9 @@ d1 $ sound "{arpy bass2 drum notes can}%4"
 
 ###Shifting Time
 
->You can use the ~> and <- functions to shift patterns forwards or backwards in time, respectively. With each of these functions, you can specify an amount, in cycle units.
+>You can use the ~> and <~ functions to shift patterns forwards or backwards in time, respectively. With each of these functions, you can specify an amount, in cycle units.
+
+~>と<~の関数によってパターンを前後の時間にそれぞれシフトできます。この二つの関数
 
 ```
 d1 $ (0.25 <~) $ sound "bd*2 cp*2 hh sn"
@@ -995,7 +1042,11 @@ d1 $ (0.25 ~>) $ sound "bd*2 cp*2 hh sn"
 
 >The above code shifts the patterns over by one quarter of a cycle.
 
+
+
 >You can hear this shifting effect best when applying it conditionally. For example, the below shifts the pattern every third cycle:
+
+条件を加えることでその効果がよくわかります。たとえな下のパターンは3サイクル毎にシフトします。
 
 ```
 d1 $ every 3 (0.25 <~) $ sound "bd*2 cp*2 hh sn"
