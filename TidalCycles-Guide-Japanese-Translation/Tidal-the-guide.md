@@ -939,7 +939,7 @@ d1 $ sound "sn:2*16" # (speed $ scale 0.5 3 sine1) |*| (speed $ slow 4 saw1)
 
 >You can tell the oscillation functions to scale themselves and oscillate between two values:
 
-二つの値の間をscale
+oscillation関数をスケールさせて二つの値の間をオシレート（発振）させます。
 
 ```
 d1 $ sound "bd*8 sn*8" # speed (scale 1 3 $ tri1)
@@ -948,11 +948,16 @@ d1 $ sound "bd*8 sn*8" # speed (slow 4 $ scale 1 3 $ tri1)
 
 >You can also scale to negative values, but make sure to wrap negative values in parens (otherwise the interpreter thinks you’re trying to subtract 2 from something):
 
+また、負の値でスケールさせられます、その時必ず負の数は親からラップしてください（でなければインタプリタは引き算しようとしていると判断します）:
+
+
 ```
 d1 $ sound "bd*8 sn*8" # speed (scale (-2) 3 $ tri1)
 ```
 
 >This technique works well for a slow low-pass filter cutoff:
+
+このテクニックはローパスフィルターカットオフとして機能します。
 
 ```
 d1 $ sound "hh*32" # cutoff (scale 300 1000 $ slow 4 $ sine1) # resonance "0.4"
@@ -961,7 +966,12 @@ d1 $ sound "hh*32" # cutoff (scale 0.001 0.1 $ slow 4 $ sine1) # resonance "0.1"
 		
 >NOTE 1: If you’re using SuperDirt to produce sound (the default install choice), cutoff is specified in Hertz, as in the first example above. If you’re using the older “classic” dirt, then you will instead need to specify cutoff between 0 and 1, as in the second example.
 
+注意1: もしSuperDirtを使用して音を生成していれば(デフォルトでインストールした場合)、cutoffは最初の例のように周波数で指定してください。古い"クラシック"dirtを使用しているならcutoffは二番目の例のように、0から1で指定してください。
+
+
 >NOTE 2: Despite the fact that the oscillator functions produce continuous values, you still need to map them to discrete sound events.
+
+注意2: oscillator関数は持続的な値を生成は行いはしますが、それぞれのsoundイベントにmapする必要がまだあります。
 
 ##Rests
 
@@ -986,7 +996,7 @@ d1 $ sound "bd bd ~ bd"
 
 >We talked about polyrhythms earlier, but Tidal can also produce polymeter sequences. A polymeter pattern is one where two patterns have different sequence lengths, but share the same pulse or tempo.
 
-先にポリリズムについて話しましたが、Tidalはポリミーターも生成できます。ポリミーターは違った長さの拍
+先にポリリズムについて話しましたが、Tidalはポリミータパターンも生成できます。ポリメータパターンは、2つのパターンが異なるシーケンス長を有し、同じパルスまたはテンポを共有するパターンです。
 
 >You use curly brace syntax to create a polymeter rhythm:
 
@@ -1026,6 +1036,8 @@ d1 $ sound "{arpy bass2 drum notes can}%4"
 
 >If “polymeter” sounds a bit confusing, there’s a good explanation here: http://music.stackexchange.com/questions/10488/polymeter-vs-polyrhythm
 
+もしポリミータがよくわからないなら、こちらに良い例があります：
+[http://music.stackexchange.com/questions/10488/polymeter-vs-polyrhythm](http://music.stackexchange.com/questions/10488/polymeter-vs-polyrhythm)
 
 ##Shifting Time
 
@@ -1042,11 +1054,12 @@ d1 $ (0.25 ~>) $ sound "bd*2 cp*2 hh sn"
 
 >The above code shifts the patterns over by one quarter of a cycle.
 
+上のコードはパターンを1/4サイクルシフトします。
 
 
 >You can hear this shifting effect best when applying it conditionally. For example, the below shifts the pattern every third cycle:
 
-条件を加えることでその効果がよくわかります。たとえな下のパターンは3サイクル毎にシフトします。
+条件を加えることでその効果がよくわかります。たとえば下のパターンは3サイクル毎にシフトします。
 
 ```
 d1 $ every 3 (0.25 <~) $ sound "bd*2 cp*2 hh sn"
@@ -1054,6 +1067,8 @@ d1 $ every 3 (0.25 ~>) $ sound "bd*2 cp*2 hh sn"
 ```
 
 >You can shift patterns as little or as much as you’d like:
+
+多くもしくは少なく好きなようにパターンをシフトすることができます。
 
 ```
 d1 $ every 3 (0.0625 <~) $ sound "bd*2 cp*2 hh sn"
@@ -1063,7 +1078,11 @@ d1 $ every 3 (1000.125 ~>) $ sound "bd*2 cp*2 hh sn"
 
 >However, in the above case every cycle is the same, so you won’t here a difference between shifting it 1 or 1000 cycles.
 
+しかし、上の例の場合全てのサイクルは同じです、ですので1または1000サイクルシフトしても違いがわからないでしょう。
+
 >You can also express time as a fraction, for example 1%4 instead of 0.25. However, due to the way Haskell’s parser works, you’ll need to put this in parenthesis:
+
+また時間は断片として表現できます、例えば0.25の代わりに1%4とすることができます。しかしながら、Hakellのパーザーの振る舞いによって丸カッコで括る必要があります。
 
 ```
 d1 $ every 3 ((1%4) <~) $ sound "bd*2 cp*2 hh sn"
@@ -1076,15 +1095,22 @@ d1 $ every 3 ((1%4) <~) $ sound "bd*2 cp*2 hh sn"
 
 >Tidal can produce random patterns of integers and decimals. It can also introduce randomness into patterns by removing random events.
 
+Tidalはランダムパターン整数と10進数で生成できます。ランダム
+
 ###Random Decimal Patterns
 
 >You can use the rand function to create a random value between 0 and 1. This is useful for effects:
+
+rand関数によって0から1の間のランダム値を生成します。これはエフェクトに使うのに便利です。
+
 
 ```
 d1 $ sound "arpy*4" # pan (rand)
 ```
 
 >As with run and all numeric patterns, the values that rand give you can be scaled, for example the below gives random numbers between 0.25 and 0.75:
+
+run関数と数値のパターンと同じく、randはスケールされた値を返します、例えば下の例では0.25から0.75までのランダム値を返します。
 
 ```
 d1 $ sound "arpy*4" # pan (scale 0.25 0.75 $ rand)
@@ -1094,15 +1120,28 @@ d1 $ sound "arpy*4" # pan (scale 0.25 0.75 $ rand)
 
 >Use the irand function to create a random integer up to a given maximum. The most common usage of irand is to produce a random pattern of sample indices (similar to run):
 
+irand関数は与えられた数値を最大に整数のランダム値を生成します。もっとも代表的なirandの使い方はサンプルのインデックスをランダムにすることです（runの時のように）
+
+
 ```
 d1 $ s "arpy*8" # n (irand 30)
 ```
 
 >The code above randomly chooses from 30 samples in the “arpy” folder.
 
+上のコードはarpyフォルダ内のサンプルを30個ランダムに選択します。
+
 >Hairy detail: rand and irand are actually continuous patterns, which in practical terms means they have infinite detail - you can treat them as pure information! As with all patterns they are also deterministic, stateless functions of time, so that if you retriggered a pattern from the same logical time point, exactly the same numbers would be produced. Furthermore, if you use a rand or irand in two different places, you would get the same ‘random’ pattern - if this isn’t what you want, you can simply shift or slow down time a little for one of them, e.g. slow 0.3 rand.
-Removing or “Degrading” Pattern events
-Tidal has a few ways to randomly remove events from patterns. You can use the shorthand ? symbol if you want to give an event a 50/50 chance of happening or not on every cycle:
+
+詳細: randとirandは実際は、実用的な意味で無限のディティールを持つcontinuous patternsです - 純粋な意味で捉えてください！ 全てのパターンがそうなようにそれらも決定論的で、時間に対してステートレスな関数です、そのため理論時間で同じ時点で再度呼ばれても全く同じ値を返します。さらにはrandとirandを違う場所から使ったとしても、同じ'ランダム'パターンが得られます。- もしこのことを望まないのであれば、単にどちらか片方の時間をシフトもしくは少し遅くしてあげることで回避できます。例 slow 0.3 rand
+
+###Removing or “Degrading” Pattern events
+
+>Tidal has a few ways to randomly remove events from patterns. You can use the shorthand ? symbol if you want to give an event a 50/50 chance of happening or not on every cycle:
+
+パターンを除くもしくは'間引く'
+Tidalにはランダムにパターンを減らすいくつかの方法があります。サイクル毎にイベントが起こる確率を50/50にしたい場合、省略表記で？シンボルが使えます。
+
 
 ```
 d1 $ sound "bd?"
@@ -1110,7 +1149,11 @@ d1 $ sound "bd?"
 
 >In the code above, the “bd” sample has a 50% chance of being played on every cycle.
 
+上のコードの中で”bd”サンプルはサイクルごとに50%の確率で再生されます。
+
 >You can add the ? after the completion of any event or group in a pattern:
+
+?をイベントやパターン内のグループの最後に付け加えられます。
 
 ```
 d1 $ sound "bd*16?"
@@ -1120,6 +1163,8 @@ d1 $ sound "[bd sn cp hh]?"
 
 >The ? symbol is shorthand for the degrade function. The two lines below are equivalent:
 
+？シンボルはでdegrade関数の省略記法です。下の二つの例は同じです。
+
 ```
 d1 $ sound "bd*16?"
 d1 $ degrade $ sound "bd*16"
@@ -1127,11 +1172,15 @@ d1 $ degrade $ sound "bd*16"
 
 >Related to degrade is the degradeBy function, where you can specify the probability (from 0 to 1) that events will be removed from a pattern:
 
+degradeに関連したdgradeBy関数は確率（0から1）を指定してパターンを減らします。
+
 ```
 d1 $ degradeBy 0.25 $ sound "bd*16"
 ```
 
 >There is also sometimesBy, which executes a function based on a probability:
+
+sometimesBy関数もあります、これはある確率で関数を実行します。
 
 ```
 d1 $ sometimesBy 0.75 (slow 2) $ sound "bd*16"
@@ -1139,12 +1188,20 @@ d1 $ sometimesBy 0.75 (slow 2) $ sound "bd*16"
 
 >The code above has a 75% chance of calling slow 2 on every event in the pattern.
 
+上のコードは75%の確率でslow 2をイベント毎パターンで呼び出します。
+
 >There are other aliases for sometimesBy:
 
+そのほかにもsometimesByのエイリアス表現があります。
+
 sometimes = sometimesBy 0.5
+
 often = sometimesBy 0.75
+
 rarely = sometimesBy 0.25
+
 almostNever = sometimesBy 0.1
+
 almostAlways = sometimesBy 0.9
 
 ```
@@ -1158,6 +1215,8 @@ d1 $ rarely (density 2) $ sound "bd*8"
 
 >You can create a lot of cyclic variations in patterns by layering conditional logic:
 
+条件式をレイヤー化してたくさんのパターンのバリエーションを作ることができます。
+
 ```
 d1 $ every 5 (|+| speed "0.5") $ every 4 (0.25 <~) $ every 3 (rev) $
    sound "bd sn arpy*2 cp"
@@ -1166,7 +1225,11 @@ d1 $ every 5 (|+| speed "0.5") $ every 4 (0.25 <~) $ every 3 (rev) $
 
 >In addition to every you can also use the whenmod conditional function. whenmod takes two parameters; it executes a function when the remainder of the current loop number divided by the first parameter is less than the second parameter.
 
+everyに加えてwhenmod条件関数もあります。whenmodは二つパラメーターを取り;今のループ回数を記憶しておき、今のループが二番目のパラメータで分割した分の二番目のパラメータで指定した数より小さい場合、関数を実行します。
+
 >For example, the following will play a pattern normally for cycles 1-6, then play it in reverse for cycles 7-8. Then normally again for six cycles, then in reverse for two, and so on:
+
+例えば次の例は、1-6サイクルを通常に再生します、そして7-8サイクルで逆に再生します。そしてまた6サイクルを通常に、次の2サイクルを逆にと進みます。
 
 ```
 d1 $ whenmod 8 6 (rev) $ sound "bd*2 arpy*2 cp hh*22"
@@ -1177,6 +1240,9 @@ d1 $ whenmod 8 6 (rev) $ sound "bd*2 arpy*2 cp hh*22"
 ###Fills
 
 >You can think of a “fill” as a change to a regular pattern that happens regularly. e.g. every 4 cycles do “xya”, or every 8 cycles do “abc”.
+
+"fill"
+
 
 >We’ve already been using every and whenmod to do pattern function fills:
 
