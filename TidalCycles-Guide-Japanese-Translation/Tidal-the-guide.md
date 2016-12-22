@@ -1241,10 +1241,12 @@ d1 $ whenmod 8 6 (rev) $ sound "bd*2 arpy*2 cp hh*22"
 
 >You can think of a “fill” as a change to a regular pattern that happens regularly. e.g. every 4 cycles do “xya”, or every 8 cycles do “abc”.
 
-"fill"
-
+"補填"は定期的に変化する規則的なパターンと考えられます。
+例えば4サイクル毎に”xya”、もしくは8サイクル毎に"abc"といったパターンで
 
 >We’ve already been using every and whenmod to do pattern function fills:
+
+すでにeveryとwhenmodでパターンを補填することをしてきました。
 
 ```
 d1 $ every 8 (rev) $ every 4 (density 2) $ sound "bd hh sn cp"
@@ -1253,7 +1255,13 @@ d1 $ whenmod 16 14 (# speed "2") $ sound "bd arpy*2 cp bass2"
 
 >However, what if you wanted to conditionally replace the pattern with a new one? You can use the const function to completely replace a playing pattern.
 
+しかしながら、条件によってパターンを新しいものに入れ替えたいとしたらどうしたら良いのでしょうか。const関数でパターンの再生を完全に置き換えることができます。
+
+
 >Let’s start with a trivial example where we use const to replace an entire pattern all the time:
+
+簡単な例から始めましょう、constによっていつもすべてのパターンが置き換わる例です。
+
 
 ```
 d1 $ const (sound "arpy*3") $ sound "bd sn cp hh"
@@ -1261,7 +1269,11 @@ d1 $ const (sound "arpy*3") $ sound "bd sn cp hh"
 
 >In the code above, we’ve completely replaced the “bd sn cp hh” pattern with an “arpy” pattern. const specifies the new pattern.
 
+上のコードでは“bd sn cp hh”というパターンは“arpy”というパターンで全て置き換わっています。constが新しいパターンを指定しています。
+
 >We can conditionally apply const using every or whenmod:
+
+everyもしくはwhenmodで条件的に適応します:
 
 ```
 d1 $ whenmod 8 6 (const $ sound "arpy(3,8) bd*4") $ sound "bd sn bass2 sn"
@@ -1274,9 +1286,13 @@ d1 $ every 12 (const $ sound "bd*4 sn*2") $ sound "bd sn bass2 sn"
 
 >There are a few ways that you can compose new patterns from multiple other patterns. You can concatenate or “append” patterns in serial, or you can “stack” them and play them together in parallel.
 
+いくつかの方法で別々の複数パターンから新しいパターンを構成できます。密集させることや”足す”ことで直列に、もしくは”積む”ことでそれらを一緒に並列に再生させたりできます。
+
 ###Concatenating patterns in serial
 
 >You can use the cat function to add patterns one after another:
+
+cat関数を使うと次へ次へとパターンを付けたせます。
 
 ```
 d1 $ cat [sound "bd sn:2" # vowel "[a o]/2",
@@ -1285,6 +1301,9 @@ d1 $ cat [sound "bd sn:2" # vowel "[a o]/2",
 ```
 
 >The cat function squeezes all the patterns into the space of one. The more patterns you add to the list, the faster each pattern will be played so that all patterns can fit into a single cycle.
+
+cat関数は一箇所にパターンのすべてを圧縮します。一つパターンをリストへ追加すると、一つのサイクルにフィットするようにそれぞれのパターンは速く再生されます。
+
 
 ```
 d1 $ cat [sound "bd sn:2" # vowel "[a o]/2",
@@ -1295,6 +1314,9 @@ d1 $ cat [sound "bd sn:2" # vowel "[a o]/2",
 
 >slowcat will maintain the original playback speed of the patterns:
 
+slowcat関数はパターン本来の再生時間を考慮します。
+
+
 ```
 d1 $ slowcat [sound "bd sn:2" # vowel "[a o]/2",
               sound "casio casio:1 casio:2*2",
@@ -1304,7 +1326,11 @@ d1 $ slowcat [sound "bd sn:2" # vowel "[a o]/2",
  
 >slowcat is a great way to create a linear sequence of patterns (a sequence of sequences), giving a larger form to multiple patterns.
 
-?There’s also randcat, which will play a random pattern from the list.
+slowcatはより長い複数のパターンを作る、線形のシーケンス（シーケンスのシーケンス）を生成する良い方法です。
+
+>There’s also randcat, which will play a random pattern from the list.
+
+randcatというどのパターンを再生するかランダムにするものもあります。
 
 ###Playing patterns together in parallel
 
