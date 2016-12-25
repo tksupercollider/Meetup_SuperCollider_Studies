@@ -863,7 +863,7 @@ d1 $ pan "0 1 0.25" # sound "bd sn drum arpy"
 
 >You might be wondering how TidalCycles decides which sound values get matched with which pan values in the above. (If not, there is no need to read the rest of this paragraph just now!) The rule is, for each value in the pattern on the left, values from the right are matched where the start (or onset) of the left value, fall within the timespan of the value on the right. For example, the second pan value of 1 starts one third into its pattern, and the second sound value of sn starts one quarter into its pattern, and ends at the halfway point. Because the former onset (one third) falls inside the timespan of the latter timespan (from one quarter until one half), they are matched. The timespan of arpy doesn’t contain any onsets from the pan pattern, and so it doesn’t match with anything, and isn’t played.
 
-上のコードでTidalCyclesがどのようにsoundの値をpanの値に適応するのか疑問に思うかもしれません。(そうでなければ、この節の残りを全て読む必要は今はありません)ルールは、左のパターンの各値に対して、左の値の開始点、右の値のタイムスパンに収まります。例えば
+上のコードでTidalCyclesがどのようにsoundの値をpanの値に適応するのか疑問に思うかもしれません。(そうでなければ、この節の残りを全て読む必要は今はありません)ルールは、左のパターンの各値に対して、左の値の開始点、右の値のタイムスパンに収まります。たとえば、2番目のpanの1はパターンの1/3から始まり、snの2番目のsoundの値はパターンの1/4になり、途中で終了します。前者（3分の1）は後者のタイムスパン（1/4から1/2まで）のタイムスパンに収まるため、一致します。 arpyのタイムスパンには、panのパターンからのオンセットされ、何も一致しないため、再生されません。
 
 
 >The rule described above may seem like a lot to keep in mind while composing patterns, but in practice there is no need. Our advice is to not worry, write some patterns and get a feel for how they fit together.
@@ -1336,6 +1336,8 @@ randcatというどのパターンを再生するかランダムにするもの�
 
 >The stack function takes a list of patterns and combines them into a new pattern by playing all of the patterns in the list simultaneously.
 
+stack関数はパターンのリストを受け取りそれらを一つの新しいパターンとして組み立て一斉に再生します。
+
 ```
 d1 $ stack [
   sound "bd bd*2",
@@ -1345,6 +1347,8 @@ d1 $ stack [
 ```
 
 >This is useful if you want to apply functions or effects on the entire stack:
+
+これは全てのstackに関数やエフェクトを適応したいときに便利です:
 
 ```
 d1 $ every 4 (slow 2) $ whenmod 5 3 (# speed "0.75 1.5") $ stack [
@@ -1360,9 +1364,15 @@ d1 $ every 4 (slow 2) $ whenmod 5 3 (# speed "0.75 1.5") $ stack [
 
 >So far, all of our examples have used short samples. However, maybe you’ve experimented with some long samples. Maybe you’ve noticed that really long samples can cause a lot of bleed and unwanted sound.
 
->With Tidal’s cut effect, you can “choke” a sound and stop it from playing when a new sample is triggered.
+With Tidal’s cut effect, you can “choke” a sound and stop it from playing when a new sample is triggered.
+
+これまで、私たちは短いサンプルを見てきました。もしかしたら、すでに長いサンプルを経験したかもしれませんが。もしとても長いサンプルのせいで音が重なってしまい望んでいたようにならないと感じると思います。
+Tidalのcutエフェクトで、音を”途切れ”させ次の音を新しくトリガーして止めることができます。
+
 
 >Consider the following example where we have a pattern of “arpy” sounds, played at a low speed, so there is a lot of bleed into each sample:
+
+以下の例では"arpy"というパターンを音を遅いスピードで再生し、それぞれのサンプルがたくさん重なって再生してまうようにします。
 
 ```
 d1 $ sound $ samples "arpy*8" (run 8) # speed "0.25"
@@ -1370,15 +1380,23 @@ d1 $ sound $ samples "arpy*8" (run 8) # speed "0.25"
 
 >We can stop this bleed by using cut and assigning the pattern a cut group of “1”:
 
+この重なりをcutエフェクトとカットグループをパターンによって"1"と指定します。
+
 ```
 d1 $ sound $ samples "arpy*8" (run 8) # speed "0.25" # cut "1"
 ```
 
 >No more bleed!
 
+もう重なりません！
+
 >You can use any number for the cut group.
 
+カットグループには何番を指定しても構いません。
+
 >Cut groups are global, to the Tidal process, so if you have two Dirt connections, use two different cut group values to make sure the patterns don’t choke each other:
+
+cutグループはグローバルなので、tidalの処理によって、もし二つのDirtコネクションを使っているなら、違ったカットグループを割り当てお互いを消し合うことがないようにします。
 
 ```
 d1 $ sound $ samples "arpy*8" (run 8) # speed "0.25" # cut "1"
@@ -1386,6 +1404,8 @@ d2 $ sound $ samples "bass2*6" (run 6) # speed "0.5" # cut "2"
 ```
 
 >This also works in a stack:
+
+これはstackでも機能します
 
 ```
 d1 $ stack [
@@ -1405,6 +1425,14 @@ d1 $ stack [
 
 >So instead of directly sending the new pattern to d1, we’ll send it to the corresponding transition channel t1 and give it a nice transition function:
 
+チャンネルのパターンを変えると（ほぼ）即座に音に反映されます。特にパフォーマンス中は、これは望ましくないことかもしれません！
+
+そこでTidalでは現在のパターンを違うパターンへと段階的にトランジッションする機能があります。
+
+全てのDirtチャンネルにはトランジッション関数をとり新しいパターンを生成するトランジッションチャンネルというものがあります。
+
+d1へと新しいパターンをじかに割り当てるのではなく、対応するトランジッションチャンネルのt1へ気に入ったトランジッション関数と共に割り当てます:
+
 ```
 d1 $ sound (samples "hc*8" (iter 4 $ run 4))
 t1 anticipate $ sound (samples "bd(3,8)" (run 3))
@@ -1412,13 +1440,19 @@ t1 anticipate $ sound (samples "bd(3,8)" (run 3))
 
 >To transition from here, simply change the pattern within t1, and in this case also change the transition function:
 
+ここからt1の中のパターンを変化させるだけで、この場合はトランジッション関数を変更できます。
+
 ```
 t1 (xfadeIn 16) $ sound "bd(5,8)"
 ```
 
 >The above will fade over 16 cycles from the former pattern to the given new one.
 
+上の例では16サイクルで前のパターンから新しいパターンへフェードして行きます。
+
 >Apart from anticipate and xfadeIn there are a lot more transition functions e.g. some that will force you to keep changing your patterns to avoid repetitive performances…
+
+anticipateとxfadeInの他にも、トランジッション関数は他にもたくさん存在しています例えば、反復して演奏するのを避けるようにあなたにパターンを常に変化させるものもあります。
 
 ##Samples
 
@@ -1436,11 +1470,28 @@ Each one is a folder containing one or more wav files. For example when you put 
 
 >If you want to add your own samples, just create a new folder in the samples folder, and put wav files in it.
 
+もしSuperDirtを使っているのであれば、デフォルトのサンプルたちはDirt-Samplesフォルダの中にあります、-
+Quarks.guiとSuperColliderで実行します、そして“Dirt-Samples”をクリックし“open folder”を選択します。もしクラシックなdirtを使っている場合サブフォルダにサンプルのフォルダがあるでしょう。試して見ることができるのは次のようなものです:
+
+flick sid can metal future gabba sn mouth co gretsch mt arp h cp
+cr newnotes bass crow hc tabla bass0 hh bass1 bass2 oc bass3 ho
+odx diphone2 house off ht tink perc bd industrial pluck trump
+printshort jazz voodoo birds3 procshort blip drum jvbass psr
+wobble drumtraks koy rave bottle kurt latibro rm sax lighter lt
+arpy feel less stab ul
+
+それぞでのフォルダにはwavファイルが複数入っています。例えばbd:1というシーケンスを指定した時、bdフォルダ内の二番目のwavファイルが選択されます。もし八番目のファイルを指定してフォルダ内には七つのサンプルしかなかった場合、丸め込まれて二番目のファイルが再生されます。
+
+もしサンプルを独自に追加したいなら、ただ新しいフォルダをサンプルフォルダに加え、中にwavファイルを置くだけでできます。
+
 ##Synths
 
 ###Synths
 
 >SuperDirt is created with SuperCollider, a fantastic synthesis engine and language with huge sonic possibilities. You can trigger custom SuperCollider synths from TidalCycles in much the same way as you trigger samples. For example:
+
+SuperDirtはSuperColliderによって作られています、とても素晴らしいシンセシスエンジンと音響合成の可能性を持った言語です。あなたの独自のSuperColliderのシンセをTidalCyclesからサンプルを再生した時と同じようにトリガーできます。例えば、
+
 
 ```
 d1 $ midinote "60 62*2" # s "supersaw"
@@ -1448,11 +1499,15 @@ d1 $ midinote "60 62*2" # s "supersaw"
 
 >The above plays note 60 and 62 of the MIDI scale, using the midinote parameter. You can alternatively specify notes by name, using n:
 
+上の例はmidinoteパラメータによってMIDI音階の60と62で鳴ります。もしくはn関数によって音階名で指定できます。
+
 ```
 d1 $ n "c5 d5*2" # s "supersaw"
 ```
 
 >You can also specify note numbers with n, but where 0 is middle c (rather than 60 with midinote).
+
+また、ノート番号をn関数で指定できます、ただし0がmiddle c（midi音階で60）です
 
 ```
 d1 $ n "0 5" # s "supersaw"
@@ -1460,21 +1515,38 @@ d1 $ n "0 5" # s "supersaw"
 
 >The default sustain length is a bit long so the sounds will overlap, you can adjust this using the sustain parameter
 
+デフォルトの音の長さは少し重なるくらい長く鳴ります、sustainパラメーターによって調整できます。
+
 ```
 d1 $ n "c5 d5*2" # s "supersaw" # sustain "0.4 0.2"
 ```
 
 >Many example synths can be found in the default-synths.scd file in the SuperDirt/synths folder. These include:
 
->a series of tutorials: tutorial1, tutorial2, tutorial3, tutorial4, tutorial5
-examples of modulating with the cursor or sound input: pmsin, in, inr
-physical modeling synths: supermandolin, supergong, superpiano, superhex
-a basic synth drumkit: superkick, superhat, supersnare, superclap, super808
-four analogue-style synths: supersquare, supersaw, superpwm, supercomparator
-two digital-style synths: superchip, supernoise
-To find the SuperDirt folder, simply run Quarks.folder in supercollider. The full folder location should appear in the postwindow (which is usually in the bottom right).
+>- a series of tutorials: tutorial1, tutorial2, tutorial3, tutorial4, tutorial5
+- examples of modulating with the cursor or sound input: pmsin, in, inr
+- physical modeling synths: supermandolin, supergong, superpiano, superhex
+- a basic synth drumkit: superkick, superhat, supersnare, superclap, super808
+- four analogue-style synths: supersquare, supersaw, superpwm, supercomparator
+- two digital-style synths: superchip, supernoise
+
+>To find the SuperDirt folder, simply run Quarks.folder in supercollider. The full folder location should appear in the postwindow (which is usually in the bottom right).
+
+SuperDirt/synthsフォルダのdefault-synths.scdに多くのイクザンプルシンセが載っています。そこには以下が含まれています。
+
+- チュートリアルのシリーズ: チュートリアル1、チュートリアル2、チュートリアル3、チュートリアル4、チュートリアル5
+- カーソルとsとの入力によるモジュレーションのexamples
+- 物理モデルシンセ: supermandolin, supergong, superpiano, superhex
+- drumkit基本シンセ: superkick, superhat, supersnare, superclap, super808
+- 4つのアナログスタイルシンセ: supersquare, supersaw, superpwm, supercomparator
+- 2つのデジタルスタイルシンセ: superchip, supernoise
+
+SuperDirtフォルダを見つけるには、supercolliderでQuarks.folderと実行します。postwindowにフルパスが表示されます（通常は右下にあります）
 
 >Many of the above synths accept additional Tidal Parameters or interpret the usual parameters in a slightly different way. For complete documentation, see default-synths.scd, but here are some examples to try:
+
+以上のシンセたちの多くは追加のTidalのパラメータもしくは、通常から多少違った組み込みの用法のパラメータを受け付けます。
+完全なドキュメントはdefault-synths.scdにありますが、ここにいくつかの例を挙げます。
 
 ```
 d1 $ jux (# accelerate "-0.1") $ s "supermandolin*8" # midinote "[80!6 78]/8"
@@ -1508,3 +1580,5 @@ d1 $ s "supernoise/8" # midinote (fmap (+30) $ irand 10) # sustain "8"
 ```
  
 >This is all quite new and under ongoing development, but you can read about modifying and adding your own synths to SuperDirt at its github repository.
+
+以上が新しいもしくは現在開発中のものですが、あなたの独自のシンセをSuperDirtへ追加したり変更する方法はgithubのリポジトリで読むことができます。
