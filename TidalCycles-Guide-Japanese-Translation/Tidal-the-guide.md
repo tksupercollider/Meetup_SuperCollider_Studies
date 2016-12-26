@@ -108,7 +108,7 @@ d1 $ sound "bd sn hh cp mt arpy drum odx bd arpy bass2 feel future"
 
 >Note how the more steps you add to the pattern, the faster it goes to fit them all in. No matter how many samples you put in a pattern in this way, they will always be distributed evenly within a single cycle.
 
-パターンのステップを増やすと、全てを押し込めるように早く再生されるということに注意しましょう。どんなに多くのパターン絵を詰め込んだとしても、一つのサイクル内に収まるように再生されます。
+パターンのステップを増やすと、全てを押し込めるように早く再生されるということに注意しましょう。どんなに多くのパターンを詰め込んだとしても、一つのサイクル内に収まるように再生されます。
 
 
 ##Silence
