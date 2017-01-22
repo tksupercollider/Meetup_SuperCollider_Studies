@@ -1225,7 +1225,8 @@ d1 $ every 5 (|+| speed "0.5") $ every 4 (0.25 <~) $ every 3 (rev) $
 
 >In addition to every you can also use the whenmod conditional function. whenmod takes two parameters; it executes a function when the remainder of the current loop number divided by the first parameter is less than the second parameter.
 
-everyに加えてwhenmod条件関数もあります。whenmodは二つパラメーターを取り;今のループ回数を記憶しておき、今のループが二番目のパラメータで分割した分の二番目のパラメータで指定した数より小さい場合、関数を実行します。
+whenmodは二つのパラメーターを取ります。ループ回数を記憶して、今のループを一番目のパラメーターで割り、その数の余りが、二番目のパラメータで指定した数より小さい場合、関数を実行します。
+
 
 >For example, the following will play a pattern normally for cycles 1-6, then play it in reverse for cycles 7-8. Then normally again for six cycles, then in reverse for two, and so on:
 
