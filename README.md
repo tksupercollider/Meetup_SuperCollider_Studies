@@ -1,4 +1,4 @@
-#Meetup_SuperCollider_Studies
+# Meetup_SuperCollider_Studies
 
 SuperCollider 勉強会 / Tokyo SuperCollider MTG などで使用した資料です
 
