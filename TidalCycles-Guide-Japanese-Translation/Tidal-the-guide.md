@@ -1,4 +1,4 @@
-#Tidal: the guide (Japanese translation)
+# Tidal: the guide (Japanese translation)
 
 the original : [https://tidalcycles.org/patterns.html](https://tidalcycles.org/patterns.html) [Translated by Koichiro Mori Oct. 2016]
 
@@ -12,11 +12,11 @@ TidalCyclesと(Super)Dirtをインストールしたら、そして多分いく�
 
 コードを読むよりコードをプレイしましょう、例文を改変して違いを実感しましょう、そしてなぜそうなったか確かめましょう。
 
-##Creating Rhythmic Sequences
+## Creating Rhythmic Sequences
 
-###Sequences
+### Sequences
 
-####Play a Single Sample
+#### Play a Single Sample
 
 >Tidal starts with nine connections to the SuperDirt synthesiser, named from d1 to d9 (if you’re using the ‘classic’ dirt, then instead use c1 to c9). Here’s a minimal example, that plays a bass drum every cycle:
 
@@ -48,7 +48,7 @@ d1 $ sound "bd:3"
 もし複数のサンプルファイルがフォルダ内に存在する場合、Tidalは"wrap"して先頭のサンプルに戻ってくれます（ゼロ始まりなので例えばもし五つのサンプルがフォルダ内にあった場合、"bd:5"は"bd:0"が再生されます）
 
 
-###Sequences From Multiple Samples
+### Sequences From Multiple Samples
 
 >Putting things in quotes actually defines a sequence. For example, the following gives you a pattern of bass drum then snare:
 
@@ -68,7 +68,7 @@ d1 $ sound "bd sn"
 
 さらには（そしてもし加えたいのであれば）Dirtフォルダ内のsamplesフォルダにサンプルファイルを置きます。'wav'フォーマットで。
 
-####Playing More Than One Sequence
+#### Playing More Than One Sequence
 
 >The easiest way to play multiple sequences at the same time is to use two or more connections to the synthesizer:
 
@@ -87,7 +87,7 @@ d3 $ sound "arpy"
 
 注意：それぞれのコネクションはエディタ内で別々に実行されなければいけません。つまり、それぞれの行でCtrl+Enterを押す、これを三度する必要があるということです。それぞれのパターンの行間には空欄の行があることを確かめてください。さもなくばTidalはそれを一度に実行しようとして失敗します（もし一行だけ実行したければshift-enterすると実行できます）
 
-####What is a Cycle?
+#### What is a Cycle?
 
 >A cycle is the main “loop” of time in Tidal. The cycle repeats forever in the background, even when you’ve stopped samples from playing. The cycle’s duration always stays the same unless you modify it with cps or bps, we’ll cover this later.
 
@@ -111,9 +111,9 @@ d1 $ sound "bd sn hh cp mt arpy drum odx bd arpy bass2 feel future"
 パターンのステップを増やすと、全てを押し込めるように早く再生されるということに注意しましょう。どんなに多くのパターンを詰め込んだとしても、一つのサイクル内に収まるように再生されます。
 
 
-##Silence
+## Silence
 
-###Silence
+### Silence
 
 >An empty pattern is defined as silence, so if you want to ‘switch off’ a pattern, you can just set it to that:
 
@@ -142,9 +142,9 @@ d1 silence
 solo $ d1 $ sound "bd sn"
 ```
 
-##Patterns Within Patterns
+## Patterns Within Patterns
 
-###Pattern Groups
+### Pattern Groups
 
 >Use Tidal’s square braces syntax to create a pattern grouping:
 
@@ -175,7 +175,7 @@ d1 $ sound "[bd bd bd bd] [sn]"
 d1 $ sound "[bd bd] [bd [sn [sn sn] sn] sn]"
 ```
 
-###Layering (Polyrhythms) Instead of Grouping
+### Layering (Polyrhythms) Instead of Grouping
 
 >You can also layer up several loops, by using commas to separate the different parts:
 
@@ -205,9 +205,9 @@ d1 $ sound "[bd bd bd, sn cp sn cp, arpy arpy, odx]"
 d1 $ sound "[bd bd bd, [sn sn] cp, arpy [arpy [arpy arpy] arpy arpy], odx]"
 ```
 
-###Pattern Repetition and Speed
+### Pattern Repetition and Speed
 
-####Repetition
+#### Repetition
 
 >There are two short-hand symbols you can use inside patterns to speed things up or slow things down: * and /. You could think of these like multiplication and division.
 
@@ -252,7 +252,7 @@ d1 $ sound "bd*3" -- plays the bd sample three times each cycle
 3サイクルでbdを一回
 ```
 
-####Using * and / on Groups
+#### Using * and / on Groups
 
 >You can apply the * and / symbols on groups of patterns:
 
@@ -276,9 +276,9 @@ d1 $ sound "[bd sn sn*3]/2 [bd sn*3 bd*4]/3"
 d1 $ sound "[bd [sn sn]*2]/2 [bd [sn bd]/2]*2"
 ```
 
-##Modifying Sequences With Functions
+## Modifying Sequences With Functions
 
-###Transformation
+### Transformation
 
 >Tidal comes into its own when you start building things up with functions which transform the patterns in various ways.
 For example, rev reverses a pattern:
@@ -341,7 +341,7 @@ d1 $ every 4 (density 4) $ sound "bd*2 [bd [sn sn*2 sn] sn]"
 d1 $ sound (every 4 (density 4) "bd*2 [bd [sn sn*2 sn] sn]")
 ```
 
-###Where are all the functions?
+### Where are all the functions?
 
 >There are many types of functions that help you change patterns. Some of them re-order sequences, some alter time, some provide conditional logic, and some can help compose more complex patterns.
 All of the functions available in Tidal can be found on the Reference page.
@@ -350,9 +350,9 @@ All of the functions available in Tidal can be found on the Reference page.
 Referenceページに全ての関数について網羅されています。
 
 
-##Using Effects
+## Using Effects
 
-###Effects
+### Effects
 
 >TidalCycles has a number of effects that you can apply to sounds. Some of them do simple things like change volume, and others do more complex things like add delay or distortion.
 
@@ -382,7 +382,7 @@ d1 $ sound "bd*4" # gain "0.5" # delay "0.5"
 
 上のコードは50%音量を下げつつ0.5のレベルで"delay"エフェクトも追加します。
 
-####Effects are patterns too
+#### Effects are patterns too
 
 >You may notice that the values of effects are specified in double quotes. This means that you can pattern the effect values too:
 
@@ -412,7 +412,7 @@ d1 $ sound "bd*4" # gain (every 3 (rev) $ "1 0.8 0.5 0.7")
 
 先のsoundの例のように、gainの後にgainパターンへ渡すために丸カッコでくくる必要があります。
 
-####Effect pattern order
+#### Effect pattern order
 
 >You can specify the effect before the sound pattern:
 
@@ -427,7 +427,7 @@ d1 $ gain "1 0.8 0.5 0.7" # sound "bd"
 それぞれの記述の順番は;パターンの構造は#の左側で決まります。この場合、bd一つがありますが、左側で与えたパターンにより4回聞こえます。
 
 
-####Modifying effect values
+#### Modifying effect values
 
 >The # operator is just a shortcut to a longer form of operator called |=|. The |=| operator means something special about combining patterns, but we’ll cover that later. All you need to know right now is that |=| will set an effect’s value equal to a pattern.
 
@@ -489,7 +489,7 @@ d1 $ every 2 (|*| speed "1.5") $ sound "arpy*4" |=| speed "1"
 d1 $ every 3 (|-| up "3") $ every 2 (|+| up "5") $ sound "arpy*4" |=| up "0 2 4 5"
 ```
 
-####Some Common Effects
+#### Some Common Effects
 
 >Here is a quick list of some effects you can use in Tidal (the full list is available in the Reference section):
 
@@ -502,9 +502,9 @@ d1 $ every 3 (|-| up "3") $ every 2 (|+| up "5") $ sound "arpy*4" |=| up "0 2 4 
 - vowel (a vowel formant filter, values include a, e, i, o, and u)
 - speed (changes playback speed of a sample, see below)
 
-##Sample Playback Speed (and Pitch)
+## Sample Playback Speed (and Pitch)
 
-###Speed
+### Speed
 
 >You can change the playback speed of a sample in TidalCycles by using the speed effect. You can use speed to change pitches, to create a weird effect, or to match the length of a sample to a specific period of the cycle time.
 
@@ -540,7 +540,7 @@ d1 $ sound "arpy*4" # speed "1 0.5 2 1.5"
 d1 $ sound "arpy*4" # speed "-1 -0.5 -2 -1.5"
 ```
 
-####Play a sample at multiple speeds simultaneously
+#### Play a sample at multiple speeds simultaneously
 
 >Use the pattern grouping syntax with a comma to cause speed to play a sample back at multiple speeds at the same time:
 
@@ -551,7 +551,7 @@ d1 $ sound "arpy" # speed "[1, 1.5]"
 d1 $ sound "arpy*4" # speed "[1 0.5, 1.5 2 3 4]"
 ```
 
-####12-tone scale speeds
+#### 12-tone scale speeds
 
 >You can also use the up function to change playback speed. up is a shortcut effect that matches speeds to half steps on a 12-tone scale. For example, the following plays a chromatic scale:
 
@@ -566,9 +566,9 @@ d1 $ sound "arpy*12" # up "0 1 2 3 4 5 6 7 8 9 10 11"
 run関数によって整数インクリメントのパターンも作り出せます: d1 $ sound "arpy*12" # up (run 12)。run関数は後で触れます。
 
 
-##Euclidean Sequences
+## Euclidean Sequences
 
-###Bjorklund
+### Bjorklund
 
 >If you give two numbers in parenthesis after an element in a pattern, then Tidal will distribute the first number of sounds equally across the second number of steps:
 
@@ -651,9 +651,9 @@ d1 $ sound "bd([5 3]/2,8)"
 (13,24,5) : Another rhythm necklace of the Aka Pygmies of the upper Sangha.
 ```
 
-##Tempo
+## Tempo
 
-###Tempo
+### Tempo
 
 >If you’ve made it this far without changing the tempo in all these examples, then you’re probably ready to change it up.
 
@@ -682,7 +682,7 @@ cps 0.75
 cps 10
 ```
 
-###Setting BPM
+### Setting BPM
 
 >Tidal also includes a helper function called bps to set “beats per second”. To set beats-per-minute, call bps with your bpm value, divided by 60:
 
@@ -705,9 +705,9 @@ long (or half the speed, depending on how you think about it:
 bps (100/120)
 ```
 
-##The Run Function
+## The Run Function
 
-###Run
+### Run
 
 >There is a special utility function called run which will return a pattern of integers up to a specified maximum. You can use run with effects to aid in automatically generating a linear pattern:
 
@@ -743,9 +743,9 @@ d1 $ sound "arpy*8" # up (every 2 (rev) $ run 8)
 
 run関数のより実践的な例は、フォルダからのサンプル読み込みに関する以下の章を読んでください。
 
-##(Algorithmically) Selecting Samples
+## (Algorithmically) Selecting Samples
 
-###Sample Selection
+### Sample Selection
 
 >The sound parameter we’ve been using up to now can actually be broken into two seperate parameters, making it easy to select samples with a pattern. These parameters are s that gives the name of the sample set, and n which gives the number of the sample within that set. For example, the following two patterns do exactly the same:
 
@@ -825,9 +825,9 @@ d1 $ sound (samples "drum arpy cp hh" (run 10))
 ```
 
 
-##Combining Types of Patterns
+## Combining Types of Patterns
 
-###Combining Patterns
+### Combining Patterns
 
 >Ok, remember when we started adding effects:
 
@@ -883,9 +883,9 @@ d1 $ up "0 0*2 0*4 1" # sound "[arpy, bass2, bd]"
 
 上の例では、soundのパターンは単に三つのサンプルをそれぞれの音でなるように指定されています。音程とリズム両方がupのパターンで指定されています。
 
-##Oscillation with Continuous Patterns
+## Oscillation with Continuous Patterns
 
-###Continuous Patterns
+### Continuous Patterns
 
 >So far we’ve only been working with discrete patterns, by which we mean patterns which containing events which begin and end. Tidal also supports continuous patterns which instead vary continually over time. You can create continuous patterns using functions which give sine, saw, triangle, and square waves:
 
@@ -935,7 +935,7 @@ d1 $ sound "bd*16" # pan (slowcat [sine1, saw1, square1, tri1])
 d1 $ sound "sn:2*16" # (speed $ scale 0.5 3 sine1) |*| (speed $ slow 4 saw1)
 ```
 
-##Scaling Oscillation
+## Scaling Oscillation
 
 >You can tell the oscillation functions to scale themselves and oscillate between two values:
 
@@ -973,9 +973,9 @@ d1 $ sound "hh*32" # cutoff (scale 0.001 0.1 $ slow 4 $ sine1) # resonance "0.1"
 
 注意2: oscillator関数は持続的な値を生成は行いはしますが、それぞれのsoundイベントにmapする必要がまだあります。
 
-##Rests
+## Rests
 
-###Rests
+### Rests
 
 >So far we have produced patterns that keep producing more and more sound. What if you want a rest, or gap of silence, in your pattern? You can use the “tilde” ~ character to do so:
 
@@ -990,9 +990,9 @@ d1 $ sound "bd bd ~ bd"
 
 ~ が空のステップという意味のため、これで無音を作り出せます。
 
-##Polymeters
+## Polymeters
 
-###Polymeter
+### Polymeter
 
 >We talked about polyrhythms earlier, but Tidal can also produce polymeter sequences. A polymeter pattern is one where two patterns have different sequence lengths, but share the same pulse or tempo.
 
@@ -1039,9 +1039,9 @@ d1 $ sound "{arpy bass2 drum notes can}%4"
 もしポリミータがよくわからないなら、こちらに良い例があります：
 [http://music.stackexchange.com/questions/10488/polymeter-vs-polyrhythm](http://music.stackexchange.com/questions/10488/polymeter-vs-polyrhythm)
 
-##Shifting Time
+## Shifting Time
 
-###Shifting Time
+### Shifting Time
 
 >You can use the ~> and <~ functions to shift patterns forwards or backwards in time, respectively. With each of these functions, you can specify an amount, in cycle units.
 
@@ -1088,16 +1088,16 @@ d1 $ every 3 (1000.125 ~>) $ sound "bd*2 cp*2 hh sn"
 d1 $ every 3 ((1%4) <~) $ sound "bd*2 cp*2 hh sn"
 ```
 
-##Introducing Randomness
+## Introducing Randomness
 
 
-###Randomness
+### Randomness
 
 >Tidal can produce random patterns of integers and decimals. It can also introduce randomness into patterns by removing random events.
 
 Tidalはランダムパターン整数と10進数で生成できます。ランダム
 
-###Random Decimal Patterns
+### Random Decimal Patterns
 
 >You can use the rand function to create a random value between 0 and 1. This is useful for effects:
 
@@ -1116,7 +1116,7 @@ run関数と数値のパターンと同じく、randはスケールされた値�
 d1 $ sound "arpy*4" # pan (scale 0.25 0.75 $ rand)
 ```
 
-###Random Integer Patterns
+### Random Integer Patterns
 
 >Use the irand function to create a random integer up to a given maximum. The most common usage of irand is to produce a random pattern of sample indices (similar to run):
 
@@ -1135,7 +1135,7 @@ d1 $ s "arpy*8" # n (irand 30)
 
 詳細: randとirandは実際は、実用的な意味で無限のディティールを持つcontinuous patternsです - 純粋な意味で捉えてください！ 全てのパターンがそうなようにそれらも決定論的で、時間に対してステートレスな関数です、そのため理論時間で同じ時点で再度呼ばれても全く同じ値を返します。さらにはrandとirandを違う場所から使ったとしても、同じ'ランダム'パターンが得られます。- もしこのことを望まないのであれば、単にどちらか片方の時間をシフトもしくは少し遅くしてあげることで回避できます。例 slow 0.3 rand
 
-###Removing or “Degrading” Pattern events
+### Removing or “Degrading” Pattern events
 
 >Tidal has a few ways to randomly remove events from patterns. You can use the shorthand ? symbol if you want to give an event a 50/50 chance of happening or not on every cycle:
 
@@ -1209,9 +1209,9 @@ d1 $ sometimes (density 2) $ sound "bd*8"
 d1 $ rarely (density 2) $ sound "bd*8"
 ```
 
-##Creating Variation in Patterns
+## Creating Variation in Patterns
 
-###Variation
+### Variation
 
 >You can create a lot of cyclic variations in patterns by layering conditional logic:
 
@@ -1236,9 +1236,9 @@ whenmodは二つのパラメーターを取ります。ループ回数を記憶�
 d1 $ whenmod 8 6 (rev) $ sound "bd*2 arpy*2 cp hh*22"
 ```
 
-##Creating "Fills" and using "const"
+## Creating "Fills" and using "const"
 
-###Fills
+### Fills
 
 >You can think of a “fill” as a change to a regular pattern that happens regularly. e.g. every 4 cycles do “xya”, or every 8 cycles do “abc”.
 
@@ -1281,15 +1281,15 @@ d1 $ whenmod 8 6 (const $ sound "arpy(3,8) bd*4") $ sound "bd sn bass2 sn"
 d1 $ every 12 (const $ sound "bd*4 sn*2") $ sound "bd sn bass2 sn"
 ```
 
-##Composing Multi-Part Patterns
+## Composing Multi-Part Patterns
 
-###Composing_patterns
+### Composing_patterns
 
 >There are a few ways that you can compose new patterns from multiple other patterns. You can concatenate or “append” patterns in serial, or you can “stack” them and play them together in parallel.
 
 いくつかの方法で別々の複数パターンから新しいパターンを構成できます。密集させることや”足す”ことで直列に、もしくは”積む”ことでそれらを一緒に並列に再生させたりできます。
 
-###Concatenating patterns in serial
+### Concatenating patterns in serial
 
 >You can use the cat function to add patterns one after another:
 
@@ -1333,7 +1333,7 @@ slowcatはより長い複数のパターンを作る、線形のシーケンス�
 
 randcatというどのパターンを再生するかランダムにするものもあります。
 
-###Playing patterns together in parallel
+### Playing patterns together in parallel
 
 >The stack function takes a list of patterns and combines them into a new pattern by playing all of the patterns in the list simultaneously.
 
@@ -1359,9 +1359,9 @@ d1 $ every 4 (slow 2) $ whenmod 5 3 (# speed "0.75 1.5") $ stack [
 ] # speed "[[1 0.8], [1.5 2]*2]/3"
 ```
 
-##Truncating samples with "cut"
+## Truncating samples with "cut"
 
-###Cut
+### Cut
 
 >So far, all of our examples have used short samples. However, maybe you’ve experimented with some long samples. Maybe you’ve noticed that really long samples can cause a lot of bleed and unwanted sound.
 
@@ -1414,9 +1414,9 @@ d1 $ stack [
    sound $ samples "bass2*6" (run 6) # speed "0.5" # cut "2" ]
 ```
 
-##Transitions Between Patterns
+## Transitions Between Patterns
 
-###Transitions
+### Transitions
 
 >Changing the pattern on a channel takes effect (almost) immediately. This may not be what you want, especially when performing live!
 
@@ -1455,9 +1455,9 @@ t1 (xfadeIn 16) $ sound "bd(5,8)"
 
 anticipateとxfadeInの他にも、トランジッション関数は他にもたくさん存在しています例えば、反復して演奏するのを避けるようにあなたにパターンを常に変化させるものもあります。
 
-##Samples
+## Samples
 
-###Samples
+### Samples
 
 >If you’re using SuperDirt, all the default samples can be found in the Dirt-Samples folder - you can open it by running Quarks.gui in SuperCollider, clicking on “Dirt-Samples” and then “open folder”. If you’re using classic dirt, look in its samples subfolder. Here’s some you could try:
 
@@ -1485,9 +1485,9 @@ arpy feel less stab ul
 
 もしサンプルを独自に追加したいなら、ただ新しいフォルダをサンプルフォルダに加え、中にwavファイルを置くだけでできます。
 
-##Synths
+## Synths
 
-###Synths
+### Synths
 
 >SuperDirt is created with SuperCollider, a fantastic synthesis engine and language with huge sonic possibilities. You can trigger custom SuperCollider synths from TidalCycles in much the same way as you trigger samples. For example:
 
