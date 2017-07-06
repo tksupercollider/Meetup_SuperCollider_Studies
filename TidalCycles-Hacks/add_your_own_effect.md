@@ -1,4 +1,4 @@
-# "[TidalCycles] Add your own effect 自分のエフェクトを加える"
+# [TidalCycles] Add your own effect 自分のエフェクトを加える
 
 TidalCyclesのSuperColliderのエンジンSuperDirtには、サンプルだけではなく独自のシンセを楽器として加えたり、エフェクトを追加したりはたまたカスタムイベントをブリッジしたりSuperColliderの柔軟性を活かした'Hack'が存在します。ライブラリパッケージの `hacks/` フォルダには様々なハックの方法を紹介するドキュメントを見つけることができます。
 
