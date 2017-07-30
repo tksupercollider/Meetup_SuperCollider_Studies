@@ -186,11 +186,11 @@ Tidal はライブラリに手を加えた場合はそれぞれのエディタ�
 
 ```
 (
+SuperDirt.start(2, s);
+
 s.waitForBoot{
   "/your/path/to/external_effect.scd".load;
 };
-
-SuperDirt.start(2, s);
 )
 ```
 
