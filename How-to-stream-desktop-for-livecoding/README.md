@@ -1,6 +1,5 @@
 # How To Stream Desktop For Livecoding
 
-```96ps-2e71-v4yx-9tmg```
 
 ライブコーディングのパフォーマンスをストーリーミング配信したい時があります。
 
