@@ -1,6 +1,6 @@
 # [SuperDirt] SuperDirt の Nodeについて
 
-~Orbit, GrobalEffect, Synth Group~
+#### Orbit, GrobalEffect, Synth Group
 
 SuperDirtを立ち上げると以下のようなNodeツリーが作られます。それぞれの役割がなんなのか気になって調べて見ました。
 
