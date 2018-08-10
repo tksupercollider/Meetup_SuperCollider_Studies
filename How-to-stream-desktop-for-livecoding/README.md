@@ -1,5 +1,6 @@
 # How To Stream Desktop For Livecoding
 
+
 ライブコーディングのパフォーマンスをストーリーミング配信したい時があります。
 
 例えばAlgoraveでは実空間でのライブを中継することがあよくあります。Youtubeの[EulerRoom](http://www.eulerroom.com)チャンネルにはまとまった記録があります。これはYouTubeの ```live``` という機能でストリーミング配信ソフトを使って配信用のサーバにアクセスして行います。
