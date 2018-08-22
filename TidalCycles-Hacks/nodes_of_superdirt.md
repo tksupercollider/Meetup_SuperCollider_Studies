@@ -23,7 +23,7 @@ NODE TREE Group 0
 図にした。
 
 処理はツリーのノードの枝の先頭から下へと処理が流れていきます(ノードID順ではない)
-これをみるとSuperDIrtの処理の流れが大体想像がつきそうです。
+これをみるとSuperDirtの処理の流れが大体想像がつきそうです。
 
 ## Orbit
 
@@ -64,9 +64,9 @@ NODE TREE Group 0
 図にすると、
 
 ![image](https://cldup.com/bb5ROhSf90-3000x3000.png)
-Oribt `0` だけ抜き出すとこんな状態。
+Orbit `0` だけ抜き出すとこんな状態。
 
-新しくOribtのグループの下に`dirt_sample_2_2` と `dirt_gate2`というSynth Nodeが追加された `group`が追加されています。このグループは`synthGroup` と言ってパターン内に登場するSynthごとに逐一生成されます。`dirt_sample`というのがサンプルのプレイバックを行うSynth Nodeですね。`dirt_gate` というのはエンベロープや `cut`パターンの影響を管理するSynth Nodeです。
+新しくOrbitのグループの下に`dirt_sample_2_2` と `dirt_gate2`というSynth Nodeが追加された `group`が追加されています。このグループは`synthGroup` と言ってパターン内に登場するSynthごとに逐一生成されます。`dirt_sample`というのがサンプルのプレイバックを行うSynth Nodeですね。`dirt_gate` というのはエンベロープや `cut`パターンの影響を管理するSynth Nodeです。
 
 まず最初の`group2`の枝を辿って synthGroup の`group`、その枝の `dirt_sample` そして `dirt_gate2`、
 その後で三つの Global Effect という順に通っていきます。
@@ -166,7 +166,7 @@ NODE TREE Group 0
 
 ## まとめ
 
-- SuperDIrt では Orbit ごとに Group が作られ, それぞれに 3つの Global Effects が追加されます。
+- SuperDirt では Orbit ごとに Group が作られ, それぞれに 3つの Global Effects が追加されます。
 
 - パターンに登場するSynthごとに synthGroup が作られ Global Effects の手前に挿入されていきます。
 
